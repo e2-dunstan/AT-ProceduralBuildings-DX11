@@ -1,0 +1,4 @@
+﻿  DXApp.cpp
+e:\university\year 3\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(91): warning C4838: conversion from 'UINT' to 'LONG' requires a narrowing conversion
+  AT1.vcxproj -> E:\UNIVERSITY\Year 3\AT-ProceduralBuildings-DX11\AT1\x64\Debug\AT1.exe
+  AT1.vcxproj -> E:\UNIVERSITY\Year 3\AT-ProceduralBuildings-DX11\AT1\x64\Debug\AT1.pdb (Partial PDB)
