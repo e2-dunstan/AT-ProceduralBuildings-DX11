@@ -26,5 +26,8 @@
     <ClInclude Include="DXApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DXUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

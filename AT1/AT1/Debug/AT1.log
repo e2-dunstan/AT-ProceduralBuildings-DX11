@@ -1,0 +1,5 @@
+﻿  DXApp.cpp
+e:\university\year 3\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(108): warning C4838: conversion from 'UINT' to 'LONG' requires a narrowing conversion
+e:\university\year 3\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(180): warning C4018: '<': signed/unsigned mismatch
+  AT1.vcxproj -> E:\UNIVERSITY\Year 3\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe
+  AT1.vcxproj -> E:\UNIVERSITY\Year 3\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.pdb (Partial PDB)
