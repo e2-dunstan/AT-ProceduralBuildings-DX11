@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{CF03D807-1FA1-4BB3-B692-85F29F8FFD95}</ProjectGuid>
     <RootNamespace>AT1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -112,11 +112,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DXApp.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="winmain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

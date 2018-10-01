@@ -1,17 +1,7 @@
 #include <windows.h>
 #include "DXApp.h"
-
-class TestApp : public DXApp
-{
-public:
-	TestApp(HINSTANCE hInstance);
-	~TestApp();
-
-	bool Init() override;
-	void Update(float dt) override;
-	void Render(float dt) override;
-
-};
+#include "Constants.h"
+#include "winmain.h"
 
 TestApp::TestApp(HINSTANCE hInstance) : DXApp(hInstance)
 {
@@ -36,9 +26,8 @@ void TestApp::Update(float dt)
 
 void TestApp::Render(float dt)
 {
-	m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, DirectX::Colors::MediumVioletRed);
-
-	m_pSwapChain->Present(0, 0);
+	renderer->GetDeviceContext()->ClearRenderTargetView(renderer->GetRenderTargetView(), DirectX::Colors::PaleVioletRed);
+	renderer->GetSwapChain()->Present(0, 0);
 }
 
 
