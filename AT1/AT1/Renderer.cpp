@@ -4,6 +4,7 @@
 
 Renderer::Renderer()
 {
+	
 }
 
 
@@ -88,22 +89,23 @@ bool Renderer::InitDirect3D(HWND appWindow)
 		return false;
 	}
 
-	//Create render target view (camera?)
 	CreateRenderTarget();
+	//BeginFrame();
 
-	//Bind render target view
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);	//nullptr is depth stencil view for shadow maps. Will implement later
 
-	//Viewport creation
-	viewport.Width = static_cast<float>(windowWidth);
-	viewport.Height = static_cast<float>(windowHeight);
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
+	////Bind render target view
+	//deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);	//nullptr is depth stencil view for shadow maps. Will implement later
 
-	//Bind viewport
-	deviceContext->RSSetViewports(1, &viewport);
+	////Viewport creation
+	//viewport.Width = static_cast<float>(windowWidth);
+	//viewport.Height = static_cast<float>(windowHeight);
+	//viewport.TopLeftX = 0;
+	//viewport.TopLeftY = 0;
+	//viewport.MinDepth = 0.0f;
+	//viewport.MaxDepth = 1.0f;
+
+	////Bind viewport
+	//deviceContext->RSSetViewports(1, &viewport);
 
 	return true;
 }
@@ -114,6 +116,26 @@ void Renderer::CreateRenderTarget()
 	//Get the buffer, store into back buffer texture
 	swapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture));
 	device->CreateRenderTargetView(backBufferTexture, nullptr, &renderTargetView);
+
+	backBufferTexture->Release();
+}
+
+void Renderer::BeginFrame()
+{
+	//bind render target
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);	//nullptr = 3D
+
+	auto viewport = CD3D11_VIEWPORT(0.0f, 0.0f, 800.0f, 600.0f);
+	//rs = rasteriser stage
+	deviceContext->RSSetViewports(1, &viewport);
+
+	//Sets background colour
+	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
+}
+
+void Renderer::EndFrame()
+{
+	swapChain->Present(0, 0);
 }
 
 ID3D11Device * Renderer::GetDevice()

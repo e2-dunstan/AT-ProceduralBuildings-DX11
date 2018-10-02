@@ -30,6 +30,7 @@ bool Triangle::InitTriangle(Renderer& renderer)
 
 void Triangle::Draw(Renderer& renderer)
 {
+
 	auto deviceContext = renderer.GetDeviceContext();
 	//bind triangle shaders
 	deviceContext->IASetInputLayout(inputLayout);
@@ -42,6 +43,7 @@ void Triangle::Draw(Renderer& renderer)
 	//IA = input assembler. See DX graphics pipeline
 	deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);	//look at function requirements for help
 
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//draw
 	deviceContext->Draw(3, 0);
 }
@@ -86,4 +88,22 @@ void Triangle::CreateShaders(Renderer & renderer)
 	};
 	renderer.GetDevice()->CreateInputLayout(layout, 2, vsData.data(), vsData.size(), &inputLayout);
 
+}
+
+void Triangle::CreateRenderStates(Renderer & renderer)
+{
+	auto rasteriserDesc = CD3D11_RASTERIZER_DESC(
+		D3D11_FILL_SOLID, D3D11_CULL_NONE, false,
+		0, 0, 0, 0, false, false, false);
+	renderer.GetDevice()->CreateRasterizerState(&rasteriserDesc, &rasteriserState);
+
+	auto blendDesc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
+	renderer.GetDevice()->CreateBlendState(&blendDesc, &blendState);
+
+	auto depthDesc = CD3D11_DEPTH_STENCIL_DESC(
+		FALSE, D3D11_DEPTH_WRITE_MASK_ZERO, D3D11_COMPARISON_LESS,
+		FALSE, D3D11_DEFAULT_STENCIL_READ_MASK, D3D11_DEFAULT_STENCIL_WRITE_MASK,
+		D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_COMPARISON_ALWAYS,
+		D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_COMPARISON_ALWAYS);
+	renderer.GetDevice()->CreateDepthStencilState(&depthDesc, &depthState);
 }
