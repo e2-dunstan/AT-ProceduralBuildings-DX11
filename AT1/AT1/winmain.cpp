@@ -28,6 +28,7 @@ void TestApp::Render(float dt)
 {
 	renderer->GetDeviceContext()->ClearRenderTargetView(renderer->GetRenderTargetView(), DirectX::Colors::PaleVioletRed);
 	renderer->GetSwapChain()->Present(0, 0);
+	triangle->Draw(*renderer);
 }
 
 

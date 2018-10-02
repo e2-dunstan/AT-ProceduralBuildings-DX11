@@ -62,6 +62,11 @@ bool DXApp::Init()
 	{
 		return false;
 	}
+	triangle = std::unique_ptr<Triangle>(new Triangle);
+	if (!triangle->InitTriangle(*renderer))
+	{
+		return false;
+	}
 	
 	return true;
 	

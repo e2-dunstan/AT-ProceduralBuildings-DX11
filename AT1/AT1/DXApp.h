@@ -4,6 +4,7 @@
 #include <string>
 #include "DXUtil.h"
 #include "Renderer.h"
+#include "Triangle.h"
 
 class DXApp
 {
@@ -27,6 +28,7 @@ protected:
 	DWORD		windowStyle;
 
 	std::unique_ptr<Renderer> renderer;
+	std::unique_ptr<Triangle> triangle;
 
 protected:
 	//Initialise Win32 window
