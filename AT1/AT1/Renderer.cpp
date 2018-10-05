@@ -19,6 +19,7 @@ Renderer::~Renderer()
 	Memory::SafeRelease(swapChain);
 	Memory::SafeRelease(deviceContext);
 	Memory::SafeRelease(device);
+	Memory::SafeRelease(depthStencilView);
 }
 
 bool Renderer::InitDirect3D(HWND appWindow)
@@ -118,6 +119,66 @@ void Renderer::CreateRenderTarget()
 	device->CreateRenderTargetView(backBufferTexture, nullptr, &renderTargetView);
 
 	backBufferTexture->Release();
+
+	D3D11_TEXTURE2D_DESC backBufferDesc = { 0 };
+	backBufferTexture->GetDesc(&backBufferDesc);
+
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	depthStencilDesc.Width = backBufferDesc.Width;
+	depthStencilDesc.Height = backBufferDesc.Height;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0;
+	depthStencilDesc.MiscFlags = 0;
+	ID3D11Texture2D* depthStencil;
+
+	//DX::ThrowIfFailed(
+	device->CreateTexture2D(
+		&depthStencilDesc,
+		nullptr,
+		&depthStencil
+	//)
+	);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	depthStencilViewDesc.Format = depthStencilDesc.Format;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Flags = 0;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+	//DX::ThrowIfFailed(
+		device->CreateDepthStencilView(
+			depthStencil,
+			&depthStencilViewDesc,
+			&depthStencilView
+		//)
+	);
+
+	float xScale = 1.42814801f;
+	float yScale = 1.42814801f;
+	if (backBufferDesc.Width > backBufferDesc.Height)
+	{
+		xScale = yScale *
+			static_cast<float>(backBufferDesc.Height) /
+			static_cast<float>(backBufferDesc.Width);
+	}
+	else
+	{
+		yScale = xScale *
+			static_cast<float>(backBufferDesc.Width) /
+			static_cast<float>(backBufferDesc.Height);
+	}
+
+	constantBufferData.projection = DirectX::XMFLOAT4X4(
+		xScale, 0.0f, 0.0f, 0.0f,
+		0.0f, yScale, 0.0f, 0.0f,
+		0.0f, 0.0f, -1.0f, -0.01f,
+		0.0f, 0.0f, -1.0f, 0.0f
+	);
 }
 
 void Renderer::BeginFrame()
@@ -125,12 +186,17 @@ void Renderer::BeginFrame()
 	//bind render target
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);	//nullptr = 3D
 
-	auto viewport = CD3D11_VIEWPORT(0.0f, 0.0f, 800.0f, 600.0f);
+	auto viewport = CD3D11_VIEWPORT(0.0f, 0.0f, windowWidth, windowHeight);
 	//rs = rasteriser stage
 	deviceContext->RSSetViewports(1, &viewport);
 
 	//Sets background colour
 	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
+}
+
+void Renderer::Draw()
+{
+	//triangle->Draw()
 }
 
 void Renderer::EndFrame()

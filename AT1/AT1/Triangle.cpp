@@ -28,9 +28,8 @@ bool Triangle::InitTriangle(Renderer& renderer)
 	return true;
 }
 
-void Triangle::Draw(Renderer& renderer)
+void Triangle::Draw(Renderer& renderer, UINT startVertexLocation)
 {
-
 	auto deviceContext = renderer.GetDeviceContext();
 	//bind triangle shaders
 	deviceContext->IASetInputLayout(inputLayout);
@@ -45,7 +44,7 @@ void Triangle::Draw(Renderer& renderer)
 
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//draw
-	deviceContext->Draw(3, 0);
+	deviceContext->Draw(3, startVertexLocation);
 }
 
 void Triangle::CreateMesh(Renderer & renderer)

@@ -8,7 +8,7 @@ public:
 	~Triangle();
 
 	bool InitTriangle(Renderer& renderer);
-	void Draw(Renderer& renderer);
+	void Draw(Renderer& renderer, UINT startVertexLocation);
 	void CreateMesh(Renderer& renderer);
 	void CreateShaders(Renderer& renderer);
 	void CreateRenderStates(Renderer& renderer);

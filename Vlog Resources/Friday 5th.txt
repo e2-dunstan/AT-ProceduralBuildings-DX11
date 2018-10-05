@@ -1,0 +1,1 @@
+First attempt at 2 triangles: from calling triangle->draw twice and setting the start vertex location of the second one to 1

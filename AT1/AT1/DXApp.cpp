@@ -62,6 +62,8 @@ bool DXApp::Init()
 	{
 		return false;
 	}
+
+
 	triangle = std::unique_ptr<Triangle>(new Triangle);
 	if (!triangle->InitTriangle(*renderer))
 	{
@@ -95,7 +97,7 @@ bool DXApp::InitWindow()
 		return false;
 	}
 
-	RECT r = { 0,0, windowHeight, windowHeight };
+	RECT r = { 0,0, windowWidth, windowHeight };
 	AdjustWindowRect(&r, windowStyle, false);
 	UINT width = r.right - r.left;
 	UINT height = r.bottom - r.top;

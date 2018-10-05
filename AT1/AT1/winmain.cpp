@@ -27,7 +27,8 @@ void TestApp::Update(float dt)
 void TestApp::Render(float dt)
 {
 	renderer->BeginFrame();
-	triangle->Draw(*renderer);
+	triangle->Draw(*renderer, 0);
+	//renderer->Draw();
 	renderer->EndFrame();
 }
 

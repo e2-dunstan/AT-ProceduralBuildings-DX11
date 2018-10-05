@@ -30,6 +30,9 @@
     <ClCompile Include="Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXApp.h">
@@ -50,12 +53,21 @@
     <ClInclude Include="winmain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="TriangleVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="TrianglePixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SimplePixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SimpleVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
