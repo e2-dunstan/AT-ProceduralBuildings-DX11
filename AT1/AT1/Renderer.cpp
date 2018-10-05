@@ -2,6 +2,12 @@
 #include "Constants.h"
 
 
+struct cbPerObject
+{
+	XMMATRIX  WVP;
+};
+cbPerObject cbPerObj;
+
 Renderer::Renderer()
 {
 	
@@ -15,20 +21,33 @@ Renderer::~Renderer()
 	{
 		deviceContext->ClearState();
 	}
-	Memory::SafeRelease(renderTargetView);
-	Memory::SafeRelease(swapChain);
-	Memory::SafeRelease(deviceContext);
-	Memory::SafeRelease(device);
-	Memory::SafeRelease(depthStencilView);
+
+	renderTargetView->Release();
+	swapChain->Release();
+	deviceContext->Release();
+	device->Release();
+	depthStencilView->Release();
+	depthStencilBuffer->Release();
+	//constantBuffer->Release();
+	cbPerObjectBuffer->Release();
 }
 
 bool Renderer::InitDirect3D(HWND appWindow)
 {
 	UINT createDeviceFlags = 0;
 
-	//#ifdef _DEBUG
-	//	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-	//#endif
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	depthStencilDesc.Width = windowWidth;
+	depthStencilDesc.Height = windowHeight;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.SampleDesc.Count = 1;
+	depthStencilDesc.SampleDesc.Quality = 0;
+	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0;
+	depthStencilDesc.MiscFlags = 0;
 
 	D3D_DRIVER_TYPE driverTypes[] =
 	{
@@ -90,25 +109,31 @@ bool Renderer::InitDirect3D(HWND appWindow)
 		return false;
 	}
 
+	device->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
+	device->CreateDepthStencilView(depthStencilBuffer, NULL, &depthStencilView);
+
 	CreateRenderTarget();
-	//BeginFrame();
-
-
-	////Bind render target view
-	//deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);	//nullptr is depth stencil view for shadow maps. Will implement later
-
-	////Viewport creation
-	//viewport.Width = static_cast<float>(windowWidth);
-	//viewport.Height = static_cast<float>(windowHeight);
-	//viewport.TopLeftX = 0;
-	//viewport.TopLeftY = 0;
-	//viewport.MinDepth = 0.0f;
-	//viewport.MaxDepth = 1.0f;
-
-	////Bind viewport
-	//deviceContext->RSSetViewports(1, &viewport);
 
 	return true;
+}
+
+void Renderer::InitView()
+{
+	D3D11_BUFFER_DESC cbbd;
+	ZeroMemory(&cbbd, sizeof(D3D11_BUFFER_DESC));
+	cbbd.Usage = D3D11_USAGE_DEFAULT;
+	cbbd.ByteWidth = sizeof(cbPerObject);
+	cbbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbbd.CPUAccessFlags = 0;
+	cbbd.MiscFlags = 0;
+	device->CreateBuffer(&cbbd, NULL, &cbPerObjectBuffer);
+
+	camPosition = XMVectorSet(0.0f, 3.0f, -8.0f, 0.0f);
+	camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
+	camProjection = XMMatrixPerspectiveFovLH(0.4f*3.14f, (float)windowWidth / windowHeight, 1.0f, 1000.0f);
 }
 
 void Renderer::CreateRenderTarget()
@@ -119,89 +144,54 @@ void Renderer::CreateRenderTarget()
 	device->CreateRenderTargetView(backBufferTexture, nullptr, &renderTargetView);
 
 	backBufferTexture->Release();
-
-	D3D11_TEXTURE2D_DESC backBufferDesc = { 0 };
-	backBufferTexture->GetDesc(&backBufferDesc);
-
-	D3D11_TEXTURE2D_DESC depthStencilDesc;
-	depthStencilDesc.Width = backBufferDesc.Width;
-	depthStencilDesc.Height = backBufferDesc.Height;
-	depthStencilDesc.MipLevels = 1;
-	depthStencilDesc.ArraySize = 1;
-	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthStencilDesc.SampleDesc.Count = 1;
-	depthStencilDesc.SampleDesc.Quality = 0;
-	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	depthStencilDesc.CPUAccessFlags = 0;
-	depthStencilDesc.MiscFlags = 0;
-	ID3D11Texture2D* depthStencil;
-
-	//DX::ThrowIfFailed(
-	device->CreateTexture2D(
-		&depthStencilDesc,
-		nullptr,
-		&depthStencil
-	//)
-	);
-
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	depthStencilViewDesc.Format = depthStencilDesc.Format;
-	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	depthStencilViewDesc.Flags = 0;
-	depthStencilViewDesc.Texture2D.MipSlice = 0;
-	//DX::ThrowIfFailed(
-		device->CreateDepthStencilView(
-			depthStencil,
-			&depthStencilViewDesc,
-			&depthStencilView
-		//)
-	);
-
-	float xScale = 1.42814801f;
-	float yScale = 1.42814801f;
-	if (backBufferDesc.Width > backBufferDesc.Height)
-	{
-		xScale = yScale *
-			static_cast<float>(backBufferDesc.Height) /
-			static_cast<float>(backBufferDesc.Width);
-	}
-	else
-	{
-		yScale = xScale *
-			static_cast<float>(backBufferDesc.Width) /
-			static_cast<float>(backBufferDesc.Height);
-	}
-
-	constantBufferData.projection = DirectX::XMFLOAT4X4(
-		xScale, 0.0f, 0.0f, 0.0f,
-		0.0f, yScale, 0.0f, 0.0f,
-		0.0f, 0.0f, -1.0f, -0.01f,
-		0.0f, 0.0f, -1.0f, 0.0f
-	);
 }
 
-void Renderer::BeginFrame()
+void Renderer::DrawScene()
 {
 	//bind render target
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);	//nullptr = 3D
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
 
-	auto viewport = CD3D11_VIEWPORT(0.0f, 0.0f, windowWidth, windowHeight);
+	viewport.Width = (float)windowWidth;
+	viewport.Height = (float)windowHeight;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+	
 	//rs = rasteriser stage
 	deviceContext->RSSetViewports(1, &viewport);
 
 	//Sets background colour
 	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
-}
+	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-void Renderer::Draw()
-{
-	//triangle->Draw()
+	//Set the WVP matrix and send it to the constant buffer in effect file
+	WVP = _cube1World * camView * camProjection;
+	cbPerObj.WVP = XMMatrixTranspose(WVP);
+	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
+	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+
+	//Draw the first cube
+	deviceContext->DrawIndexed(36, 0, 0);
+
+	WVP = _cube2World * camView * camProjection;
+	cbPerObj.WVP = XMMatrixTranspose(WVP);
+	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
+	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+
+	//Draw the second cube
+	deviceContext->DrawIndexed(36, 0, 0);
 }
 
 void Renderer::EndFrame()
 {
 	swapChain->Present(0, 0);
+}
+
+void Renderer::SetCubeWorldTransforms(XMMATRIX cube1World, XMMATRIX cube2World)
+{
+	_cube1World = cube1World;
+	_cube2World = cube2World;
 }
 
 ID3D11Device * Renderer::GetDevice()

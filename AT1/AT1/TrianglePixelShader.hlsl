@@ -1,10 +1,5 @@
-struct Input
-{
-	float4 pos : SV_POSITION;
-	float3 colour : COLOR;
-};
 
-float4 main(Input input) : SV_TARGET
+float4 PS(VS_Output input) : SV_TARGET
 {
-	return float4(input.colour.r, input.colour.g, input.colour.b, 1);
+	return input.Color;
 }

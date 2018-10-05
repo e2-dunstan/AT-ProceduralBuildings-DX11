@@ -22,13 +22,13 @@ bool TestApp::Init()
 
 void TestApp::Update(float dt)
 {
+	//https://www.braynzarsoft.net/viewtutorial/q16390-9-transformations
 }
 
 void TestApp::Render(float dt)
 {
-	renderer->BeginFrame();
-	triangle->Draw(*renderer, 0);
-	//renderer->Draw();
+	renderer->DrawScene();
+	model->Draw(*renderer);
 	renderer->EndFrame();
 }
 

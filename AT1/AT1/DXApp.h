@@ -4,7 +4,7 @@
 #include <string>
 #include "DXUtil.h"
 #include "Renderer.h"
-#include "Triangle.h"
+#include "Model.h"
 
 class DXApp
 {
@@ -17,7 +17,7 @@ public:
 
 	//Framework
 	virtual bool Init();
-	virtual void Update(float dt) = 0;
+	virtual void Update(float dt);
 	virtual void Render(float dt) = 0;
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -28,10 +28,19 @@ protected:
 	DWORD		windowStyle;
 
 	std::unique_ptr<Renderer> renderer;
-	std::unique_ptr<Triangle> triangle;
+	std::unique_ptr<Model> model;
 
 protected:
 	//Initialise Win32 window
 	bool InitWindow();
+
+private:
+	XMMATRIX cube1World;
+	XMMATRIX cube2World;
+
+	XMMATRIX Rotation;
+	XMMATRIX Scale;
+	XMMATRIX Translation;
+	float rot = 0.01f;
 };
 

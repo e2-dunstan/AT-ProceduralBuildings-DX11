@@ -62,16 +62,47 @@ bool DXApp::Init()
 	{
 		return false;
 	}
+	renderer->InitView();
 
-
-	triangle = std::unique_ptr<Triangle>(new Triangle);
-	if (!triangle->InitTriangle(*renderer))
+	model = std::unique_ptr<Model>(new Model);
+	if (!model->InitModel(*renderer))
 	{
 		return false;
 	}
 	
 	return true;
 	
+}
+
+void DXApp::Update(float dt)
+{
+	//Keep the cubes rotating
+	rot += .0005f;
+	if (rot > 6.28f)
+		rot = 0.0f;
+
+	//Reset cube1World
+	cube1World = XMMatrixIdentity();
+
+	//Define cube1's world space matrix
+	XMVECTOR rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotaxis, rot);
+	Translation = XMMatrixTranslation(0.0f, 0.0f, 4.0f);
+
+	//Set cube1's world space using the transformations
+	cube1World = Rotation * Translation;
+
+	//Reset cube2World
+	cube2World = XMMatrixIdentity();
+
+	//Define cube2's world space matrix
+	Rotation = XMMatrixRotationAxis(rotaxis, -rot);
+	Scale = XMMatrixScaling(1.3f, 1.3f, 1.3f);
+
+	//Set cube2's world space matrix
+	cube2World = Scale * Rotation;
+
+	renderer->SetCubeWorldTransforms(cube1World, cube2World);
 }
 
 bool DXApp::InitWindow()

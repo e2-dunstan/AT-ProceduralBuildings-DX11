@@ -14,9 +14,9 @@ struct SimpleCubeVertex
 
 struct ConstantBuffer
 {
-	XMFLOAT4X4 model;
-	XMFLOAT4X4 view;
-	XMFLOAT4X4 projection;
+	XMMATRIX model;
+	XMMATRIX view;
+	XMMATRIX projection;
 };
 
 
@@ -28,11 +28,13 @@ public:
 
 	//Initialise DX
 	bool InitDirect3D(HWND appWindow);
+	void InitView();
 	void CreateRenderTarget();
 
-	void BeginFrame();
-	void Draw();
+	void DrawScene();
 	void EndFrame();
+
+	void SetCubeWorldTransforms(XMMATRIX cube1World, XMMATRIX cube2World);
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
@@ -51,7 +53,22 @@ protected:
 
 	//render objects closer to the camera in front of objects further from the camera
 	ID3D11DepthStencilView* depthStencilView = nullptr;
-	std::unique_ptr<ID3D11Buffer> constantBuffer;
+	ID3D11Texture2D* depthStencilBuffer = nullptr;
+	//ID3D11Buffer* constantBuffer;
 	ConstantBuffer constantBufferData;
+
+	ID3D11Buffer* cbPerObjectBuffer = nullptr;
+
+	XMMATRIX _cube1World;
+	XMMATRIX _cube2World;
+
+	XMMATRIX WVP;
+	XMMATRIX World;
+	XMMATRIX camView;
+	XMMATRIX camProjection;
+
+	XMVECTOR camPosition;
+	XMVECTOR camTarget;
+	XMVECTOR camUp;
 };
 
