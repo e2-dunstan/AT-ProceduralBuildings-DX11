@@ -1,5 +1,3 @@
-﻿  DXApp.cpp
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(61): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
-  winmain.cpp
-  Generating Code...
-  AT1.vcxproj -> D:\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe
+﻿  compilation object save succeeded; see E:\-- UNIVERSITY --\-- Year 3 --\AT-ProceduralBuildings-DX11\AT1\AT1\TriangleVertexShader.cso
+  Model.cpp
+  AT1.vcxproj -> E:\-- UNIVERSITY --\-- Year 3 --\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe

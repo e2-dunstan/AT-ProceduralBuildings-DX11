@@ -69,7 +69,7 @@ bool Renderer::InitDirect3D(HWND appWindow)
 
 	HRESULT result;
 
-	D3D_FEATURE_LEVEL  FeatureLevelsRequested = D3D_FEATURE_LEVEL_11_0;
+	D3D_FEATURE_LEVEL  FeatureLevelsRequested = D3D_FEATURE_LEVEL_9_3;
 	UINT               numLevelsRequested = 1;
 	D3D_FEATURE_LEVEL  FeatureLevelsSupported;
 
@@ -82,13 +82,13 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	result = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		0,
+		D3D11_CREATE_DEVICE_DEBUG,
 		&FeatureLevelsRequested,
 		numLevelsRequested,
 		D3D11_SDK_VERSION,
 		&swapChainDesc,
 		&swapChain,
-		&device,
+		&device, 
 		&FeatureLevelsSupported,
 		&deviceContext);
 

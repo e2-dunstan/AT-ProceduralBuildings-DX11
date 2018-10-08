@@ -109,9 +109,11 @@ void Model::CreateShaders(Renderer & renderer)
 
 	std::vector<char> vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 	std::vector<char> psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
-
+		
 	renderer.GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
 	renderer.GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
+	renderer.GetDeviceContext()->VSSetShader(vertexShader, NULL, NULL);
+	renderer.GetDeviceContext()->PSSetShader(pixelShader, NULL, NULL);
 
 	//create input layout description
 	D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -129,13 +131,13 @@ void Model::CreateShaders(Renderer & renderer)
 
 void Model::CreateRenderStates(Renderer & renderer)
 {
-	auto rasteriserDesc = CD3D11_RASTERIZER_DESC(
-		D3D11_FILL_SOLID, D3D11_CULL_NONE, false,
-		0, 0, 0, 0, false, false, false);
-	renderer.GetDevice()->CreateRasterizerState(&rasteriserDesc, &rasteriserState);
+	//auto rasteriserDesc = CD3D11_RASTERIZER_DESC(
+	//	D3D11_FILL_SOLID, D3D11_CULL_NONE, false,
+	//	0, 0, 0, 0, false, false, false);
+	//renderer.GetDevice()->CreateRasterizerState(&rasteriserDesc, &rasteriserState);
 
-	auto blendDesc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
-	renderer.GetDevice()->CreateBlendState(&blendDesc, &blendState);
+	//auto blendDesc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
+	//renderer.GetDevice()->CreateBlendState(&blendDesc, &blendState);
 
 	auto depthDesc = CD3D11_DEPTH_STENCIL_DESC(
 		FALSE, D3D11_DEPTH_WRITE_MASK_ZERO, D3D11_COMPARISON_LESS,
