@@ -49,25 +49,6 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-	D3D_DRIVER_TYPE driverTypes[] =
-	{
-		//GPU or integrated for sliding transforms
-		D3D_DRIVER_TYPE_HARDWARE,
-		//Emulated if don't have above. Rarely used.
-		D3D_DRIVER_TYPE_WARP,
-		D3D_DRIVER_TYPE_REFERENCE
-	};
-	UINT numDriverTypes = ARRAYSIZE(driverTypes);
-
-	D3D_FEATURE_LEVEL featureLevels[] =
-	{
-		//Will most likely only need 11
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0,
-		D3D_FEATURE_LEVEL_9_3
-	};
-	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
 	//Swap chains: front buffer and back buffer
 	//Swaps between the two to e.g. smooth out animation
@@ -88,37 +69,44 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	swapDesc.SampleDesc.Quality = 0;
 	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; //alt-enter fullscreen, but won't resize the buffer
 
-															 //sets driver type
-	HRESULT result;
-	for (int i = 0; i < numDriverTypes; i++)
-	{
-		result = D3D11CreateDeviceAndSwapChain(NULL, driverTypes[i], NULL, createDeviceFlags,
-			featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &swapDesc, &swapChain,
-			&device, &featureLevel, &deviceContext);
-		
-		if (SUCCEEDED(result))
-		{
-			driverType = driverTypes[i];
-			break;
-		}
-		//m_pDevice is related to shaders
-	}
+
+	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, NULL,
+			NULL, NULL, D3D11_SDK_VERSION, &swapDesc, &swapChain,
+			&device, NULL, &deviceContext);
+
 	if (FAILED(result))
 	{
 		OutputDebugString("FAILED TO CREATE DEVICE AND SWAP CHAIN \nDXApp.cpp InitDirect3D()");
 		return false;
 	}
 
+	ID3D11Texture2D* backBufferTexture;
+	//Get the buffer, store into back buffer texture
+	swapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture));
+	device->CreateRenderTargetView(backBufferTexture, nullptr, &renderTargetView);
+	backBufferTexture->Release();
+
 	device->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
 	device->CreateDepthStencilView(depthStencilBuffer, NULL, &depthStencilView);
 
-	CreateRenderTarget();
-
+	//bind render target
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+	
 	return true;
 }
 
 void Renderer::InitView()
-{
+{	
+	viewport.Width = (float)windowWidth;
+	viewport.Height = (float)windowHeight;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+
+	//rs = rasteriser stage
+	deviceContext->RSSetViewports(1, &viewport);
+
 	D3D11_BUFFER_DESC cbbd;
 	ZeroMemory(&cbbd, sizeof(D3D11_BUFFER_DESC));
 	cbbd.Usage = D3D11_USAGE_DEFAULT;
@@ -128,6 +116,8 @@ void Renderer::InitView()
 	cbbd.MiscFlags = 0;
 	device->CreateBuffer(&cbbd, NULL, &cbPerObjectBuffer);
 
+	deviceContext->IASetIndexBuffer(squareIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
 	camPosition = XMVectorSet(0.0f, 3.0f, -8.0f, 0.0f);
 	camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -136,31 +126,8 @@ void Renderer::InitView()
 	camProjection = XMMatrixPerspectiveFovLH(0.4f*3.14f, (float)windowWidth / windowHeight, 1.0f, 1000.0f);
 }
 
-void Renderer::CreateRenderTarget()
-{
-	ID3D11Texture2D* backBufferTexture = 0;
-	//Get the buffer, store into back buffer texture
-	swapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture));
-	device->CreateRenderTargetView(backBufferTexture, nullptr, &renderTargetView);
-
-	backBufferTexture->Release();
-}
-
 void Renderer::DrawScene()
 {
-	//bind render target
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-
-	viewport.Width = (float)windowWidth;
-	viewport.Height = (float)windowHeight;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
-	
-	//rs = rasteriser stage
-	deviceContext->RSSetViewports(1, &viewport);
-
 	//Sets background colour
 	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);

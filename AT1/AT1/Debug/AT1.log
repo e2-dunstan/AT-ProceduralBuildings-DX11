@@ -1,3 +1,5 @@
-﻿  DXApp.cpp
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(60): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
-  AT1.vcxproj -> D:\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe
+﻿  Renderer.cpp
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\renderer.cpp(93): warning C4018: '<': signed/unsigned mismatch
+  winmain.cpp
+  Generating Code...
+  AT1.vcxproj -> E:\-- UNIVERSITY --\-- Year 3 --\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe

@@ -75,6 +75,9 @@ void Model::CreateMesh(Renderer & renderer)
 	D3D11_BUFFER_DESC indexBufferDesc;
 	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
 
+
+
+
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(DWORD) * 12 * 3;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -105,6 +108,7 @@ void Model::CreateShaders(Renderer & renderer)
 	renderer.GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
 	renderer.GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
 
+
 	//create input layout description
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -113,7 +117,9 @@ void Model::CreateShaders(Renderer & renderer)
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		//use append element for each following parameter
 	};
-	renderer.GetDevice()->CreateInputLayout(layout, 2, vsData.data(), vsData.size(), &inputLayout);
+	UINT numElements = ARRAYSIZE(layout);
+	renderer.GetDevice()->CreateInputLayout(layout, numElements, vsData.data(), vsData.size(), &inputLayout);
+	renderer.GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void Model::CreateRenderStates(Renderer & renderer)
@@ -147,8 +153,8 @@ void Model::Draw(Renderer& renderer)
 	UINT offset = 0;
 	//IA = input assembler. See DX graphics pipeline
 	deviceContext->IASetVertexBuffers(0, 1, &squareVertexBuffer, &stride, &offset);	//look at function requirements for help
-	deviceContext->IASetIndexBuffer(squareIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	
+
 	//draw
-	deviceContext->DrawIndexed(6, 0, 0);
+	//deviceContext->DrawIndexed(6, 0, 0);
 }
