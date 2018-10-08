@@ -26,10 +26,8 @@ public:
 	Renderer();
 	~Renderer();
 
-	//Initialise DX
 	bool InitDirect3D(HWND appWindow);
 	void InitView();
-	void CreateRenderTarget();
 
 	void DrawScene();
 	void EndFrame();

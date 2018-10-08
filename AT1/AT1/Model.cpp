@@ -2,16 +2,6 @@
 #include <fstream>
 #include <vector>
 
-struct Vertex
-{
-	Vertex(){}
-	Vertex(float x, float y, float z,
-		float r, float g, float b, float a)
-		: pos(x, y, z), colour(r, g, b, a) {}
-
-	XMFLOAT3 pos;
-	XMFLOAT4 colour;
-};
 
 Model::Model()
 {
@@ -30,8 +20,8 @@ Model::~Model()
 
 bool Model::InitModel(Renderer& renderer)
 {
-	CreateMesh(renderer);
 	CreateShaders(renderer);
+	CreateMesh(renderer);
 	CreateRenderStates(renderer);
 	return true;
 }
@@ -41,6 +31,7 @@ void Model::CreateMesh(Renderer & renderer)
 	//define vertices
 	Vertex vertices[]
 	{
+		//x, y, z, r, g, b, a
 		Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f),
 		Vertex(-1.0f, +1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f),
 		Vertex(+1.0f, +1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f),
@@ -72,11 +63,11 @@ void Model::CreateMesh(Renderer & renderer)
 		4, 3, 7
 	};
 
+	//--CREATE BUFFERS--//
+
+	//Create index buffer
 	D3D11_BUFFER_DESC indexBufferDesc;
 	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
-
-
-
 
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(DWORD) * 12 * 3;
@@ -84,18 +75,32 @@ void Model::CreateMesh(Renderer & renderer)
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
 
-	//create vertex buffer
-	auto vertexBufferDesc = CD3D11_BUFFER_DESC(sizeof(vertices) * 8,
-		D3D11_BIND_VERTEX_BUFFER);
-	D3D11_SUBRESOURCE_DATA vertexData = { 0 };
-	vertexData.pSysMem = vertices;
-
 	D3D11_SUBRESOURCE_DATA iinitData;
 	iinitData.pSysMem = indices;
-
-	renderer.GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &squareVertexBuffer);
 	renderer.GetDevice()->CreateBuffer(&indexBufferDesc, &iinitData, &squareIndexBuffer);
+	renderer.GetDeviceContext()->IASetIndexBuffer(squareIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	//Create vertex buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * 8;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = vertices;
+	renderer.GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &squareVertexBuffer);
+
+	//bind vertex buffer
+	UINT stride = sizeof(Vertex);	//size between each vertex
+	UINT offset = 0;
+	renderer.GetDeviceContext()->IASetVertexBuffers(0, 1, &squareVertexBuffer, &stride, &offset);	//look at function requirements for help
 }
+
 
 void Model::CreateShaders(Renderer & renderer)
 {
@@ -108,17 +113,17 @@ void Model::CreateShaders(Renderer & renderer)
 	renderer.GetDevice()->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &vertexShader);
 	renderer.GetDevice()->CreatePixelShader(psData.data(), psData.size(), nullptr, &pixelShader);
 
-
 	//create input layout description
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		//2 parameters. See Input data in shader
-		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		//use append element for each following parameter
 	};
 	UINT numElements = ARRAYSIZE(layout);
 	renderer.GetDevice()->CreateInputLayout(layout, numElements, vsData.data(), vsData.size(), &inputLayout);
+	renderer.GetDeviceContext()->IASetInputLayout(inputLayout);
 	renderer.GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
@@ -138,23 +143,4 @@ void Model::CreateRenderStates(Renderer & renderer)
 		D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_COMPARISON_ALWAYS,
 		D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_COMPARISON_ALWAYS);
 	renderer.GetDevice()->CreateDepthStencilState(&depthDesc, &depthState);
-}
-
-void Model::Draw(Renderer& renderer)
-{
-	auto deviceContext = renderer.GetDeviceContext();
-	//bind triangle shaders
-	deviceContext->IASetInputLayout(inputLayout);
-	deviceContext->VSSetShader(vertexShader, nullptr, 0);
-	deviceContext->PSSetShader(pixelShader, nullptr, 0);
-
-	//bind vertex buffer
-	UINT stride = sizeof(Vertex);	//size between each vertex
-	UINT offset = 0;
-	//IA = input assembler. See DX graphics pipeline
-	deviceContext->IASetVertexBuffers(0, 1, &squareVertexBuffer, &stride, &offset);	//look at function requirements for help
-	
-
-	//draw
-	//deviceContext->DrawIndexed(6, 0, 0);
 }

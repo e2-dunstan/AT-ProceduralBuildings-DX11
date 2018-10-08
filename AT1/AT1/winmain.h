@@ -7,6 +7,5 @@ public:
 	~TestApp();
 
 	bool Init() override;
-	void Update(float dt) override;
 	void Render(float dt) override;
 };

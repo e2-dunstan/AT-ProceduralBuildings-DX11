@@ -58,18 +58,18 @@ bool DXApp::Init()
 		return false;
 	}	
 	
-	model = std::unique_ptr<Model>(new Model);
-	if (!model->InitModel(*renderer))
-	{
-		return false;
-	}
-	
 	renderer = std::unique_ptr<Renderer>(new Renderer);
 	if (!renderer->InitDirect3D(appWindow))
 	{
 		return false;
 	}
 	renderer->InitView();
+
+	model = std::unique_ptr<Model>(new Model);
+	if (!model->InitModel(*renderer))
+	{
+		return false;
+	}
 	
 	return true;
 	
@@ -147,6 +147,7 @@ bool DXApp::InitWindow()
 	}
 
 	ShowWindow(appWindow, SW_SHOW);
+	UpdateWindow(appWindow);
 
 	return true;
 }

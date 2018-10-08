@@ -6,7 +6,7 @@ cbuffer cbPerObject
 
 struct VS_INPUT
 {
-	float3 vPosition   : SV_POSITION;
+	float4 vPosition   : POSITION;
 	float3 vColour : COLOR;
 };
 
@@ -21,7 +21,7 @@ VS_OUTPUT main(VS_INPUT input) // main is the default function name
 {
 	VS_OUTPUT Output;
 
-	float4 pos = float4(input.vPosition, 1.0f);
+	float4 pos = float4(input.vPosition);
 
 	// Transform the position from object space to homogeneous projection space
 	pos = mul(pos, WVP);

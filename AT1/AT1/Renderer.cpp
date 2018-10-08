@@ -17,24 +17,94 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
 	//Clean up D3D
-	if (deviceContext)
-	{
-		deviceContext->ClearState();
-	}
+	//if (deviceContext)
+	//{
+	//	deviceContext->ClearState();
+	//}
 
-	renderTargetView->Release();
+	
 	swapChain->Release();
-	deviceContext->Release();
 	device->Release();
+	deviceContext->Release();
+	renderTargetView->Release();
 	depthStencilView->Release();
 	depthStencilBuffer->Release();
-	//constantBuffer->Release();
 	cbPerObjectBuffer->Release();
 }
 
 bool Renderer::InitDirect3D(HWND appWindow)
 {
-	UINT createDeviceFlags = 0;
+	//UINT createDeviceFlags = 0;
+	//Describe our SwapChain Buffer
+	DXGI_MODE_DESC bufferDesc;
+
+	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
+
+	bufferDesc.Width = windowWidth;
+	bufferDesc.Height = windowHeight;
+	bufferDesc.RefreshRate.Numerator = 60;
+	bufferDesc.RefreshRate.Denominator = 1;
+	bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	bufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+	//Describe our SwapChain
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+
+	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
+
+	swapChainDesc.BufferDesc = bufferDesc;
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount = 1;
+	swapChainDesc.OutputWindow = appWindow;
+	swapChainDesc.Windowed = TRUE;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	//swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; //alt-enter fullscreen, but won't resize the buffer
+
+	//Swap chains: front buffer and back buffer
+	//Swaps between the two to e.g. smooth out animation
+	//This handles how they swap out
+
+	HRESULT result;
+
+	D3D_FEATURE_LEVEL  FeatureLevelsRequested = D3D_FEATURE_LEVEL_11_0;
+	UINT               numLevelsRequested = 1;
+	D3D_FEATURE_LEVEL  FeatureLevelsSupported;
+
+
+	//Create swap chain
+	//result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, D3D11_CREATE_DEVICE_DEBUG,
+	//		NULL, NULL, D3D11_SDK_VERSION, &swapChainDesc, &swapChain,
+	//		&device, NULL, &deviceContext);
+
+	result = D3D11CreateDeviceAndSwapChain(NULL,
+		D3D_DRIVER_TYPE_HARDWARE,
+		NULL,
+		0,
+		&FeatureLevelsRequested,
+		numLevelsRequested,
+		D3D11_SDK_VERSION,
+		&swapChainDesc,
+		&swapChain,
+		&device,
+		&FeatureLevelsSupported,
+		&deviceContext);
+
+	if (FAILED(result))
+	{
+		OutputDebugString("FAILED \nRenderer.cpp InitDirect3D()");
+		return false;
+	}
+	//SWAP CHAIN IS NULLPTR
+
+	ID3D11Texture2D* backBufferTexture;
+	//Get the buffer, store into back buffer texture
+	result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBufferTexture);
+
+	result = device->CreateRenderTargetView(backBufferTexture, nullptr, &renderTargetView);
+	backBufferTexture->Release();
 
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 	depthStencilDesc.Width = windowWidth;
@@ -49,48 +119,17 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-
-	//Swap chains: front buffer and back buffer
-	//Swaps between the two to e.g. smooth out animation
-	//This handles how they swap out
-	DXGI_SWAP_CHAIN_DESC swapDesc;
-	ZeroMemory(&swapDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-	swapDesc.BufferCount = 1;	//double buffer. 0 is single buffer
-	swapDesc.BufferDesc.Width = windowWidth;
-	swapDesc.BufferDesc.Height = windowHeight;
-	swapDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;	//8 bits for each
-	swapDesc.BufferDesc.RefreshRate.Numerator = 60;	//60 FPS
-	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapDesc.OutputWindow = appWindow;
-	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; //fast and efficient
-	swapDesc.Windowed = true;
-	swapDesc.SampleDesc.Count = 1;	//anti-aliasing for geometry, lowers performance
-	swapDesc.SampleDesc.Quality = 0;
-	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; //alt-enter fullscreen, but won't resize the buffer
-
-
-	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, NULL,
-			NULL, NULL, D3D11_SDK_VERSION, &swapDesc, &swapChain,
-			&device, NULL, &deviceContext);
-
-	if (FAILED(result))
-	{
-		OutputDebugString("FAILED TO CREATE DEVICE AND SWAP CHAIN \nDXApp.cpp InitDirect3D()");
-		return false;
-	}
-
-	ID3D11Texture2D* backBufferTexture;
-	//Get the buffer, store into back buffer texture
-	swapChain->GetBuffer(NULL, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBufferTexture));
-	device->CreateRenderTargetView(backBufferTexture, nullptr, &renderTargetView);
-	backBufferTexture->Release();
-
 	device->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
 	device->CreateDepthStencilView(depthStencilBuffer, NULL, &depthStencilView);
 
 	//bind render target
 	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+
+	if (FAILED(result))
+	{
+		OutputDebugString("FAILED \nRenderer.cpp InitDirect3D()");
+		return false;
+	}
 	
 	return true;
 }
@@ -114,9 +153,12 @@ void Renderer::InitView()
 	cbbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cbbd.CPUAccessFlags = 0;
 	cbbd.MiscFlags = 0;
-	device->CreateBuffer(&cbbd, NULL, &cbPerObjectBuffer);
+	HRESULT result = device->CreateBuffer(&cbbd, NULL, &cbPerObjectBuffer);
 
-	deviceContext->IASetIndexBuffer(squareIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	if (FAILED(result))
+	{
+		OutputDebugString("FAILED \nRenderer.cpp InitView()");
+	}
 
 	camPosition = XMVectorSet(0.0f, 3.0f, -8.0f, 0.0f);
 	camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);

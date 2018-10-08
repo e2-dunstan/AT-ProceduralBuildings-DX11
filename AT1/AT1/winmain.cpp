@@ -20,15 +20,13 @@ bool TestApp::Init()
 	return true;
 }
 
-void TestApp::Update(float dt)
-{
 	//https://www.braynzarsoft.net/viewtutorial/q16390-9-transformations
-}
+
 
 void TestApp::Render(float dt)
 {
 	renderer->DrawScene();
-	model->Draw(*renderer);
+	//model->Draw(*renderer);
 	renderer->EndFrame();
 }
 
