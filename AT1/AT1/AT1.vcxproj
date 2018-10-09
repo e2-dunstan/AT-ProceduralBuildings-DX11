@@ -114,6 +114,7 @@
     <ClCompile Include="DXApp.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +123,7 @@
     <ClInclude Include="DXUtil.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="winmain.h" />
   </ItemGroup>
   <ItemGroup>

@@ -12,17 +12,8 @@ Renderer::Renderer()
 {
 	
 }
-
-
 Renderer::~Renderer()
-{
-	//Clean up D3D
-	//if (deviceContext)
-	//{
-	//	deviceContext->ClearState();
-	//}
-
-	
+{	
 	swapChain->Release();
 	device->Release();
 	deviceContext->Release();
@@ -30,6 +21,8 @@ Renderer::~Renderer()
 	depthStencilView->Release();
 	depthStencilBuffer->Release();
 	cbPerObjectBuffer->Release();
+	wireframeState->Release();
+	filledState->Release();
 }
 
 bool Renderer::InitDirect3D(HWND appWindow)
@@ -69,9 +62,9 @@ bool Renderer::InitDirect3D(HWND appWindow)
 
 	HRESULT result;
 
-	D3D_FEATURE_LEVEL  FeatureLevelsRequested = D3D_FEATURE_LEVEL_9_3;
-	UINT               numLevelsRequested = 1;
-	D3D_FEATURE_LEVEL  FeatureLevelsSupported;
+	//D3D_FEATURE_LEVEL  FeatureLevelsRequested = D3D_FEATURE_LEVEL_9_3;
+	//UINT               numLevelsRequested = 1;
+	//D3D_FEATURE_LEVEL  FeatureLevelsSupported;
 
 
 	//Create swap chain
@@ -82,14 +75,14 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	result = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
-		&FeatureLevelsRequested,
-		numLevelsRequested,
+		NULL,//D3D11_CREATE_DEVICE_DEBUG,
+		NULL,//&FeatureLevelsRequested,
+		NULL,//numLevelsRequested,
 		D3D11_SDK_VERSION,
 		&swapChainDesc,
 		&swapChain,
 		&device, 
-		&FeatureLevelsSupported,
+		NULL,//&FeatureLevelsSupported,
 		&deviceContext);
 
 	if (FAILED(result))
@@ -166,6 +159,25 @@ void Renderer::InitView()
 
 	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
 	camProjection = XMMatrixPerspectiveFovLH(0.4f*3.14f, (float)windowWidth / windowHeight, 1.0f, 1000.0f);
+
+	InitRenderStates();
+}
+
+void Renderer::InitRenderStates()
+{
+	//VLOG: SET MULTIPLE RASTERIZER STATES THEN APPLY ON DRAW
+
+	D3D11_RASTERIZER_DESC wireframeDesc;
+	ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
+	wireframeDesc.FillMode = D3D11_FILL_WIREFRAME;
+	wireframeDesc.CullMode = D3D11_CULL_NONE;
+	device->CreateRasterizerState(&wireframeDesc, &wireframeState);
+
+	D3D11_RASTERIZER_DESC filledDesc;
+	ZeroMemory(&filledDesc, sizeof(D3D11_RASTERIZER_DESC));
+	filledDesc.FillMode = D3D11_FILL_SOLID;
+	filledDesc.CullMode = D3D11_CULL_BACK;
+	device->CreateRasterizerState(&filledDesc, &filledState);
 }
 
 void Renderer::DrawScene()
@@ -174,20 +186,22 @@ void Renderer::DrawScene()
 	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+
+	deviceContext->RSSetState(wireframeState);
 	//Set the WVP matrix and send it to the constant buffer in effect file
 	WVP = _cube1World * camView * camProjection;
 	cbPerObj.WVP = XMMatrixTranspose(WVP);
 	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
 	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-
 	//Draw the first cube
 	deviceContext->DrawIndexed(36, 0, 0);
 
+	//set individual RS states
+	deviceContext->RSSetState(filledState);
 	WVP = _cube2World * camView * camProjection;
 	cbPerObj.WVP = XMMatrixTranspose(WVP);
 	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
 	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-
 	//Draw the second cube
 	deviceContext->DrawIndexed(36, 0, 0);
 }

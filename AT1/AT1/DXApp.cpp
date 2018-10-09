@@ -79,7 +79,7 @@ void DXApp::Update(float dt)
 {
 	//Keep the cubes rotating
 	rot += .0005f;
-	if (rot > 6.28f)
+	if (rot > 6.26f)
 		rot = 0.0f;
 
 	//Reset cube1World

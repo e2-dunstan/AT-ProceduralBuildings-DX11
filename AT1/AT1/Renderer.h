@@ -28,6 +28,8 @@ public:
 
 	bool InitDirect3D(HWND appWindow);
 	void InitView();
+	void InitRenderStates();
+
 
 	void DrawScene();
 	void EndFrame();
@@ -54,6 +56,9 @@ protected:
 	ID3D11Texture2D* depthStencilBuffer = nullptr;
 	//ID3D11Buffer* constantBuffer;
 	ConstantBuffer constantBufferData;
+
+	ID3D11RasterizerState* wireframeState = nullptr;
+	ID3D11RasterizerState* filledState = nullptr;
 
 	ID3D11Buffer* cbPerObjectBuffer = nullptr;
 

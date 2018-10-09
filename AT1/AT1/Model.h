@@ -1,15 +1,16 @@
 #pragma once
 #include "Renderer.h"
+#include "Texture.h"
 
 struct Vertex
 {
 	Vertex() {}
 	Vertex(float x, float y, float z,
-		float r, float g, float b, float a)
-		: pos(x, y, z), colour(r, g, b, a) {}
+		float u, float v)
+		: pos(x, y, z), tCoord(u, v) {}
 
 	XMFLOAT3 pos;
-	XMFLOAT4 colour;
+	XMFLOAT2 tCoord;
 };
 
 class Model
@@ -21,7 +22,6 @@ public:
 	bool InitModel(Renderer& renderer);
 	void CreateMesh(Renderer& renderer);
 	void CreateShaders(Renderer& renderer);
-	void CreateRenderStates(Renderer& renderer);
 
 private:
 
@@ -31,7 +31,7 @@ private:
 	ID3D11VertexShader* vertexShader = nullptr;
 	ID3D11PixelShader* pixelShader = nullptr;
 	ID3D11InputLayout* inputLayout = nullptr;
-	ID3D11RasterizerState* rasteriserState = nullptr;
-	ID3D11DepthStencilState* depthState = nullptr;
-	ID3D11BlendState* blendState = nullptr;
+
+	//ID3D11DepthStencilState* depthState = nullptr;
+	//ID3D11BlendState* blendState = nullptr;
 };
