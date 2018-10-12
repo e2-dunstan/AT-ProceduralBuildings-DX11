@@ -5,6 +5,7 @@
 
 Model::Model()
 {
+	texture = new Texture();
 }
 
 Model::~Model()
@@ -12,15 +13,27 @@ Model::~Model()
 	//triangleVertexBuffer->Release();
 	squareVertexBuffer->Release();
 	squareIndexBuffer->Release();
-	vertexShader->Release();
-	pixelShader->Release();
-	inputLayout->Release();
+	//vertexShader->Release();
+	//pixelShader->Release();
+	//inputLayout->Release();
+	if (texture)
+	{
+		delete texture;
+		texture = nullptr;
+	}
 }
 
-bool Model::InitModel(Renderer& renderer)
+bool Model::InitModel(Renderer& renderer, char* textureFilename, HWND hwnd)
 {
-	CreateShaders(renderer);
+	//CreateShaders(renderer);
 	CreateMesh(renderer);
+
+	bool result = LoadTexture(renderer, textureFilename, hwnd);
+	if (!result)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -125,10 +138,8 @@ void Model::CreateMesh(Renderer & renderer)
 
 void Model::CreateShaders(Renderer & renderer)
 {
-	std::ifstream vsFile("TriangleVertexShader.cso", std::ios::binary);
-	std::ifstream psFile("TrianglePixelShader.cso", std::ios::binary);
-
-	D3DX11Create
+	std::ifstream vsFile("ColourVertexShader.cso", std::ios::binary);
+	std::ifstream psFile("ColourPixelShader.cso", std::ios::binary);
 
 	std::vector<char> vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 	std::vector<char> psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
@@ -150,6 +161,35 @@ void Model::CreateShaders(Renderer & renderer)
 	renderer.GetDevice()->CreateInputLayout(layout, numElements, vsData.data(), vsData.size(), &inputLayout);
 	renderer.GetDeviceContext()->IASetInputLayout(inputLayout);
 	renderer.GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+ID3D11ShaderResourceView * Model::GetTexture()
+{
+	return texture->GetTexture();
+}
+
+Texture * Model::GetTexturePointer()
+{
+	return texture;
+}
+
+bool Model::LoadTexture(Renderer & renderer, char * filename, HWND hwnd)
+{
+	bool result;
+	// Create the texture object.
+	texture = new Texture();
+	if (!texture)
+	{
+		return false;
+	}
+	// Initialize the texture object.
+	result = texture->Init(renderer.GetDevice(), renderer.GetDeviceContext(), filename, hwnd);
+	if (!result)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 

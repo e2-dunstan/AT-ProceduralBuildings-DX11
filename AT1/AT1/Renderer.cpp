@@ -75,7 +75,7 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	result = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		NULL,//D3D11_CREATE_DEVICE_DEBUG,
+		D3D11_CREATE_DEVICE_DEBUG,
 		NULL,//&FeatureLevelsRequested,
 		NULL,//numLevelsRequested,
 		D3D11_SDK_VERSION,
@@ -90,7 +90,6 @@ bool Renderer::InitDirect3D(HWND appWindow)
 		OutputDebugString("FAILED \nRenderer.cpp InitDirect3D()");
 		return false;
 	}
-	//SWAP CHAIN IS NULLPTR
 
 	ID3D11Texture2D* backBufferTexture;
 	//Get the buffer, store into back buffer texture
@@ -186,24 +185,23 @@ void Renderer::DrawScene()
 	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+	//deviceContext->RSSetState(wireframeState);
+	////Set the WVP matrix and send it to the constant buffer in effect file
+	//WVP = _cube1World * camView * camProjection;
+	//cbPerObj.WVP = XMMatrixTranspose(WVP);
+	//deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
+	//deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+	////Draw the first cube
+	//deviceContext->DrawIndexed(36, 0, 0);
 
-	deviceContext->RSSetState(wireframeState);
-	//Set the WVP matrix and send it to the constant buffer in effect file
-	WVP = _cube1World * camView * camProjection;
-	cbPerObj.WVP = XMMatrixTranspose(WVP);
-	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
-	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-	//Draw the first cube
-	deviceContext->DrawIndexed(36, 0, 0);
-
-	//set individual RS states
-	deviceContext->RSSetState(filledState);
-	WVP = _cube2World * camView * camProjection;
-	cbPerObj.WVP = XMMatrixTranspose(WVP);
-	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
-	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-	//Draw the second cube
-	deviceContext->DrawIndexed(36, 0, 0);
+	////set individual RS states
+	//deviceContext->RSSetState(filledState);
+	//WVP = _cube2World * camView * camProjection;
+	//cbPerObj.WVP = XMMatrixTranspose(WVP);
+	//deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
+	//deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+	////Draw the second cube
+	//deviceContext->DrawIndexed(36, 0, 0);
 }
 
 void Renderer::EndFrame()
@@ -235,4 +233,19 @@ ID3D11RenderTargetView * Renderer::GetRenderTargetView()
 IDXGISwapChain * Renderer::GetSwapChain()
 {
 	return swapChain;
+}
+
+XMMATRIX Renderer::GetWorldMatrix()
+{
+	return World;
+}
+
+XMMATRIX Renderer::GetViewMatrix()
+{
+	return camView;
+}
+
+XMMATRIX Renderer::GetProjectionMatrix()
+{
+	return camProjection;
 }

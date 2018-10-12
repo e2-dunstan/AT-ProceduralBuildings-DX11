@@ -1,6 +1,9 @@
 #pragma once
 #include <d3d11.h>
 #include <DirectXColors.h>
+#include <d3dcompiler.h>
+#include <directxmath.h>
+#include <fstream>
 
 #pragma comment(lib, "d3d11.lib")
 

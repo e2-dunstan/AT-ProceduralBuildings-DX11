@@ -58,11 +58,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="TrianglePixelShader.hlsl">
+    <FxCompile Include="ColourPixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="TriangleVertexShader.hlsl">
+    <FxCompile Include="ColourVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="TexturePixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureVertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Vlog Resources\George Foreman.tga">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ public:
 	//Framework
 	virtual bool Init();
 	virtual void Update(float dt);
-	virtual void Render(float dt) = 0;
+	virtual void Render(float dt);
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 protected:
@@ -29,6 +29,7 @@ protected:
 
 	std::unique_ptr<Renderer> renderer;
 	std::unique_ptr<Model> model;
+	Texture* texture;
 
 protected:
 	//Initialise Win32 window

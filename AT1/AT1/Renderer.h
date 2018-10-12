@@ -30,7 +30,6 @@ public:
 	void InitView();
 	void InitRenderStates();
 
-
 	void DrawScene();
 	void EndFrame();
 
@@ -40,6 +39,10 @@ public:
 	ID3D11DeviceContext* GetDeviceContext();
 	ID3D11RenderTargetView* GetRenderTargetView();
 	IDXGISwapChain*	GetSwapChain();
+
+	XMMATRIX GetWorldMatrix();
+	XMMATRIX GetViewMatrix();
+	XMMATRIX GetProjectionMatrix();
 
 protected:
 	//DX Attributes
