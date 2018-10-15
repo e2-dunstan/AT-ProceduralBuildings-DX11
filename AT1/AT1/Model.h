@@ -16,18 +16,20 @@ public:
 	Texture* GetTexturePointer();
 	bool LoadTexture(Renderer& renderer, char* filename, HWND hwnd);
 
-private:
 	struct Vertex
 	{
 		Vertex() {}
 		Vertex(float x, float y, float z,
-			float u, float v)
-			: pos(x, y, z), texture(u, v) {}
+			float u, float v, 
+			float nx, float ny, float nz)
+			: pos(x, y, z), texture(u, v), normal(nx, ny, nz) {}
 
 		XMFLOAT3 pos;
 		XMFLOAT2 texture;
+		XMFLOAT3 normal;
 	};
 
+private:
 	//ID3D11Buffer* triangleVertexBuffer = nullptr;
 	ID3D11Buffer* squareVertexBuffer = nullptr;
 	ID3D11Buffer* squareIndexBuffer = nullptr;

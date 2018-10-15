@@ -29,11 +29,6 @@ DXApp::DXApp(HINSTANCE hInstance)
 
 DXApp::~DXApp()
 {
-	if (texture)
-	{
-		delete texture;
-		texture = nullptr;
-	}
 }
 
 int DXApp::Run()
@@ -71,8 +66,7 @@ bool DXApp::Init()
 	renderer->InitView();
 
 	model = std::unique_ptr<Model>(new Model);
-	//texture = model->GetTexturePointer();
-	if (!model->InitModel(*renderer, "George Foreman.tga", 
+	if (!model->InitModel(*renderer, "George_Foreman.tga", 
 		appWindow))
 	{
 		return false;
@@ -93,22 +87,18 @@ void DXApp::Update(float dt)
 
 	//Reset cube1World
 	cube1World = XMMatrixIdentity();
-
 	//Define cube1's world space matrix
 	XMVECTOR rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	Rotation = XMMatrixRotationAxis(rotaxis, rot);
 	Translation = XMMatrixTranslation(0.0f, 0.0f, 4.0f);
-
 	//Set cube1's world space using the transformations
 	cube1World = Rotation * Translation;
 
 	//Reset cube2World
 	cube2World = XMMatrixIdentity();
-
 	//Define cube2's world space matrix
 	Rotation = XMMatrixRotationAxis(rotaxis, -rot);
 	Scale = XMMatrixScaling(1.3f, 1.3f, 1.3f);
-
 	//Set cube2's world space matrix
 	cube2World = Scale * Rotation;
 

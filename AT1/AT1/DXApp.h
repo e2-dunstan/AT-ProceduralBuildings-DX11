@@ -29,7 +29,6 @@ protected:
 
 	std::unique_ptr<Renderer> renderer;
 	std::unique_ptr<Model> model;
-	Texture* texture;
 
 protected:
 	//Initialise Win32 window
