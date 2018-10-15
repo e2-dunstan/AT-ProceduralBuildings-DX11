@@ -2,11 +2,7 @@
 #include "Constants.h"
 
 
-struct cbPerObject
-{
-	XMMATRIX  WVP;
-};
-cbPerObject cbPerObj;
+
 
 Renderer::Renderer()
 {
@@ -30,9 +26,7 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	//UINT createDeviceFlags = 0;
 	//Describe our SwapChain Buffer
 	DXGI_MODE_DESC bufferDesc;
-
 	ZeroMemory(&bufferDesc, sizeof(bufferDesc));
-
 	bufferDesc.Width = windowWidth;
 	bufferDesc.Height = windowHeight;
 	bufferDesc.RefreshRate.Numerator = 60;
@@ -43,9 +37,7 @@ bool Renderer::InitDirect3D(HWND appWindow)
 
 	//Describe our SwapChain
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-
 	swapChainDesc.BufferDesc = bufferDesc;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
@@ -56,28 +48,17 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	//swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH; //alt-enter fullscreen, but won't resize the buffer
 
-	//Swap chains: front buffer and back buffer
-	//Swaps between the two to e.g. smooth out animation
-	//This handles how they swap out
-
-	HRESULT result;
-
-	//D3D_FEATURE_LEVEL  FeatureLevelsRequested = D3D_FEATURE_LEVEL_9_3;
-	//UINT               numLevelsRequested = 1;
-	//D3D_FEATURE_LEVEL  FeatureLevelsSupported;
-
-
 	//Create swap chain
 	//result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, D3D11_CREATE_DEVICE_DEBUG,
 	//		NULL, NULL, D3D11_SDK_VERSION, &swapChainDesc, &swapChain,
 	//		&device, NULL, &deviceContext);
 
-	result = D3D11CreateDeviceAndSwapChain(NULL,
+	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
 		D3D11_CREATE_DEVICE_DEBUG,
-		NULL,//&FeatureLevelsRequested,
-		NULL,//numLevelsRequested,
+		NULL,
+		NULL,
 		D3D11_SDK_VERSION,
 		&swapChainDesc,
 		&swapChain,
@@ -138,14 +119,14 @@ void Renderer::InitView()
 	//rs = rasteriser stage
 	deviceContext->RSSetViewports(1, &viewport);
 
-	D3D11_BUFFER_DESC cbbd;
-	ZeroMemory(&cbbd, sizeof(D3D11_BUFFER_DESC));
-	cbbd.Usage = D3D11_USAGE_DEFAULT;
-	cbbd.ByteWidth = sizeof(cbPerObject);
-	cbbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbbd.CPUAccessFlags = 0;
-	cbbd.MiscFlags = 0;
-	HRESULT result = device->CreateBuffer(&cbbd, NULL, &cbPerObjectBuffer);
+	D3D11_BUFFER_DESC matrixBufferDesc;
+	ZeroMemory(&matrixBufferDesc, sizeof(D3D11_BUFFER_DESC));
+	matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	matrixBufferDesc.ByteWidth = sizeof(matrixBuffer);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = 0;
+	matrixBufferDesc.MiscFlags = 0;
+	HRESULT result = device->CreateBuffer(&matrixBufferDesc, NULL, &cbPerObjectBuffer);
 
 	if (FAILED(result))
 	{
@@ -179,29 +160,33 @@ void Renderer::InitRenderStates()
 	device->CreateRasterizerState(&filledDesc, &filledState);
 }
 
-void Renderer::DrawScene()
+void Renderer::DrawScene(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState)
 {
 	//Sets background colour
 	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	//deviceContext->RSSetState(wireframeState);
-	////Set the WVP matrix and send it to the constant buffer in effect file
-	//WVP = _cube1World * camView * camProjection;
-	//cbPerObj.WVP = XMMatrixTranspose(WVP);
-	//deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
-	//deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-	////Draw the first cube
-	//deviceContext->DrawIndexed(36, 0, 0);
+	deviceContext->RSSetState(wireframeState);
+	//Set the WVP matrix and send it to the constant buffer in effect file
+	WVP = _cube1World * camView * camProjection;
+	matrixBuffer.WVP = XMMatrixTranspose(WVP);
+	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
+	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+	deviceContext->PSSetShaderResources(0, 1, &textureShader);
+	deviceContext->PSSetSamplers(0, 1, &samplerState);
+	//Draw the first cube
+	deviceContext->DrawIndexed(36, 0, 0);
 
-	////set individual RS states
-	//deviceContext->RSSetState(filledState);
-	//WVP = _cube2World * camView * camProjection;
-	//cbPerObj.WVP = XMMatrixTranspose(WVP);
-	//deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
-	//deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-	////Draw the second cube
-	//deviceContext->DrawIndexed(36, 0, 0);
+	//set individual RS states
+	deviceContext->RSSetState(filledState);
+	WVP = _cube2World * camView * camProjection;
+	matrixBuffer.WVP = XMMatrixTranspose(WVP);
+	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
+	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+	deviceContext->PSSetShaderResources(0, 1, &textureShader);
+	deviceContext->PSSetSamplers(0, 1, &samplerState);
+	//Draw the second cube
+	deviceContext->DrawIndexed(36, 0, 0);
 }
 
 void Renderer::EndFrame()

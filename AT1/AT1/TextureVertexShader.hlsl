@@ -17,7 +17,7 @@ struct PixelInputType
 	//0 indicates which set of coords, can have multiple
 };
 
-PixelInputType TextureVertexShader(VertexInputType input)
+PixelInputType main(VertexInputType input)
 {
     PixelInputType output;
 

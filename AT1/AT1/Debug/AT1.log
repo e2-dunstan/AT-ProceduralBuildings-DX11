@@ -1,1 +1,7 @@
-﻿  AT1.vcxproj -> E:\-- UNIVERSITY --\-- Year 3 --\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe
+﻿  DXApp.cpp
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(66): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
+  Model.cpp
+  Texture.cpp
+  winmain.cpp
+  Generating Code...
+  AT1.vcxproj -> E:\-- UNIVERSITY --\-- Year 3 --\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe

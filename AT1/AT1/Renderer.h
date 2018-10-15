@@ -6,18 +6,7 @@
 
 using namespace DirectX;
 
-struct SimpleCubeVertex
-{
-	XMFLOAT3 pos;   // Position
-	XMFLOAT3 color; // Color
-};
 
-struct ConstantBuffer
-{
-	XMMATRIX model;
-	XMMATRIX view;
-	XMMATRIX projection;
-};
 
 
 class Renderer
@@ -30,8 +19,27 @@ public:
 	void InitView();
 	void InitRenderStates();
 
-	void DrawScene();
+	void DrawScene(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState);
 	void EndFrame();
+
+	struct SimpleCubeVertex
+	{
+		XMFLOAT3 pos;   // Position
+		XMFLOAT3 color; // Color
+	};
+
+	struct ConstantBuffer
+	{
+		XMMATRIX model;
+		XMMATRIX view;
+		XMMATRIX projection;
+	};
+
+	struct MatrixBufferType
+	{
+		XMMATRIX  WVP;
+	};
+	MatrixBufferType matrixBuffer;
 
 	void SetCubeWorldTransforms(XMMATRIX cube1World, XMMATRIX cube2World);
 

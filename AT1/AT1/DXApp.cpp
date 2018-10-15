@@ -71,13 +71,14 @@ bool DXApp::Init()
 	renderer->InitView();
 
 	model = std::unique_ptr<Model>(new Model);
-	if (!model->InitModel(*renderer, "../Resources/George Foreman.tga", 
+	//texture = model->GetTexturePointer();
+	if (!model->InitModel(*renderer, "George Foreman.tga", 
 		appWindow))
 	{
 		return false;
 	}
 	
-	texture = model->GetTexturePointer();
+	
 
 	return true;
 	
@@ -116,10 +117,10 @@ void DXApp::Update(float dt)
 
 void DXApp::Render(float dt)
 {
-	renderer->DrawScene();
-	texture->Render(renderer->GetDeviceContext(), 36, 
+	renderer->DrawScene(model->GetTexture(), model->GetTexturePointer()->GetSamplerState());
+	/*texture->Render(renderer->GetDeviceContext(), 36, 
 		renderer->GetWorldMatrix(), renderer->GetViewMatrix(), renderer->GetProjectionMatrix(),
-		model->GetTexture());
+		model->GetTexture());*/
 	//model->Draw(*renderer);
 	renderer->EndFrame();
 }

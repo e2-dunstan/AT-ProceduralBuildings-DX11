@@ -13,9 +13,9 @@ Model::~Model()
 	//triangleVertexBuffer->Release();
 	squareVertexBuffer->Release();
 	squareIndexBuffer->Release();
-	//vertexShader->Release();
-	//pixelShader->Release();
-	//inputLayout->Release();
+	vertexShader->Release();
+	pixelShader->Release();
+	inputLayout->Release();
 	if (texture)
 	{
 		delete texture;
@@ -25,7 +25,7 @@ Model::~Model()
 
 bool Model::InitModel(Renderer& renderer, char* textureFilename, HWND hwnd)
 {
-	//CreateShaders(renderer);
+	CreateShaders(renderer);
 	CreateMesh(renderer);
 
 	bool result = LoadTexture(renderer, textureFilename, hwnd);
@@ -102,7 +102,6 @@ void Model::CreateMesh(Renderer & renderer)
 	//Create index buffer
 	D3D11_BUFFER_DESC indexBufferDesc;
 	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
-
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(DWORD) * 12 * 3;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -117,7 +116,6 @@ void Model::CreateMesh(Renderer & renderer)
 	//Create vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
-
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(Vertex) * 24;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -138,8 +136,8 @@ void Model::CreateMesh(Renderer & renderer)
 
 void Model::CreateShaders(Renderer & renderer)
 {
-	std::ifstream vsFile("ColourVertexShader.cso", std::ios::binary);
-	std::ifstream psFile("ColourPixelShader.cso", std::ios::binary);
+	std::ifstream vsFile("TextureVertexShader.cso", std::ios::binary);
+	std::ifstream psFile("TexturePixelShader.cso", std::ios::binary);
 
 	std::vector<char> vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 	std::vector<char> psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
