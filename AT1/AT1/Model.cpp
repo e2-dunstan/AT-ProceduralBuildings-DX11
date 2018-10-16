@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "OBJExporter.h"
+#include "Shapes.h"
 
 
 Model::Model()
@@ -37,65 +38,11 @@ bool Model::InitModel(Renderer& renderer, char* textureFilename, HWND hwnd)
 	return true;
 }
 
-//LOOK UP RASTERTEK TUTORIAL ON TEXTURES: CTRL F 'TARGA'
-
 void Model::CreateMesh(Renderer & renderer)
 {
 	//define vertices
-	std::vector<Vertex> vertices
-	{
-		// Front Face
-		Vertex(-1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f),
-		Vertex(-1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f),
-		Vertex(1.0f,  1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f),
-		Vertex(1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f),
-		// Back Face
-		Vertex(-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(-1.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f),
-		// Top Face
-		Vertex(-1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(-1.0f, 1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(1.0f, 1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f),
-		// Bottom Face
-		Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(1.0f, -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(-1.0f, -1.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f),
-		// Left Face
-		Vertex(-1.0f, -1.0f,  1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f,  1.0f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f,  1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f),
-		// Right Face
-		Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f, -1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f),
-	}; //sizeof = total bytes/bits
-
-	std::vector<DWORD> indices = {
-		// Front Face
-		0,  1,  2,
-		0,  2,  3,
-		// Back Face
-		4,  5,  6,
-		4,  6,  7,
-		// Top Face
-		8,  9, 10,
-		8, 10, 11,
-		// Bottom Face
-		12, 13, 14,
-		12, 14, 15,
-		// Left Face
-		16, 17, 18,
-		16, 18, 19,
-		// Right Face
-		20, 21, 22,
-		20, 22, 23
-	};
+	std::vector<Shape::Vertex> vertices = Shape::CreateSquareVertices(1, 1);//Shape::CreateTVertices(6, 3, 5, 4, 1);
+	std::vector<DWORD> indices = Shape::CreateSquareIndices();//Shape::CreateTIndices();
 
 	OBJExporter::Create(vertices, indices);
 
@@ -119,7 +66,7 @@ void Model::CreateMesh(Renderer & renderer)
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
+	vertexBufferDesc.ByteWidth = sizeof(Shape::Vertex) * vertices.size();
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -130,7 +77,7 @@ void Model::CreateMesh(Renderer & renderer)
 	renderer.GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &squareVertexBuffer);
 
 	//bind vertex buffer
-	UINT stride = sizeof(Vertex);	//size between each vertex
+	UINT stride = sizeof(Shape::Vertex);	//size between each vertex
 	UINT offset = 0;
 	renderer.GetDeviceContext()->IASetVertexBuffers(0, 1, &squareVertexBuffer, &stride, &offset);	//look at function requirements for help
 }

@@ -2,13 +2,13 @@
 
 using namespace std;
 
-void OBJExporter::Create(std::vector<Model::Vertex> vertices, std::vector<DWORD> indices)
+void OBJExporter::Create(std::vector<Shape::Vertex> vertices, std::vector<DWORD> indices)
 {
 	ofstream mtl("Export.mtl");
 	mtl << "newmtl texture" << endl;
-	mtl << "illum 1" << endl;
-	mtl << "Kd 0.50 0.50 0.50" << endl;
-	mtl << "Ka 0.50 0.50 0.50" << endl;
+	mtl << "illum 2" << endl;
+	mtl << "Kd 1.0 1.0 1.0" << endl;
+	mtl << "Ka 1.0 1.0 1.0" << endl;
 	mtl << "map_Kd George_Foreman.tga" << endl;
 	mtl << "map_Ka George_Foreman.tga" << endl;
 	mtl.close();

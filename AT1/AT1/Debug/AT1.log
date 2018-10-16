@@ -1,5 +1,4 @@
-﻿  DXApp.cpp
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(61): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
+﻿  Model.cpp
   OBJExporter.cpp
 d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(23): warning C4018: '<': signed/unsigned mismatch
 d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(36): warning C4018: '<': signed/unsigned mismatch
@@ -7,5 +6,6 @@ d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(44): warning C4018: '<': 
 d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(49): warning C4018: '<': signed/unsigned mismatch
 d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(54): warning C4018: '<': signed/unsigned mismatch
 d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(59): warning C4018: '<': signed/unsigned mismatch
+  Shapes.cpp
   Generating Code...
   AT1.vcxproj -> D:\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe
