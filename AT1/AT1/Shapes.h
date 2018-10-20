@@ -17,9 +17,14 @@ namespace Shape
 		XMFLOAT3 normal;
 	};
 
-	std::vector<Vertex> CreateSquareVertices(float width, float height);
-	std::vector<DWORD> CreateSquareIndices();
-	std::vector<Vertex> CreateTVertices(float tWidth, float iWidth, float tHeight, float iHeight, float roomHeight);
-	std::vector<DWORD> CreateTIndices();
-	void CreateL(float topWidth, float baseWidth, float height, float baseHeight);
+	std::vector<Vertex> CreateSquareVertices(float width, float height, float depth);
+
+	std::vector<Vertex> CreateFloorVertices(float width, float height, float depth);
+
+	std::vector<Vertex> CreateCornerVertices(float width, float height); //depth = width
+
+	std::vector<DWORD> CreateQuadIndices();
+
+	//std::vector<Vertex> CreateTVertices(float tWidth, float iWidth, float tHeight, float iHeight, float roomHeight);
+	//std::vector<DWORD> CreateTIndices();
 }

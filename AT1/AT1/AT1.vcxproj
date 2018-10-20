@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DXApp.cpp" />
     <ClCompile Include="OBJExporter.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />

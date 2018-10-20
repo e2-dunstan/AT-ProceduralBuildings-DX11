@@ -1,20 +1,32 @@
 #include "Model.h"
 #include <fstream>
-#include <vector>
 #include "OBJExporter.h"
-#include "Shapes.h"
 
-
-Model::Model()
+Model::Model(Type modelType, int width, int height, int depth,
+	float posX, float posY, float posZ, float rotation)
 {
 	texture = new Texture();
+
+	type = modelType;
+	w = width;
+	h = height;
+	d = depth;
+	position.x = posX;
+	position.y = posY;
+	position.z = posZ;
+	if (r == 0 || r == 180)
+	{
+		position.z += 0.5f;
+	}
+
+	//Convert to radians
+	r = (rotation / 180) * PI;
 }
 
 Model::~Model()
 {
-	//triangleVertexBuffer->Release();
-	squareVertexBuffer->Release();
-	squareIndexBuffer->Release();
+	vertexBuffer->Release();
+	indexBuffer->Release();
 	vertexShader->Release();
 	pixelShader->Release();
 	inputLayout->Release();
@@ -40,10 +52,32 @@ bool Model::InitModel(Renderer& renderer, char* textureFilename, HWND hwnd)
 
 void Model::CreateMesh(Renderer & renderer)
 {
-	//define vertices
-	std::vector<Shape::Vertex> vertices = Shape::CreateSquareVertices(1, 1);//Shape::CreateTVertices(6, 3, 5, 4, 1);
-	std::vector<DWORD> indices = Shape::CreateSquareIndices();//Shape::CreateTIndices();
+	//--DEFINE VERTICES--//
+	std::vector<Shape::Vertex> vertices;
+	std::vector<DWORD> indices;
 
+	switch (type)
+	{
+	case Type::WALL:
+	{
+		vertices = Shape::CreateSquareVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
+		break;
+	}
+	case Type::FLOOR:
+	{
+		vertices = Shape::CreateFloorVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
+	}
+	case Type::CORNER:
+	{
+		vertices = Shape::CreateCornerVertices(w, h);
+		indices = Shape::CreateQuadIndices();
+	}
+	//potentially add more shapes
+	}
+
+	//--CREATE OBJ--//
 	OBJExporter::Create(vertices, indices);
 
 	//--CREATE BUFFERS--//
@@ -59,8 +93,7 @@ void Model::CreateMesh(Renderer & renderer)
 
 	D3D11_SUBRESOURCE_DATA iinitData;
 	iinitData.pSysMem = indices.data();
-	renderer.GetDevice()->CreateBuffer(&indexBufferDesc, &iinitData, &squareIndexBuffer);
-	renderer.GetDeviceContext()->IASetIndexBuffer(squareIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	renderer.GetDevice()->CreateBuffer(&indexBufferDesc, &iinitData, &indexBuffer);
 
 	//Create vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc;
@@ -74,12 +107,7 @@ void Model::CreateMesh(Renderer & renderer)
 	D3D11_SUBRESOURCE_DATA vertexBufferData;
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
 	vertexBufferData.pSysMem = vertices.data();
-	renderer.GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &squareVertexBuffer);
-
-	//bind vertex buffer
-	UINT stride = sizeof(Shape::Vertex);	//size between each vertex
-	UINT offset = 0;
-	renderer.GetDeviceContext()->IASetVertexBuffers(0, 1, &squareVertexBuffer, &stride, &offset);	//look at function requirements for help
+	renderer.GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &vertexBuffer);
 }
 
 
@@ -110,6 +138,15 @@ void Model::CreateShaders(Renderer & renderer)
 	renderer.GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
+void Model::UpdateBuffers(Renderer& renderer)
+{
+	renderer.GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	//bind vertex buffer
+	UINT stride = sizeof(Shape::Vertex);	//size between each vertex
+	UINT offset = 0;
+	renderer.GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);	//look at function requirements for help
+}
+
 ID3D11ShaderResourceView * Model::GetTexture()
 {
 	return texture->GetTexture();
@@ -137,6 +174,21 @@ bool Model::LoadTexture(Renderer & renderer, char * filename, HWND hwnd)
 	}
 
 	return true;
+}
+
+Position Model::GetPosition()
+{
+	return position;
+}
+
+float Model::GetRotation()
+{
+	return r;
+}
+
+Type Model::GetType()
+{
+	return type;
 }
 
 

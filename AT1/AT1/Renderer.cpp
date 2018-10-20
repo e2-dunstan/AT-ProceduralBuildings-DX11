@@ -1,9 +1,6 @@
 #include "Renderer.h"
 #include "Constants.h"
 
-
-
-
 Renderer::Renderer()
 {
 	
@@ -160,33 +157,26 @@ void Renderer::InitRenderStates()
 	device->CreateRasterizerState(&filledDesc, &filledState);
 }
 
-void Renderer::DrawScene(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState)
+void Renderer::DrawBackground()
 {
 	//Sets background colour
 	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
 
-	deviceContext->RSSetState(wireframeState);
-	//Set the WVP matrix and send it to the constant buffer in effect file
-	WVP = _cube1World * camView * camProjection;
-	matrixBuffer.WVP = XMMatrixTranspose(WVP);
-	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
-	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-	deviceContext->PSSetShaderResources(0, 1, &textureShader);
-	deviceContext->PSSetSamplers(0, 1, &samplerState);
-	//Draw the first cube
-	deviceContext->DrawIndexed(36, 0, 0);
-
-	//set individual RS states
-	deviceContext->RSSetState(filledState);
-	WVP = _cube2World * camView * camProjection;
-	matrixBuffer.WVP = XMMatrixTranspose(WVP);
-	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
-	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-	deviceContext->PSSetShaderResources(0, 1, &textureShader);
-	deviceContext->PSSetSamplers(0, 1, &samplerState);
-	//Draw the second cube
-	deviceContext->DrawIndexed(36, 0, 0);
+void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, XMMATRIX cameraView)
+{
+	for (int i = 0; i < _wallTransforms.size(); i++)
+	{
+		deviceContext->RSSetState(filledState);
+		WVP = _wallTransforms[i] * cameraView * camProjection;
+		matrixBuffer.WVP = XMMatrixTranspose(WVP);
+		deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
+		deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+		deviceContext->PSSetShaderResources(0, 1, &textureShader);
+		deviceContext->PSSetSamplers(0, 1, &samplerState);
+		deviceContext->DrawIndexed(36, 0, 0);
+	}
 }
 
 void Renderer::EndFrame()
@@ -194,10 +184,9 @@ void Renderer::EndFrame()
 	swapChain->Present(0, 0);
 }
 
-void Renderer::SetCubeWorldTransforms(XMMATRIX cube1World, XMMATRIX cube2World)
+void Renderer::SetModelTransforms(std::vector<XMMATRIX> wallTransforms)
 {
-	_cube1World = cube1World;
-	_cube2World = cube2World;
+	_wallTransforms = wallTransforms;
 }
 
 ID3D11Device * Renderer::GetDevice()

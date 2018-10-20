@@ -1,5 +1,6 @@
 #include "DXApp.h"
 #include "Constants.h"
+#include <dwrite.h>
 
 namespace
 {
@@ -29,6 +30,14 @@ DXApp::DXApp(HINSTANCE hInstance)
 
 DXApp::~DXApp()
 {
+	for (int i = 0; i < walls.size(); i++)
+	{
+		if (walls[i])
+		{
+			delete walls[i];
+			walls[i] = nullptr;
+		}
+	}
 }
 
 int DXApp::Run()
@@ -44,8 +53,18 @@ int DXApp::Run()
 		}
 		else
 		{
-			Update(0.0f);
-			Render(0.0f);
+			frameCount++;
+			if (GetTime() > 1.0f)
+			{
+				fps = frameCount;
+				frameCount = 0;
+				StartTimer();
+			}
+
+			frameTime = GetFrameTime();
+
+			Update(frameTime);
+			Render(frameTime);
 		}
 	}
 	return static_cast<int>(msg.wParam);
@@ -61,57 +80,142 @@ bool DXApp::Init()
 	renderer = std::unique_ptr<Renderer>(new Renderer);
 	if (!renderer->InitDirect3D(appWindow))
 	{
+		MessageBox(0, (LPCSTR)L"Direct3D Initialization - Failed",
+			(LPCSTR)L"Error", MB_OK);
 		return false;
 	}
 	renderer->InitView();
 
-	model = std::unique_ptr<Model>(new Model);
-	if (!model->InitModel(*renderer, "George_Foreman.tga", 
-		appWindow))
+	camera = std::unique_ptr<Camera>(new Camera);
+	if (!camera->InitDirectInput(appInstance, appWindow))
 	{
+		MessageBox(0, (LPCSTR)L"Direct Input Initialization - Failed",
+			(LPCSTR)L"Error", MB_OK);
 		return false;
 	}
-	
-	
+
+	// -- CREATE MODELS -- //
+
+	//get user input ()
+
+	InitWalls();
+	InitCorners();
+
+	for (int i = 0; i < allModels.size(); i++)
+	{
+		if (!allModels[i]->InitModel(*renderer, "George_Foreman.tga",
+			appWindow))
+		{
+			MessageBox(0, (LPCSTR)L"Model Initialization - Failed",
+				(LPCSTR)L"Error", MB_OK);
+			return false;
+		}
+	}
+
 
 	return true;
-	
 }
 
-void DXApp::Update(float dt)
+void DXApp::InitWalls()
 {
-	//Keep the cubes rotating
-	rot += .0005f;
-	if (rot > 6.26f)
-		rot = 0.0f;
+	buildingDepth += 2;
+	for (int f = 1; f <= buildingHeight; f++)
+	{
+		float height = f * wallHeight;
+		for (int d = 0; d < buildingDepth; d++)
+		{
+			if (d == 0)
+			{
+				float depth = (d + 0.5f) * wallWidth;
+				for (int w = 0; w < buildingWidth; w++)
+				{
+					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+						w * wallWidth, height, depth, 90.0f * 0));
+				}
+			}
+			else if (d == (buildingDepth - 1))
+			{
+				float depth = ((d - 0.5f) * wallWidth) + (wallDepth * 2);
+				for (int w = 0; w < buildingWidth; w++)
+				{
+					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+						w * wallWidth, height, depth, 90.0f * 2));
+				}
+			}
+			else
+			{
+				float depth = (d* wallWidth) + wallDepth;
+				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+					-(wallWidth / 2) - wallDepth, height, depth, 90.0f * 1));
+				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+					(buildingWidth * wallWidth) - (wallWidth / 2) + wallDepth, height, depth, 90.0f * 3));
+			}
+		}
+	}
 
-	//Reset cube1World
-	cube1World = XMMatrixIdentity();
-	//Define cube1's world space matrix
-	XMVECTOR rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	Rotation = XMMatrixRotationAxis(rotaxis, rot);
-	Translation = XMMatrixTranslation(0.0f, 0.0f, 4.0f);
-	//Set cube1's world space using the transformations
-	cube1World = Rotation * Translation;
-
-	//Reset cube2World
-	cube2World = XMMatrixIdentity();
-	//Define cube2's world space matrix
-	Rotation = XMMatrixRotationAxis(rotaxis, -rot);
-	Scale = XMMatrixScaling(1.3f, 1.3f, 1.3f);
-	//Set cube2's world space matrix
-	cube2World = Scale * Rotation;
-
-	renderer->SetCubeWorldTransforms(cube1World, cube2World);
+	for (int w = 0; w < walls.size(); w++)
+	{
+		allModels.push_back(walls[w]);
+	}
 }
 
-void DXApp::Render(float dt)
+void DXApp::InitCorners()
 {
-	renderer->DrawScene(model->GetTexture(), model->GetTexturePointer()->GetSamplerState());
-	/*texture->Render(renderer->GetDeviceContext(), 36, 
-		renderer->GetWorldMatrix(), renderer->GetViewMatrix(), renderer->GetProjectionMatrix(),
-		model->GetTexture());*/
-	//model->Draw(*renderer);
+	//0,0
+	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+		-(wallWidth / 2) - wallDepth, (wallHeight * buildingHeight) / 2, 0.5f * wallWidth, 0));
+	//1,0
+
+	//0,1
+
+	//1,1
+
+	for (int c = 0; c < corners.size(); c++)
+	{
+		allModels.push_back(corners[c]);
+	}
+}
+
+void DXApp::Update(double dt)
+{
+	camera->DetectInput(dt, appWindow);
+
+	//Stops it from updating every frame
+	if (valuesChanged)
+	{
+		allModelTransforms.clear();
+
+		for (int i = 0; i < allModels.size(); i++)
+		{
+			//Initialise and reset
+			if (allModelTransforms.size() != allModels.size())
+				allModelTransforms.push_back(XMMatrixIdentity());
+			else
+				allModelTransforms[i] = XMMatrixIdentity();
+
+			XMVECTOR rotAxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+			Rotation = XMMatrixRotationAxis(rotAxis, allModels[i]->GetRotation());
+			Translation = XMMatrixTranslation(allModels[i]->GetPosition().x,
+											  allModels[i]->GetPosition().y,
+											  allModels[i]->GetPosition().z);
+			Scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+
+			allModelTransforms[i] = Scale * Rotation * Translation;
+		}
+
+		renderer->SetModelTransforms(allModelTransforms);
+		valuesChanged = false;
+	}
+}
+
+void DXApp::Render(double dt)
+{
+	renderer->DrawBackground();
+	for (int i = 0; i < walls.size(); i++)
+	{
+		walls[i]->UpdateBuffers(*renderer);
+		renderer->DrawModel(walls[i]->GetTexture(), walls[i]->GetTexturePointer()->GetSamplerState(), camera->GetCamView());
+	}
 	renderer->EndFrame();
 }
 
@@ -174,3 +278,37 @@ LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	return LRESULT();
 }
+
+void DXApp::StartTimer()
+{
+	LARGE_INTEGER frequencyCount;
+	QueryPerformanceFrequency(&frequencyCount);
+
+	countsPerSecond = double(frequencyCount.QuadPart);
+
+	QueryPerformanceCounter(&frequencyCount);
+	CounterStart = frequencyCount.QuadPart;
+}
+
+double DXApp::GetTime()
+{
+	LARGE_INTEGER currentTime;
+	QueryPerformanceCounter(&currentTime);
+	return double(currentTime.QuadPart - CounterStart) / countsPerSecond;
+}
+
+double DXApp::GetFrameTime()
+{
+	LARGE_INTEGER currentTime;
+	__int64 tickCount;
+	QueryPerformanceCounter(&currentTime);
+
+	tickCount = currentTime.QuadPart - frameTimeOld;
+	frameTimeOld = currentTime.QuadPart;
+
+	if (tickCount < 0.0f)
+		tickCount = 0.0f;
+
+	return float(tickCount) / countsPerSecond;
+}
+

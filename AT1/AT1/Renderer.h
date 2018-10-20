@@ -2,12 +2,10 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string>
+#include <vector>
 #include "DXUtil.h"
 
 using namespace DirectX;
-
-
-
 
 class Renderer
 {
@@ -19,7 +17,9 @@ public:
 	void InitView();
 	void InitRenderStates();
 
-	void DrawScene(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState);
+	void DrawBackground();
+	void DrawModel(ID3D11ShaderResourceView *textureShader, 
+		ID3D11SamplerState *samplerState, XMMATRIX cameraView);
 	void EndFrame();
 
 	struct SimpleCubeVertex
@@ -41,7 +41,7 @@ public:
 	};
 	MatrixBufferType matrixBuffer;
 
-	void SetCubeWorldTransforms(XMMATRIX cube1World, XMMATRIX cube2World);
+	void SetModelTransforms(std::vector<XMMATRIX> wallTransforms);
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
@@ -73,11 +73,11 @@ protected:
 
 	ID3D11Buffer* cbPerObjectBuffer = nullptr;
 
-	XMMATRIX _cube1World;
-	XMMATRIX _cube2World;
+	std::vector<XMMATRIX> _wallTransforms;
 
 	XMMATRIX WVP;
 	XMMATRIX World;
+
 	XMMATRIX camView;
 	XMMATRIX camProjection;
 

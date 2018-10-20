@@ -23,11 +23,6 @@ bool TestApp::Init()
 	//https://www.braynzarsoft.net/viewtutorial/q16390-9-transformations
 
 
-//void TestApp::Render(float dt)
-//{
-//
-//}
-
 
 int WINAPI WinMain(__in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance, __in LPSTR lpCmdLine, __in int nShowCmd)
 {

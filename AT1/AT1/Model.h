@@ -1,38 +1,54 @@
 #pragma once
+#include <vector>
 #include "Renderer.h"
 #include "Texture.h"
+#include "Shapes.h"
+
+enum Type
+{
+	WALL, FLOOR, CORNER
+};
+
+struct Position
+{
+	float x;
+	float y;
+	float z;
+};
 
 class Model
 {
-public:
-	Model();
+public: 
+	Model(Type modelType, int width, int height, int depth,
+			float posX, float posY, float posZ, float rotation);
 	~Model();
 
 	bool InitModel(Renderer& renderer, char* textureFilename, HWND hwnd);
 	void CreateMesh(Renderer& renderer);
 	void CreateShaders(Renderer& renderer);
 
+	void UpdateBuffers(Renderer& renderer);
+
 	ID3D11ShaderResourceView* GetTexture();
 	Texture* GetTexturePointer();
 	bool LoadTexture(Renderer& renderer, char* filename, HWND hwnd);
 
-	//struct Vertex
-	//{
-	//	Vertex() {}
-	//	Vertex(float x, float y, float z,
-	//		float u, float v, 
-	//		float nx, float ny, float nz)
-	//		: pos(x, y, z), texture(u, v), normal(nx, ny, nz) {}
-
-	//	XMFLOAT3 pos;
-	//	XMFLOAT2 texture;
-	//	XMFLOAT3 normal;
-	//};
+	Position GetPosition();
+	float GetRotation();
+	Type GetType();
 
 private:
-	//ID3D11Buffer* triangleVertexBuffer = nullptr;
-	ID3D11Buffer* squareVertexBuffer = nullptr;
-	ID3D11Buffer* squareIndexBuffer = nullptr;
+	const long double PI = 3.141592653589793238L;
+
+	Type type;
+	int w = 1;
+	int h = 1;
+	int d = 1;
+	float r = 0;
+	Position position;
+
+	ID3D11Buffer* vertexBuffer = nullptr;
+	ID3D11Buffer* indexBuffer = nullptr;
 	ID3D11Buffer* matrixBuffer = nullptr;
 	ID3D11VertexShader* vertexShader = nullptr;
 	ID3D11PixelShader* pixelShader = nullptr;

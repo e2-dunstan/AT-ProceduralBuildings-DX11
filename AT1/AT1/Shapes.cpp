@@ -1,45 +1,134 @@
 #include "Shapes.h"
 
-std::vector<Shape::Vertex> Shape::CreateSquareVertices(float width, float height)
+std::vector<Shape::Vertex> Shape::CreateSquareVertices(float width, float height, float depth)
 {
+	width *= 0.5f;
+	height *= 0.5f;
+
 	std::vector<Vertex> vertices
 	{
 		// Front Face
-		Vertex(-1.0f, -1.0f, -1.0f,			0.0f, 1.0f,			0.0f, 0.0f, -1.0f),
-		Vertex(-1.0f,  1.0f, -1.0f,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
-		Vertex(1.0f,  1.0f, -1.0f,			1.0f, 0.0f,			0.0f, 0.0f, -1.0f),
-		Vertex(1.0f, -1.0f, -1.0f,			1.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(-width, -height, -depth,			0.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(-width,  height, -depth,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width,  height, -depth,			1.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width, -height, -depth,			1.0f, 1.0f,			0.0f, 0.0f, -1.0f),
 		// Back Face
-		Vertex(-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(-1.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f),
+		Vertex(-width, -height, depth,			1.0f, 1.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width, -height, depth,			0.0f, 1.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width,  height, depth,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(-width,  height, depth,			1.0f, 0.0f,			0.0f, 0.0f, 1.0f),
 		// Top Face
-		Vertex(-1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(-1.0f, 1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(1.0f, 1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f),
+		Vertex(-width, height, -depth,			0.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(-width, height,  depth,			0.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height,  depth,			1.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height, -depth,			1.0f, 1.0f,			0.0f, 1.0f, 0.0f),
 		// Bottom Face
-		Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(1.0f, -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(-1.0f, -1.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height, -depth,			1.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height, -depth,			0.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height,  depth,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height,  depth,			1.0f, 0.0f,			0.0f, -1.0f, 0.0f),
 		// Left Face
-		Vertex(-1.0f, -1.0f,  1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f,  1.0f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f,  1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height,  depth,			0.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height,  depth,			0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height, -depth,			1.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height, -depth,			1.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
 		// Right Face
-		Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f, -1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f),
+		Vertex(width, -height, -depth,			0.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height, -depth,			0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height,  depth,			1.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width, -height,  depth,			1.0f, 1.0f,			1.0f, 0.0f, 0.0f),
 	};
 
 	return vertices;
 }
 
-std::vector<DWORD> Shape::CreateSquareIndices()
+std::vector<Shape::Vertex> Shape::CreateFloorVertices(float width, float height, float depth)
+{
+	//PLACEHOLDER
+
+	width *= 0.5f;
+	height *= 0.5f;
+
+	std::vector<Vertex> vertices
+	{
+		// Front Face
+		Vertex(-width, -height, -1.0f,			0.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(-width,  height, -1.0f,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width,  height, -1.0f,			1.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width, -height, -1.0f,			1.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		// Back Face
+		Vertex(-width, -height, 1.0f,			1.0f, 1.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width, -height, 1.0f,			0.0f, 1.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width,  height, 1.0f,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(-width,  height, 1.0f,			1.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		// Top Face
+		Vertex(-width, height, -1.0f,			0.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(-width, height,  1.0f,			0.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height,  1.0f,			1.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height, -1.0f,			1.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		// Bottom Face
+		Vertex(-width, -height, -1.0f,			1.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height, -1.0f,			0.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height,  1.0f,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height,  1.0f,			1.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		// Left Face
+		Vertex(-width, -height,  1.0f,			0.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height,  1.0f,			0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height, -1.0f,			1.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height, -1.0f,			1.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		// Right Face
+		Vertex(width, -height, -1.0f,			0.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height, -1.0f,			0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height,  1.0f,			1.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width, -height,  1.0f,			1.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+	};
+
+	return vertices;
+}
+
+std::vector<Shape::Vertex> Shape::CreateCornerVertices(float width, float height)
+{
+	width *= 0.5f;
+	height *= 0.5f;
+
+	std::vector<Vertex> vertices
+	{
+		// Front Face
+		Vertex(-width, -height, -width,			0.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(-width,  height, -width,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width,  height, -width,			1.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width, -height, -width,			1.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		// Back Face
+		Vertex(-width, -height, width,			1.0f, 1.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width, -height, width,			0.0f, 1.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width,  height, width,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(-width,  height, width,			1.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		// Top Face
+		Vertex(-width, height, -width,			0.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(-width, height,  width,			0.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height,  width,			1.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height, -width,			1.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		// Bottom Face
+		Vertex(-width, -height, -width,			1.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height, -width,			0.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height,  width,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height,  width,			1.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		// Left Face
+		Vertex(-width, -height,  width,			0.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height,  width,			0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height, -width,			1.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height, -width,			1.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		// Right Face
+		Vertex(width, -height, -width,			0.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height, -width,			0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height,  width,			1.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width, -height,  width,			1.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+	};
+
+	return vertices;
+}
+
+std::vector<DWORD> Shape::CreateQuadIndices()
 {
 	std::vector<DWORD> indices = {
 		// Front Face
@@ -64,7 +153,8 @@ std::vector<DWORD> Shape::CreateSquareIndices()
 	return indices;
 }
 
-std::vector<Shape::Vertex> Shape::CreateTVertices(float tWidth, float iWidth, float tHeight, float iHeight, float roomHeight)
+//Doesn't work
+/*std::vector<Shape::Vertex> Shape::CreateTVertices(float tWidth, float iWidth, float tHeight, float iHeight, float roomHeight)
 {
 	float totalWidth = 1;//(2 * tWidth) + iWidth;
 	float _tWidth = tWidth / ((2 * tWidth) + iWidth);
@@ -179,63 +269,4 @@ std::vector<DWORD> Shape::CreateTIndices()
 		45, 46, 47,
 	};
 	return indices;
-}
-
-void Shape::CreateL(float topWidth, float baseWidth, float height, float baseHeight)
-{
-	//define vertices
-	std::vector<Vertex> vertices
-	{
-		// Front Face
-		Vertex(-1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f),
-		Vertex(-1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f),
-		Vertex(1.0f,  1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f),
-		Vertex(1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f),
-		// Back Face
-		Vertex(-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f),
-		Vertex(-1.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f),
-		// Top Face
-		Vertex(-1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(-1.0f, 1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(1.0f, 1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f),
-		Vertex(1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f),
-		// Bottom Face
-		Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(1.0f, -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f),
-		Vertex(-1.0f, -1.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f),
-		// Left Face
-		Vertex(-1.0f, -1.0f,  1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f,  1.0f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f,  1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f),
-		Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f),
-		// Right Face
-		Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f),
-		Vertex(1.0f, -1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f),
-	};
-
-	std::vector<DWORD> indices = {
-		// Front Face
-		0,  1,  2,
-		0,  2,  3,
-		// Back Face
-		4,  5,  6,
-		4,  6,  7,
-		// Top Face
-		8,  9, 10,
-		8, 10, 11,
-		// Bottom Face
-		12, 13, 14,
-		12, 14, 15,
-		// Left Face
-		16, 17, 18,
-		16, 18, 19,
-		// Right Face
-		20, 21, 22,
-		20, 22, 23
-	};
-}
+}*/

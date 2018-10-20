@@ -1,11 +1,18 @@
-﻿  Model.cpp
-  OBJExporter.cpp
-d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(23): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(36): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(44): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(49): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(54): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(59): warning C4018: '<': signed/unsigned mismatch
-  Shapes.cpp
-  Generating Code...
+﻿  DXApp.cpp
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(33): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(80): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(89): warning C4316: 'Camera': object allocated on the heap may not be aligned 16
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(104): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(132): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(141): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(148): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(150): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(156): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(165): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(173): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(181): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(188): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(214): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(310): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
   AT1.vcxproj -> D:\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe
