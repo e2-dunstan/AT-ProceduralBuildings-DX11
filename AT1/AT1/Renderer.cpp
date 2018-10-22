@@ -3,7 +3,6 @@
 
 Renderer::Renderer()
 {
-	
 }
 Renderer::~Renderer()
 {	
@@ -130,12 +129,11 @@ void Renderer::InitView()
 		OutputDebugString("FAILED \nRenderer.cpp InitView()");
 	}
 
-	camPosition = XMVectorSet(0.0f, 3.0f, -8.0f, 0.0f);
-	camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
-	camProjection = XMMatrixPerspectiveFovLH(0.4f*3.14f, (float)windowWidth / windowHeight, 1.0f, 1000.0f);
+	//camPosition = XMVectorSet(0.0f, 3.0f, -8.0f, 0.0f);
+	//camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	//camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	//
+	//camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
 
 	InitRenderStates();
 }
@@ -164,7 +162,8 @@ void Renderer::DrawBackground()
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, XMMATRIX cameraView, int i)
+void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, 
+	XMMATRIX cameraView, XMMATRIX camProjection, int i)
 {
 	//deviceContext->RSSetState(filledState);
 	deviceContext->RSSetState(wireframeState);
@@ -210,14 +209,4 @@ IDXGISwapChain * Renderer::GetSwapChain()
 XMMATRIX Renderer::GetWorldMatrix()
 {
 	return World;
-}
-
-XMMATRIX Renderer::GetViewMatrix()
-{
-	return camView;
-}
-
-XMMATRIX Renderer::GetProjectionMatrix()
-{
-	return camProjection;
 }

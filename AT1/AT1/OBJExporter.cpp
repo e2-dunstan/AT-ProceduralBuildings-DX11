@@ -64,4 +64,20 @@ void OBJExporter::Create()
 	file.close();
 }
 
+void OBJExporter::SetVertices(std::vector<Vertex> newVertices)
+{
+	for (int v = 0; v < newVertices.size(); v++)
+	{
+		allVertices.push_back(newVertices[v]);
+	}
+}
+
+void OBJExporter::SetIndices(std::vector<DWORD> newIndices)
+{
+	for (int i = 0; i < newIndices.size(); i++)
+	{
+		allIndices.push_back(newIndices[i]);
+	}
+}
+
 

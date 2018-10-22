@@ -1,11 +1,18 @@
 #pragma once
-#include "DXApp.h"
-//#include "Shapes.h"
+#include "DXUtil.h"
+#include "Shapes.h"
 
-namespace OBJExporter
+class OBJExporter
 {
-	void Create();
+public:
+	OBJExporter() = default;
+	~OBJExporter() = default;
 
-	static std::vector<Vertex> allVertices;
-	static std::vector<DWORD> allIndices;
-}
+	void Create();
+	void SetVertices(std::vector<Vertex> newVertices);
+	void SetIndices(std::vector<DWORD> newIndices);
+
+private:
+	std::vector<Vertex> allVertices;
+	std::vector<DWORD> allIndices;
+};

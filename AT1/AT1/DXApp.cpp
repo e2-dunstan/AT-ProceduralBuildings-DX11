@@ -2,7 +2,6 @@
 #include "Constants.h"
 #include <dwrite.h>
 #include "OBJExporter.h"
-
 #include <time.h>
 
 namespace
@@ -16,6 +15,10 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	if (globalApp)
 	{
 		return globalApp->MsgProc(hwnd, msg, wParam, lParam);
+	}
+	if (TwEventWin(hwnd, msg, wParam, lParam))
+	{
+		return 0;
 	}
 	else
 	{
@@ -119,9 +122,11 @@ bool DXApp::Init()
 		return false;
 	}
 
-	// -- CREATE MODELS -- //
+	std::unique_ptr<OBJExporter> exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
 
-	//get user input ()
+	InitTweakBar();
+
+	// -- CREATE MODELS -- //
 
 	InitWalls();
 	InitCorners();
@@ -139,12 +144,15 @@ bool DXApp::Init()
 			return false;
 		}
 
-		//OBJExporter::allVertices.insert(OBJExporter::allVertices.end(), allModels[i]->GetVertices().begin(), allModels[i]->GetVertices().end());
-		//OBJExporter::allIndices.insert(OBJExporter::allIndices.end(), allModels[i]->GetIndices().begin(), allModels[i]->GetIndices().end());
-	}
+		exporter->SetVertices(allModels[i]->GetVertices());
+		exporter->SetIndices(allModels[i]->GetIndices());
 
+		/*OBJExporter::allIndices.insert(OBJExporter::allIndices.end(), 
+										allModels[i]->GetIndices().begin(), 
+										allModels[i]->GetIndices().end());*/
+	}
 	//--CREATE OBJ--//
-	//OBJExporter::Create();
+	exporter->Create();
 
 
 	return true;
@@ -214,6 +222,17 @@ void DXApp::InitCorners()
 	}
 }
 
+void DXApp::InitTweakBar()
+{
+	TwInit(TW_DIRECT3D11, renderer->GetDevice());
+	tweakBar = TwNewBar("Customise");
+	TwWindowSize(200, 400);
+	int tweakBarSize[2] = { 200, 400 };
+	TwSetParam(tweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
+	bool freezeCamera = false;
+	TwAddVarRW(tweakBar, "Freeze Camera", TW_TYPE_BOOLCPP, &freezeCamera, NULL);
+}
+
 void DXApp::Update(double dt)
 {
 	camera->DetectInput(dt, appWindow);
@@ -252,8 +271,10 @@ void DXApp::Render(double dt)
 	for (int i = 0; i < allModels.size(); i++)
 	{
 		allModels[i]->UpdateBuffers(*renderer);
-		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(), camera->GetCamView(), i);
+		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(), 
+			camera->GetCamView(), camera->GetCamProjection(), i);
 	}
+	TwDraw();
 	renderer->EndFrame();
 }
 

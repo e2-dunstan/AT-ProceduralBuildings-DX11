@@ -15,7 +15,8 @@ public:
 
 	void DrawBackground();
 	void DrawModel(ID3D11ShaderResourceView *textureShader, 
-		ID3D11SamplerState *samplerState, XMMATRIX cameraView, int i);
+		ID3D11SamplerState *samplerState, XMMATRIX cameraView, XMMATRIX camProjection,
+		int i);
 	void EndFrame();
 
 	struct SimpleCubeVertex
@@ -45,8 +46,6 @@ public:
 	IDXGISwapChain*	GetSwapChain();
 
 	XMMATRIX GetWorldMatrix();
-	XMMATRIX GetViewMatrix();
-	XMMATRIX GetProjectionMatrix();
 
 protected:
 	//DX Attributes
@@ -74,11 +73,11 @@ protected:
 	XMMATRIX WVP;
 	XMMATRIX World;
 
-	XMMATRIX camView;
-	XMMATRIX camProjection;
-
-	XMVECTOR camPosition;
-	XMVECTOR camTarget;
-	XMVECTOR camUp;
+	//XMMATRIX camView;
+	//XMMATRIX camProjection;
+	//
+	//XMVECTOR camPosition;
+	//XMVECTOR camTarget;
+	//XMVECTOR camUp;
 };
 

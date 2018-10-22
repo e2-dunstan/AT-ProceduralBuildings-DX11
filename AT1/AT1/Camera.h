@@ -15,8 +15,11 @@ public:
 	void UpdateCamera();
 
 	XMMATRIX GetCamView();
+	XMMATRIX GetCamProjection();
 
 private:
+	bool lockCamera = false;
+
 	IDirectInputDevice8* DIKeyboard;
 	IDirectInputDevice8* DIMouse;
 
@@ -32,6 +35,7 @@ private:
 	XMVECTOR camPosition = XMVectorSet(0.0f, 8.0f, -20.0f, 0.0f);
 
 	XMMATRIX camView;
+	XMMATRIX camProjection;
 	XMMATRIX camRotationMatrix;
 	XMMATRIX groundWorld;
 

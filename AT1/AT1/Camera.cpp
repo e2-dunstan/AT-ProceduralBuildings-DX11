@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Constants.h"
 
 Camera::Camera()
 {
@@ -29,7 +30,7 @@ bool Camera::InitDirectInput(HINSTANCE appInstance, HWND appWindow)
 	hr = DIKeyboard->SetCooperativeLevel(appWindow, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 
 	hr = DIMouse->SetDataFormat(&c_dfDIMouse);
-	hr = DIMouse->SetCooperativeLevel(appWindow, DISCL_EXCLUSIVE | DISCL_NOWINKEY | DISCL_FOREGROUND);
+	hr = DIMouse->SetCooperativeLevel(appWindow, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 
 	return true;
 }
@@ -42,8 +43,18 @@ void Camera::DetectInput(float dt, HWND appWindow)
 	DIKeyboard->Acquire();
 	DIMouse->Acquire();
 
-	DIMouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseCurrState);
-	DIKeyboard->GetDeviceState(sizeof(keyboardState), (LPVOID)&keyboardState);
+	HRESULT result;
+
+	result = DIMouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseCurrState);
+	if (FAILED(result) && (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED))
+	{
+		DIMouse->Acquire();
+	}
+	result = DIKeyboard->GetDeviceState(sizeof(keyboardState), (LPVOID)&keyboardState);
+	if (FAILED(result) && (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED))
+	{
+		DIKeyboard->Acquire();
+	}
 
 	if ((keyboardState[DIK_ESCAPE] & 0x80) && !keyboardState[DIK_LWIN])
 		PostMessage(appWindow, WM_DESTROY, 0, 0);
@@ -66,6 +77,16 @@ void Camera::DetectInput(float dt, HWND appWindow)
 	{
 		moveBackForward -= speed;
 	}
+
+	if (keyboardState[DIK_Q])
+	{
+		lockCamera = true;
+	}
+	if (keyboardState[DIK_E])
+	{
+		lockCamera = false;
+	}
+
 	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
 	{
 		camYaw += mouseLastState.lX * 0.001f;
@@ -75,7 +96,8 @@ void Camera::DetectInput(float dt, HWND appWindow)
 		mouseLastState = mouseCurrState;
 	}
 
-	UpdateCamera();
+	if (!lockCamera)
+		UpdateCamera();
 }
 
 void Camera::UpdateCamera()
@@ -97,9 +119,15 @@ void Camera::UpdateCamera()
 	camTarget = camPosition + camTarget;
 
 	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
+	camProjection = XMMatrixPerspectiveFovLH(0.4f*3.14f, (float)windowWidth / windowHeight, 1.0f, 1000.0f);
 }
 
 XMMATRIX Camera::GetCamView()
 {
 	return camView;
+}
+
+XMMATRIX Camera::GetCamProjection()
+{
+	return camProjection;
 }

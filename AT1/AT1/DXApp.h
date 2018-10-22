@@ -17,6 +17,8 @@ public:
 	virtual bool Init();
 	void InitWalls();
 	void InitCorners();
+	void InitTweakBar();
+
 	virtual void Update(double dt);
 	virtual void Render(double dt);
 	virtual LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -50,6 +52,8 @@ private:
 	XMMATRIX Scale;
 	XMMATRIX Translation;
 	float rot = 0.01f;
+
+	TwBar* tweakBar;
 
 
 	double countsPerSecond = 0.0;

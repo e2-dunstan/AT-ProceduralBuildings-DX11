@@ -185,12 +185,12 @@ Type Model::GetType()
 	return type;
 }
 
-std::vector<Vertex> Model::GetVertices()
+std::vector<Vertex> & Model::GetVertices()
 {
 	return vertices;
 }
 
-std::vector<DWORD> Model::GetIndices()
+std::vector<DWORD> & Model::GetIndices()
 {
 	return indices;
 }

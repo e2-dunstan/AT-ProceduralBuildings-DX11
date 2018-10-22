@@ -37,8 +37,8 @@ public:
 	float GetRotation();
 	Type GetType();
 
-	std::vector<Vertex> GetVertices();
-	std::vector<DWORD> GetIndices();
+	std::vector<Vertex> & GetVertices();
+	std::vector<DWORD> & GetIndices();
 
 private:
 	const long double PI = 3.141592653589793238L;
