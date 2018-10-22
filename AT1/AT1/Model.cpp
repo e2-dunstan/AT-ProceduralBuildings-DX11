@@ -1,6 +1,5 @@
 #include "Model.h"
 #include <fstream>
-#include "OBJExporter.h"
 
 Model::Model(Type modelType, int width, int height, int depth,
 	float posX, float posY, float posZ, float rotation)
@@ -53,8 +52,6 @@ bool Model::InitModel(Renderer& renderer, char* textureFilename, HWND hwnd)
 void Model::CreateMesh(Renderer & renderer)
 {
 	//--DEFINE VERTICES--//
-	std::vector<Shape::Vertex> vertices;
-	std::vector<DWORD> indices;
 
 	switch (type)
 	{
@@ -76,9 +73,6 @@ void Model::CreateMesh(Renderer & renderer)
 	}
 	//potentially add more shapes
 	}
-
-	//--CREATE OBJ--//
-	OBJExporter::Create(vertices, indices);
 
 	//--CREATE BUFFERS--//
 
@@ -189,6 +183,16 @@ float Model::GetRotation()
 Type Model::GetType()
 {
 	return type;
+}
+
+std::vector<Shape::Vertex> Model::GetVertices()
+{
+	return vertices;
+}
+
+std::vector<DWORD> Model::GetIndices()
+{
+	return indices;
 }
 
 

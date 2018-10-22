@@ -164,19 +164,17 @@ void Renderer::DrawBackground()
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
-void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, XMMATRIX cameraView)
+void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, XMMATRIX cameraView, int i)
 {
-	for (int i = 0; i < _wallTransforms.size(); i++)
-	{
-		deviceContext->RSSetState(filledState);
-		WVP = _wallTransforms[i] * cameraView * camProjection;
-		matrixBuffer.WVP = XMMatrixTranspose(WVP);
-		deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
-		deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
-		deviceContext->PSSetShaderResources(0, 1, &textureShader);
-		deviceContext->PSSetSamplers(0, 1, &samplerState);
-		deviceContext->DrawIndexed(36, 0, 0);
-	}
+	//deviceContext->RSSetState(filledState);
+	deviceContext->RSSetState(wireframeState);
+	WVP = _modelTransforms[i] * cameraView * camProjection;
+	matrixBuffer.WVP = XMMatrixTranspose(WVP);
+	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
+	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+	deviceContext->PSSetShaderResources(0, 1, &textureShader);
+	deviceContext->PSSetSamplers(0, 1, &samplerState);
+	deviceContext->DrawIndexed(36, 0, 0);
 }
 
 void Renderer::EndFrame()
@@ -184,9 +182,9 @@ void Renderer::EndFrame()
 	swapChain->Present(0, 0);
 }
 
-void Renderer::SetModelTransforms(std::vector<XMMATRIX> wallTransforms)
+void Renderer::SetModelTransforms(std::vector<XMMATRIX> modelTransforms)
 {
-	_wallTransforms = wallTransforms;
+	_modelTransforms = modelTransforms;
 }
 
 ID3D11Device * Renderer::GetDevice()

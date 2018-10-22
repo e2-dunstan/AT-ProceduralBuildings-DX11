@@ -89,9 +89,4 @@
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\Vlog Resources\George Foreman.tga">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
 </Project>

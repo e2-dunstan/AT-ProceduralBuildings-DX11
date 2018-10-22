@@ -1,8 +1,4 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <string>
-
 #include "DXUtil.h"
 #include "Renderer.h"
 #include "Model.h"
@@ -45,6 +41,9 @@ protected:
 	bool InitWindow();
 
 private:
+
+	char* textureFiles[11];
+
 	std::vector<XMMATRIX> allModelTransforms;
 
 	XMMATRIX Rotation;
@@ -66,9 +65,9 @@ private:
 	bool valuesChanged = true;
 
 	//these will be user defined
-	int buildingWidth = 4;
+	int buildingWidth = 5;
 	int buildingHeight = 5;
-	int buildingDepth = 10;
+	int buildingDepth = 8;
 	float wallWidth = 5;
 	float wallHeight = 5;
 	float wallDepth = 1; //don't allow to be greater than wall width

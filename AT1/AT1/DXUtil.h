@@ -1,9 +1,13 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #include <d3d11.h>
 #include <DirectXColors.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include <fstream>
+#include <vector>
+#include <string>
 
 #pragma comment(lib, "d3d11.lib")
 

@@ -1,6 +1,5 @@
 #pragma once
-#include "Model.h"
-#include <vector>
+#include "DXUtil.h"
 
 namespace Shape
 {
@@ -12,13 +11,14 @@ namespace Shape
 			float nx, float ny, float nz)
 			: pos(x, y, z), texture(u, v), normal(nx, ny, nz) {}
 
-		XMFLOAT3 pos;
-		XMFLOAT2 texture;
-		XMFLOAT3 normal;
+		DirectX::XMFLOAT3 pos;
+		DirectX::XMFLOAT2 texture;
+		DirectX::XMFLOAT3 normal;
 	};
 
 	std::vector<Vertex> CreateSquareVertices(float width, float height, float depth);
 
+	//not yet implemented
 	std::vector<Vertex> CreateFloorVertices(float width, float height, float depth);
 
 	std::vector<Vertex> CreateCornerVertices(float width, float height); //depth = width

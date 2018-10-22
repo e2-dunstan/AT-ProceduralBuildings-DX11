@@ -88,7 +88,7 @@ std::vector<Shape::Vertex> Shape::CreateFloorVertices(float width, float height,
 
 std::vector<Shape::Vertex> Shape::CreateCornerVertices(float width, float height)
 {
-	width *= 0.5f;
+	//width *= 0.5f;
 	height *= 0.5f;
 
 	std::vector<Vertex> vertices

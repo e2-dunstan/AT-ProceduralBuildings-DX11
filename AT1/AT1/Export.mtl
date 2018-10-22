@@ -1,6 +1,0 @@
-newmtl texture
-illum 2
-Kd 1.0 1.0 1.0
-Ka 1.0 1.0 1.0
-map_Kd George_Foreman.tga
-map_Ka George_Foreman.tga

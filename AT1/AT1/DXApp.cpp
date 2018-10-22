@@ -1,6 +1,9 @@
 #include "DXApp.h"
 #include "Constants.h"
 #include <dwrite.h>
+#include "OBJExporter.h"
+
+#include <time.h>
 
 namespace
 {
@@ -26,6 +29,18 @@ DXApp::DXApp(HINSTANCE hInstance)
 	appWindow = NULL;
 	windowStyle = WS_OVERLAPPEDWINDOW;
 	globalApp = this;
+
+	textureFiles[0] = "Resources/chiseled_red_sandstone.tga";
+	textureFiles[1] = "Resources/coal_block.tga";
+	textureFiles[2] = "Resources/daylight_detector.tga";
+	textureFiles[3] = "Resources/lapis_ore.tga";
+	textureFiles[4] = "Resources/light_gray_terracotta.tga";
+	textureFiles[5] = "Resources/lime_terracotta.tga";
+	textureFiles[6] = "Resources/mycelium_top.tga";
+	textureFiles[7] = "Resources/nether_wart_block.tga";
+	textureFiles[8] = "Resources/purpur_pillar.tga";
+	textureFiles[9] = "Resources/red_nether_bricks.tga";
+	textureFiles[10] = "Resources/red_sandstone.tga";
 }
 
 DXApp::~DXApp()
@@ -38,6 +53,16 @@ DXApp::~DXApp()
 			walls[i] = nullptr;
 		}
 	}
+
+	//CHANGE 11 TO MAX TEXTURES
+	//for (int i = 0; i < 11; i++)
+	//{
+	//	if (textureFiles[i])
+	//	{
+	//		delete textureFiles[i];
+	//		textureFiles[i] = nullptr;
+	//	}
+	//}
 }
 
 int DXApp::Run()
@@ -103,14 +128,23 @@ bool DXApp::Init()
 
 	for (int i = 0; i < allModels.size(); i++)
 	{
-		if (!allModels[i]->InitModel(*renderer, "George_Foreman.tga",
+		//srand(time(NULL));
+		//int randNum = rand() % 11;
+
+		if (!allModels[i]->InitModel(*renderer, textureFiles[10],
 			appWindow))
 		{
 			MessageBox(0, (LPCSTR)L"Model Initialization - Failed",
 				(LPCSTR)L"Error", MB_OK);
 			return false;
 		}
+
+		//OBJExporter::allVertices.insert(OBJExporter::allVertices.end(), allModels[i]->GetVertices().begin(), allModels[i]->GetVertices().end());
+		//OBJExporter::allIndices.insert(OBJExporter::allIndices.end(), allModels[i]->GetIndices().begin(), allModels[i]->GetIndices().end());
 	}
+
+	//--CREATE OBJ--//
+	//OBJExporter::Create();
 
 
 	return true;
@@ -163,7 +197,7 @@ void DXApp::InitCorners()
 {
 	//0,0
 	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-		-(wallWidth / 2) - wallDepth, (wallHeight * buildingHeight) / 2, 0.5f * wallWidth, 0));
+		-(wallWidth / 2) - wallDepth, (wallHeight * (buildingHeight + 1)) / 2, 0.5f * wallWidth, 0));
 	//1,0
 
 	//0,1
@@ -211,10 +245,10 @@ void DXApp::Update(double dt)
 void DXApp::Render(double dt)
 {
 	renderer->DrawBackground();
-	for (int i = 0; i < walls.size(); i++)
+	for (int i = 0; i < allModels.size(); i++)
 	{
-		walls[i]->UpdateBuffers(*renderer);
-		renderer->DrawModel(walls[i]->GetTexture(), walls[i]->GetTexturePointer()->GetSamplerState(), camera->GetCamView());
+		allModels[i]->UpdateBuffers(*renderer);
+		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(), camera->GetCamView(), i);
 	}
 	renderer->EndFrame();
 }

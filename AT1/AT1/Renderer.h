@@ -1,8 +1,4 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <string>
-#include <vector>
 #include "DXUtil.h"
 
 using namespace DirectX;
@@ -19,7 +15,7 @@ public:
 
 	void DrawBackground();
 	void DrawModel(ID3D11ShaderResourceView *textureShader, 
-		ID3D11SamplerState *samplerState, XMMATRIX cameraView);
+		ID3D11SamplerState *samplerState, XMMATRIX cameraView, int i);
 	void EndFrame();
 
 	struct SimpleCubeVertex
@@ -41,7 +37,7 @@ public:
 	};
 	MatrixBufferType matrixBuffer;
 
-	void SetModelTransforms(std::vector<XMMATRIX> wallTransforms);
+	void SetModelTransforms(std::vector<XMMATRIX> modelTransforms);
 
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetDeviceContext();
@@ -73,7 +69,7 @@ protected:
 
 	ID3D11Buffer* cbPerObjectBuffer = nullptr;
 
-	std::vector<XMMATRIX> _wallTransforms;
+	std::vector<XMMATRIX> _modelTransforms;
 
 	XMMATRIX WVP;
 	XMMATRIX World;

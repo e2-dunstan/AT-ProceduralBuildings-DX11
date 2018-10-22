@@ -1,8 +1,8 @@
 #pragma once
-#include <vector>
 #include "Renderer.h"
 #include "Texture.h"
 #include "Shapes.h"
+
 
 enum Type
 {
@@ -37,6 +37,9 @@ public:
 	float GetRotation();
 	Type GetType();
 
+	std::vector<Shape::Vertex> GetVertices();
+	std::vector<DWORD> GetIndices();
+
 private:
 	const long double PI = 3.141592653589793238L;
 
@@ -55,6 +58,9 @@ private:
 	ID3D11InputLayout* inputLayout = nullptr;
 
 	Texture* texture = nullptr;
+
+	std::vector<Shape::Vertex> vertices;
+	std::vector<DWORD> indices;
 
 	//ID3D11DepthStencilState* depthState = nullptr;
 	//ID3D11BlendState* blendState = nullptr;

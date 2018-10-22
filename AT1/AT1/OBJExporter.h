@@ -1,10 +1,11 @@
 #pragma once
-#include "Model.h"
-#include "Shapes.h"
-#include <vector>
-#include <fstream>
+#include "DXApp.h"
+//#include "Shapes.h"
 
 namespace OBJExporter
 {
-	void Create(std::vector<Shape::Vertex> vertices, std::vector<DWORD> indices);
+	void Create();
+
+	static std::vector<Shape::Vertex> allVertices;
+	static std::vector<DWORD> allIndices;
 }
