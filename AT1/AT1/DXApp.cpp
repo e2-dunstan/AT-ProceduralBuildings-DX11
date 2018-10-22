@@ -199,10 +199,14 @@ void DXApp::InitCorners()
 	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
 		-(wallWidth / 2) - wallDepth, (wallHeight * (buildingHeight + 1)) / 2, 0.5f * wallWidth, 0));
 	//1,0
-
+	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, 0.5f * wallWidth, 0));
 	//0,1
-
+	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+		-(wallWidth / 2) - wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
 	//1,1
+	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
 
 	for (int c = 0; c < corners.size(); c++)
 	{

@@ -1,6 +1,6 @@
 #include "Shapes.h"
 
-std::vector<Shape::Vertex> Shape::CreateSquareVertices(float width, float height, float depth)
+std::vector<Vertex> Shape::CreateSquareVertices(float width, float height, float depth)
 {
 	width *= 0.5f;
 	height *= 0.5f;
@@ -42,7 +42,7 @@ std::vector<Shape::Vertex> Shape::CreateSquareVertices(float width, float height
 	return vertices;
 }
 
-std::vector<Shape::Vertex> Shape::CreateFloorVertices(float width, float height, float depth)
+std::vector<Vertex> Shape::CreateFloorVertices(float width, float height, float depth)
 {
 	//PLACEHOLDER
 
@@ -86,7 +86,7 @@ std::vector<Shape::Vertex> Shape::CreateFloorVertices(float width, float height,
 	return vertices;
 }
 
-std::vector<Shape::Vertex> Shape::CreateCornerVertices(float width, float height)
+std::vector<Vertex> Shape::CreateCornerVertices(float width, float height)
 {
 	//width *= 0.5f;
 	height *= 0.5f;

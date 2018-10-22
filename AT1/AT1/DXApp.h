@@ -65,9 +65,9 @@ private:
 	bool valuesChanged = true;
 
 	//these will be user defined
-	int buildingWidth = 5;
-	int buildingHeight = 5;
-	int buildingDepth = 8;
+	int buildingWidth = 10;
+	int buildingHeight = 3;
+	int buildingDepth = 1;
 	float wallWidth = 5;
 	float wallHeight = 5;
 	float wallDepth = 1; //don't allow to be greater than wall width

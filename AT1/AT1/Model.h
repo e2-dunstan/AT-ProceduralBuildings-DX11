@@ -37,7 +37,7 @@ public:
 	float GetRotation();
 	Type GetType();
 
-	std::vector<Shape::Vertex> GetVertices();
+	std::vector<Vertex> GetVertices();
 	std::vector<DWORD> GetIndices();
 
 private:
@@ -59,7 +59,7 @@ private:
 
 	Texture* texture = nullptr;
 
-	std::vector<Shape::Vertex> vertices;
+	std::vector<Vertex> vertices;
 	std::vector<DWORD> indices;
 
 	//ID3D11DepthStencilState* depthState = nullptr;

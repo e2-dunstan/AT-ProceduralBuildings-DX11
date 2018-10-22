@@ -93,7 +93,7 @@ void Model::CreateMesh(Renderer & renderer)
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Shape::Vertex) * vertices.size();
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -136,7 +136,7 @@ void Model::UpdateBuffers(Renderer& renderer)
 {
 	renderer.GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	//bind vertex buffer
-	UINT stride = sizeof(Shape::Vertex);	//size between each vertex
+	UINT stride = sizeof(Vertex);	//size between each vertex
 	UINT offset = 0;
 	renderer.GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);	//look at function requirements for help
 }
@@ -185,7 +185,7 @@ Type Model::GetType()
 	return type;
 }
 
-std::vector<Shape::Vertex> Model::GetVertices()
+std::vector<Vertex> Model::GetVertices()
 {
 	return vertices;
 }
