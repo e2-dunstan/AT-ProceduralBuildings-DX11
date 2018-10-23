@@ -9,75 +9,126 @@ void OBJExporter::Create()
 	mtl << "illum 2" << endl;
 	mtl << "Kd 1.0 1.0 1.0" << endl;
 	mtl << "Ka 1.0 1.0 1.0" << endl;
-	mtl << "map_Kd George_Foreman.tga" << endl;
-	mtl << "map_Ka George_Foreman.tga" << endl;
+	mtl << "map_Kd " << texture << endl;
+	mtl << "map_Ka " << texture << endl;
 	mtl.close();
 
 	// THIS MAY CAUSE ISSUES
 	ofstream file("Resources/Export.obj");
 	
-	vector<string> positions;
-	vector<string> textureCoordinates;
-	vector<string> normals;
-	vector<string> faces;
+	file << "mtllib Export.mtl" << endl << endl;
 
-	for (int i = 0; i < allVertices.size(); i++)
-	{
-		positions.push_back("v " + to_string(allVertices[i].pos.x) + 
-							" " + to_string(allVertices[i].pos.y) +
-							" " + to_string(allVertices[i].pos.z));
+	int indexOffset = 1;
 
-		textureCoordinates.push_back("vt " + to_string(allVertices[i].texture.x) +
-									" " + to_string(allVertices[i].texture.y));
+	for (int m = 0; m < models.size(); m++)
+	{
+		SetVertices(models[m]->GetVertices(), m);
+		SetIndices(models[m]->GetIndices());
 
-		normals.push_back("vn " + to_string(allVertices[i].normal.x) +
-							" " + to_string(allVertices[i].normal.y) +
-							" " + to_string(allVertices[i].normal.z));
-	}
-	for (int i = 0; i < allIndices.size(); i++)
-	{
-		faces.push_back(to_string(allIndices[i] + 1) + "/"
-					  + to_string(allIndices[i] + 1) + "/"
-					  + to_string(allIndices[i] + 1) + " ");
-	}
+		vector<string> positions;
+		vector<string> textureCoordinates;
+		vector<string> normals;
+		vector<string> faces;
 
-	file << "mtllib Export.mtl" << endl;
-	for (int i = 0; i < allVertices.size(); i++)
-	{
-		file << positions[i] << endl;
-	}
-	file << endl;
-	for (int i = 0; i < allVertices.size(); i++)
-	{
-		file << textureCoordinates[i] << endl;
-	}
-	file << endl;
-	for (int i = 0; i < allVertices.size(); i++)
-	{
-		file << normals[i] << endl;
-	}
-	file << "usemtl texture" << endl;
-	for (int i = 0; i < allIndices.size(); i+=3)
-	{
-		file << "f " + faces[i] + faces[i + 1] + faces[i + 2] << endl;
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			positions.push_back("v " + to_string(vertices[i].pos.x) +
+				" " + to_string(vertices[i].pos.y) +
+				" " + to_string(vertices[i].pos.z));
+
+			textureCoordinates.push_back("vt " + to_string(vertices[i].texture.x) +
+				" " + to_string(vertices[i].texture.y));
+
+			normals.push_back("vn " + to_string(vertices[i].normal.x) +
+				" " + to_string(vertices[i].normal.y) +
+				" " + to_string(vertices[i].normal.z));
+		}
+		
+		for (int i = 0; i < indices.size(); i++)
+		{
+			faces.push_back(to_string(indices[i] + indexOffset) + "/"
+				+ to_string(indices[i] + indexOffset) + "/"
+				+ to_string(indices[i] + indexOffset) + " ");
+		}
+
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			file << positions[i] << endl;
+		}
+		file << endl;
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			file << textureCoordinates[i] << endl;
+		}
+		file << endl;
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			file << normals[i] << endl;
+			++indexOffset;
+		}
+		file << endl << "usemtl texture" << endl;
+
+		for (int i = 0; i < indices.size(); i += 3)
+		{
+			file << "f " + faces[i] + faces[i + 1] + faces[i + 2] << endl;
+		}
+		file << endl;
+
+		ClearVertices();
+		ClearIndices();
 	}
 	file.close();
 }
 
-void OBJExporter::SetVertices(std::vector<Vertex> newVertices)
+void OBJExporter::SetModels(std::vector<Model*> _models)
+{
+	models = _models;
+}
+
+void OBJExporter::SetTransforms(std::vector<XMMATRIX> _transforms)
+{
+	transforms = _transforms;
+}
+
+void OBJExporter::SetVertices(std::vector<Vertex> newVertices, int i)
 {
 	for (int v = 0; v < newVertices.size(); v++)
 	{
-		allVertices.push_back(newVertices[v]);
+		//vertices.push_back(newVertices[v]);
+
+		XMVECTOR pos = XMVectorSet(newVertices[v].pos.x, newVertices[v].pos.y, newVertices[v].pos.z, 0.0f);
+		pos = XMVector3Transform(pos, transforms[i]);
+
+		XMFLOAT4 temp;
+		XMStoreFloat4(&temp, pos);
+
+		Vertex newVertex = Vertex(temp.x, temp.y, temp.z,
+			newVertices[v].texture.x, newVertices[v].texture.y,
+			newVertices[v].normal.x, newVertices[v].normal.y, newVertices[v].normal.z);
+		vertices.push_back(newVertex);
 	}
+	
 }
 
 void OBJExporter::SetIndices(std::vector<DWORD> newIndices)
 {
 	for (int i = 0; i < newIndices.size(); i++)
 	{
-		allIndices.push_back(newIndices[i]);
+		indices.push_back(newIndices[i]);
 	}
 }
 
+void OBJExporter::SetTexture(std::string newTexture)
+{
+	texture = newTexture;
+}
 
+void OBJExporter::ClearVertices()
+{
+	vertices.clear();
+}
+
+void OBJExporter::ClearIndices()
+{
+	indices.clear();
+}

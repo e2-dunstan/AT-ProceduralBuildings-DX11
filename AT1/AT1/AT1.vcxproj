@@ -117,6 +117,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BuildingGenerator.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DXApp.cpp" />
     <ClCompile Include="OBJExporter.cpp" />
@@ -127,6 +128,7 @@
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BuildingGenerator.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DXApp.h" />

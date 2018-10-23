@@ -1,8 +1,8 @@
 #include "DXApp.h"
 #include "Constants.h"
 #include <dwrite.h>
-#include "OBJExporter.h"
 #include <time.h>
+#include "BuildingGenerator.h"
 
 namespace
 {
@@ -48,14 +48,6 @@ DXApp::DXApp(HINSTANCE hInstance)
 
 DXApp::~DXApp()
 {
-	for (int i = 0; i < walls.size(); i++)
-	{
-		if (walls[i])
-		{
-			delete walls[i];
-			walls[i] = nullptr;
-		}
-	}
 
 	//CHANGE 11 TO MAX TEXTURES
 	//for (int i = 0; i < 11; i++)
@@ -122,14 +114,16 @@ bool DXApp::Init()
 		return false;
 	}
 
-	std::unique_ptr<OBJExporter> exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
+	exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
 
 	InitTweakBar();
 
 	// -- CREATE MODELS -- //
 
-	InitWalls();
-	InitCorners();
+	std::unique_ptr<BuildingGenerator> generator = std::unique_ptr<BuildingGenerator>(new BuildingGenerator);
+	generator->Init();
+
+	allModels = generator->GetModels();
 
 	for (int i = 0; i < allModels.size(); i++)
 	{
@@ -143,84 +137,130 @@ bool DXApp::Init()
 				(LPCSTR)L"Error", MB_OK);
 			return false;
 		}
-
-		exporter->SetVertices(allModels[i]->GetVertices());
-		exporter->SetIndices(allModels[i]->GetIndices());
-
-		/*OBJExporter::allIndices.insert(OBJExporter::allIndices.end(), 
-										allModels[i]->GetIndices().begin(), 
-										allModels[i]->GetIndices().end());*/
+		SetTransforms(i);
 	}
 	//--CREATE OBJ--//
+	exporter->SetTexture(textureFiles[10]);
+	exporter->SetModels(allModels);
+	exporter->SetTransforms(allModelTransforms);
 	exporter->Create();
-
 
 	return true;
 }
 
-void DXApp::InitWalls()
-{
-	buildingDepth += 2;
-	for (int f = 1; f <= buildingHeight; f++)
-	{
-		float height = f * wallHeight;
-		for (int d = 0; d < buildingDepth; d++)
-		{
-			if (d == 0)
-			{
-				float depth = (d + 0.5f) * wallWidth;
-				for (int w = 0; w < buildingWidth; w++)
-				{
-					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-						w * wallWidth, height, depth, 90.0f * 0));
-				}
-			}
-			else if (d == (buildingDepth - 1))
-			{
-				float depth = ((d - 0.5f) * wallWidth) + (wallDepth * 2);
-				for (int w = 0; w < buildingWidth; w++)
-				{
-					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-						w * wallWidth, height, depth, 90.0f * 2));
-				}
-			}
-			else
-			{
-				float depth = (d* wallWidth) + wallDepth;
-				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-					-(wallWidth / 2) - wallDepth, height, depth, 90.0f * 1));
-				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-					(buildingWidth * wallWidth) - (wallWidth / 2) + wallDepth, height, depth, 90.0f * 3));
-			}
-		}
-	}
+//void DXApp::InitWalls()
+//{
+//	//for all of the floors
+//	//for (int h = 0; h < buildingHeight; h++)
+//	//{
+//	//	//for each depth in the building
+//	//	for (int d = 0; d < buildingDepth; d++)
+//	//	{
+//	//		//first horizontal wall
+//	//		if (d == 0)
+//	//		{
+//	//			for (int w = 0; w < buildingWidth; w++)
+//	//			{
+//	//				allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//	//					wallDepth + (wallWidth/2) + (wallWidth * w), 
+//	//					wallHeight * h,
+//	//					wallDepth / 2, 
+//	//					90.0f * 0));
+//	//			}
+//	//		}
+//	//		//final horizontal wall
+//	//		else if (d == (buildingDepth - 1))
+//	//		{
+//	//			for (int w = 0; w < buildingWidth; w++)
+//	//			{
+//	//				allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//	//					wallDepth + (wallWidth / 2) + (wallWidth * w),
+//	//					wallHeight * h,
+//	//					(wallDepth * 1.5f) + (wallWidth * d),
+//	//					90.0f * 0));
+//	//			}
+//	//		}
+//	//		//vertical walls
+//	//		else
+//	//		{
+//	//			allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//	//				wallDepth / 2, 
+//	//				wallHeight * h,
+//	//				wallDepth + (wallWidth / 2) + (wallWidth * d), 
+//	//				90.0f * 1));
+//	//			allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//	//				(wallDepth * 1.5f) + (wallWidth * buildingWidth),
+//	//				wallHeight * h,
+//	//				wallDepth + (wallWidth / 2) + (wallWidth * d),
+//	//				90.0f * 1));
+//	//		}
+//	//	}
+//	//}
+//
+//
+//	buildingDepth += 2;
+//	for (int f = 1; f <= buildingHeight; f++)
+//	{
+//		float height = f * wallHeight;
+//		for (int d = 0; d < buildingDepth; d++)
+//		{
+//			if (d == 0)
+//			{
+//				float depth = (d + 0.5f) * wallWidth;
+//				for (int w = 0; w < buildingWidth; w++)
+//				{
+//					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//						w * wallWidth, height, depth, 90.0f * 0));
+//				}
+//			}
+//			else if (d == (buildingDepth - 1))
+//			{
+//				float depth = ((d - 0.5f) * wallWidth) + (wallDepth * 2);
+//				for (int w = 0; w < buildingWidth; w++)
+//				{
+//					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//						w * wallWidth, height, depth, 90.0f * 2));
+//				}
+//			}
+//			else
+//			{
+//				float depth = (d* wallWidth) + wallDepth;
+//				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//					-(wallWidth / 2) - wallDepth, height, depth, 90.0f * 1));
+//				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
+//					(buildingWidth * wallWidth) - (wallWidth / 2) + wallDepth, height, depth, 90.0f * 3));
+//			}
+//		}
+//	}
+//
+//	for (int w = 0; w < walls.size(); w++)
+//	{
+//		allModels.push_back(walls[w]);
+//	}
+//}
 
-	for (int w = 0; w < walls.size(); w++)
-	{
-		allModels.push_back(walls[w]);
-	}
-}
-
-void DXApp::InitCorners()
-{
-	//0,0
-	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-		-(wallWidth / 2) - wallDepth, (wallHeight * (buildingHeight + 1)) / 2, 0.5f * wallWidth, 0));
-	//1,0
-	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, 0.5f * wallWidth, 0));
-	//0,1
-	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-		-(wallWidth / 2) - wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
-	//1,1
-	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
-
-	for (int c = 0; c < corners.size(); c++)
-	{
-		allModels.push_back(corners[c]);
-	}
-}
+//void DXApp::InitCorners()
+//{
+//	//0,0
+//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+//		-(wallWidth / 2) - wallDepth, 
+//		(wallHeight * (buildingHeight + 1)) / 2,
+//		0.5f * wallWidth, 0));
+//	//1,0
+//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+//		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, 0.5f * wallWidth, 0));
+//	//0,1
+//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+//		-(wallWidth / 2) - wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
+//	//1,1
+//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
+//		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
+//
+//	for (int c = 0; c < corners.size(); c++)
+//	{
+//		allModels.push_back(corners[c]);
+//	}
+//}
 
 void DXApp::InitTweakBar()
 {
@@ -231,6 +271,23 @@ void DXApp::InitTweakBar()
 	TwSetParam(tweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
 	bool freezeCamera = false;
 	TwAddVarRW(tweakBar, "Freeze Camera", TW_TYPE_BOOLCPP, &freezeCamera, NULL);
+}
+
+void DXApp::SetTransforms(int i)
+{
+	//Initialise and reset
+	if (allModelTransforms.size() != allModels.size())
+		allModelTransforms.push_back(XMMatrixIdentity());
+	else
+		allModelTransforms[i] = XMMatrixIdentity();
+
+	XMVECTOR rotAxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	Rotation = XMMatrixRotationAxis(rotAxis, allModels[i]->GetRotation());
+	Translation = XMMatrixTranslation(allModels[i]->GetPosition().x,
+		allModels[i]->GetPosition().y,
+		allModels[i]->GetPosition().z);
+	Scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	allModelTransforms[i] = Scale * Rotation * Translation;
 }
 
 void DXApp::Update(double dt)
@@ -244,23 +301,14 @@ void DXApp::Update(double dt)
 
 		for (int i = 0; i < allModels.size(); i++)
 		{
-			//Initialise and reset
-			if (allModelTransforms.size() != allModels.size())
-				allModelTransforms.push_back(XMMatrixIdentity());
-			else
-				allModelTransforms[i] = XMMatrixIdentity();
-
-			XMVECTOR rotAxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-			Rotation = XMMatrixRotationAxis(rotAxis, allModels[i]->GetRotation());
-			Translation = XMMatrixTranslation(allModels[i]->GetPosition().x,
-											  allModels[i]->GetPosition().y,
-											  allModels[i]->GetPosition().z);
-			Scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-
-			allModelTransforms[i] = Scale * Rotation * Translation;
+			SetTransforms(i);
 		}
 
 		renderer->SetModelTransforms(allModelTransforms);
+
+
+		//exporter->Create();
+
 		valuesChanged = false;
 	}
 }
@@ -272,7 +320,7 @@ void DXApp::Render(double dt)
 	{
 		allModels[i]->UpdateBuffers(*renderer);
 		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(), 
-			camera->GetCamView(), camera->GetCamProjection(), i);
+			camera->GetCamView(), camera->GetCamProjection(), i, allModels[i]->GetIndices().size());
 	}
 	TwDraw();
 	renderer->EndFrame();

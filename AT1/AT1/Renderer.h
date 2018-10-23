@@ -16,7 +16,7 @@ public:
 	void DrawBackground();
 	void DrawModel(ID3D11ShaderResourceView *textureShader, 
 		ID3D11SamplerState *samplerState, XMMATRIX cameraView, XMMATRIX camProjection,
-		int i);
+		int i, int indexCount);
 	void EndFrame();
 
 	struct SimpleCubeVertex

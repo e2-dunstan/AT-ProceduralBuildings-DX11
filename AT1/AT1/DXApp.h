@@ -3,6 +3,7 @@
 #include "Renderer.h"
 #include "Model.h"
 #include "Camera.h"
+#include "OBJExporter.h"
 
 class DXApp
 {
@@ -15,9 +16,9 @@ public:
 
 	//Framework
 	virtual bool Init();
-	void InitWalls();
-	void InitCorners();
 	void InitTweakBar();
+
+	void SetTransforms(int i);
 
 	virtual void Update(double dt);
 	virtual void Render(double dt);
@@ -35,9 +36,8 @@ protected:
 
 	std::unique_ptr<Renderer> renderer;
 	std::vector<Model*> allModels;
-	std::vector<Model*> walls;
-	std::vector<Model*> corners;
 	std::unique_ptr<Camera> camera;
+	std::unique_ptr<OBJExporter> exporter;
 
 	//Initialise Win32 window
 	bool InitWindow();
@@ -67,13 +67,5 @@ private:
 
 
 	bool valuesChanged = true;
-
-	//these will be user defined
-	int buildingWidth = 10;
-	int buildingHeight = 3;
-	int buildingDepth = 1;
-	float wallWidth = 5;
-	float wallHeight = 5;
-	float wallDepth = 1; //don't allow to be greater than wall width
 };
 

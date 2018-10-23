@@ -24,6 +24,7 @@ namespace Shape
 	std::vector<Vertex> CreateCornerVertices(float width, float height); //depth = width
 
 	std::vector<DWORD> CreateQuadIndices();
+	std::vector<DWORD> CreatePlaneIndices();
 
 	//std::vector<Vertex> CreateTVertices(float tWidth, float iWidth, float tHeight, float iHeight, float roomHeight);
 	//std::vector<DWORD> CreateTIndices();

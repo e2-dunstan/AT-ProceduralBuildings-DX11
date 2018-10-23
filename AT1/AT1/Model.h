@@ -33,7 +33,8 @@ public:
 	Texture* GetTexturePointer();
 	bool LoadTexture(Renderer& renderer, char* filename, HWND hwnd);
 
-	Position GetPosition();
+	XMFLOAT3 GetPosition();
+	void SetPosition(XMFLOAT3 pos);
 	float GetRotation();
 	Type GetType();
 
@@ -48,8 +49,9 @@ private:
 	int h = 1;
 	int d = 1;
 	float r = 0;
-	Position position;
-
+	//Position position;
+	XMFLOAT3 position;
+	
 	ID3D11Buffer* vertexBuffer = nullptr;
 	ID3D11Buffer* indexBuffer = nullptr;
 	ID3D11Buffer* matrixBuffer = nullptr;

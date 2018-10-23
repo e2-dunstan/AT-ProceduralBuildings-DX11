@@ -163,7 +163,7 @@ void Renderer::DrawBackground()
 }
 
 void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, 
-	XMMATRIX cameraView, XMMATRIX camProjection, int i)
+	XMMATRIX cameraView, XMMATRIX camProjection, int i, int indexCount)
 {
 	//deviceContext->RSSetState(filledState);
 	deviceContext->RSSetState(wireframeState);
@@ -173,7 +173,7 @@ void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerS
 	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
 	deviceContext->PSSetShaderResources(0, 1, &textureShader);
 	deviceContext->PSSetSamplers(0, 1, &samplerState);
-	deviceContext->DrawIndexed(36, 0, 0);
+	deviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
 void Renderer::EndFrame()

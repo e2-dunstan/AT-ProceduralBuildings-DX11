@@ -13,10 +13,10 @@ Model::Model(Type modelType, int width, int height, int depth,
 	position.x = posX;
 	position.y = posY;
 	position.z = posZ;
-	if (r == 0 || r == 180)
-	{
-		position.z += 0.5f;
-	}
+	//if (r == 0 || r == 180)
+	//{
+	//	position.z += 0.5f;
+	//}
 
 	//Convert to radians
 	r = (rotation / 180) * PI;
@@ -170,9 +170,14 @@ bool Model::LoadTexture(Renderer & renderer, char * filename, HWND hwnd)
 	return true;
 }
 
-Position Model::GetPosition()
+XMFLOAT3 Model::GetPosition()
 {
 	return position;
+}
+
+void Model::SetPosition(XMFLOAT3 pos)
+{
+	position = pos;
 }
 
 float Model::GetRotation()
