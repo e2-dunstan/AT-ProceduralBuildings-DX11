@@ -1,0 +1,6 @@
+newmtl texture1
+illum 2
+Kd 1.0 1.0 1.0
+Ka 1.0 1.0 1.0
+map_Kd Resources/daylight_detector_top.tga
+map_Ka Resources/daylight_detector_top.tga

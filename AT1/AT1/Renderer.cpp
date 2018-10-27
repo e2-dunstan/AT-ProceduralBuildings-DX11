@@ -15,6 +15,9 @@ Renderer::~Renderer()
 	cbPerObjectBuffer->Release();
 	wireframeState->Release();
 	filledState->Release();
+	transparency->Release();
+	CCWcullMode->Release();
+	CWcullMode->Release();
 }
 
 bool Renderer::InitDirect3D(HWND appWindow)
@@ -52,7 +55,7 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		NULL,//D3D11_CREATE_DEVICE_DEBUG,
+		D3D11_CREATE_DEVICE_DEBUG,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
@@ -129,12 +132,7 @@ void Renderer::InitView()
 		OutputDebugString("FAILED \nRenderer.cpp InitView()");
 	}
 
-	//camPosition = XMVectorSet(0.0f, 3.0f, -8.0f, 0.0f);
-	//camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	//camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	//
-	//camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
-
+	InitBlendStates();
 	InitRenderStates();
 }
 
@@ -153,6 +151,56 @@ void Renderer::InitRenderStates()
 	filledDesc.FillMode = D3D11_FILL_SOLID;
 	filledDesc.CullMode = D3D11_CULL_BACK;
 	device->CreateRasterizerState(&filledDesc, &filledState);
+
+	D3D11_RASTERIZER_DESC noCullDesc;
+	ZeroMemory(&noCullDesc, sizeof(D3D11_RASTERIZER_DESC));
+	noCullDesc.FillMode = D3D11_FILL_SOLID;
+	noCullDesc.CullMode = D3D11_CULL_NONE;
+	device->CreateRasterizerState(&noCullDesc, &noCullState);
+
+	//Additional render states for cull modes
+	filledDesc.FrontCounterClockwise = true;
+	device->CreateRasterizerState(&filledDesc, &CCWcullMode);
+	filledDesc.FrontCounterClockwise = false;
+	device->CreateRasterizerState(&filledDesc, &CWcullMode);
+}
+
+void Renderer::InitBlendStates()
+{
+	//(FC)-Final Color
+	//(SP) -Source Pixel
+	//(DP) -Destination Pixel
+	//(SBF) -Source Blend Factor
+	//(DBF) -Destination Blend Factor
+	//(FA) -Final Alpha
+	//(SA) -Source Alpha
+	//(DA) -Destination Alpha
+	//(+) - Binaray Operator described below
+	//(X) -Cross Multiply Matrices
+
+	//(FC) = (SP)(X)(SBF)(+) (DP) (X) (DPF)
+	//(FA) = (SA)(SBF)(+) (DA)(DBF)
+
+	D3D11_BLEND_DESC blendDesc;
+	ZeroMemory(&blendDesc, sizeof(blendDesc));
+
+	D3D11_RENDER_TARGET_BLEND_DESC rtbd;
+	ZeroMemory(&rtbd, sizeof(rtbd));
+
+	rtbd.BlendEnable = true;
+	rtbd.SrcBlend = D3D11_BLEND_SRC_COLOR;
+	rtbd.DestBlend = D3D11_BLEND_BLEND_FACTOR;
+	rtbd.BlendOp = D3D11_BLEND_OP_ADD;
+	rtbd.SrcBlendAlpha = D3D11_BLEND_ONE;
+	rtbd.DestBlendAlpha = D3D11_BLEND_ZERO;
+	rtbd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	rtbd.RenderTargetWriteMask = D3D10_COLOR_WRITE_ENABLE_ALL;
+
+	blendDesc.AlphaToCoverageEnable = false;
+	blendDesc.RenderTarget[0] = rtbd;
+
+	device->CreateBlendState(&blendDesc, &transparency);
+
 }
 
 void Renderer::DrawBackground()
@@ -162,11 +210,44 @@ void Renderer::DrawBackground()
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
+void Renderer::SetRasterizerState(int state)
+{
+	switch (state)
+	{
+	case 0:
+		deviceContext->RSSetState(filledState);
+		break;
+	case 1:
+		deviceContext->RSSetState(noCullState);
+		break;
+	default:
+		deviceContext->RSSetState(wireframeState);
+		break;
+	}
+}
+
+void Renderer::SetBlendState(int state)
+{
+	float blendFactor[] = { 0.75f, 0.75f, 0.75f, 1.0f };
+	switch (state)
+	{
+	//transparent
+	case 0:
+		deviceContext->OMSetBlendState(transparency, blendFactor, 0xffffffff);
+		break;
+	//opaque
+	case 1:
+		deviceContext->OMSetBlendState(0, 0, 0xffffffff);
+		break;
+	default:
+		deviceContext->OMSetBlendState(0, 0, 0xffffffff);
+		break;
+	}
+}
+
 void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, 
 	XMMATRIX cameraView, XMMATRIX camProjection, int i, int indexCount)
 {
-	//deviceContext->RSSetState(filledState);
-	deviceContext->RSSetState(wireframeState);
 	WVP = _modelTransforms[i] * cameraView * camProjection;
 	matrixBuffer.WVP = XMMatrixTranspose(WVP);
 	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);

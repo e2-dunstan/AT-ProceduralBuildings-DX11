@@ -12,8 +12,11 @@ public:
 	bool InitDirect3D(HWND appWindow);
 	void InitView();
 	void InitRenderStates();
+	void InitBlendStates();
 
 	void DrawBackground();
+	void SetRasterizerState(int state);
+	void SetBlendState(int state);
 	void DrawModel(ID3D11ShaderResourceView *textureShader, 
 		ID3D11SamplerState *samplerState, XMMATRIX cameraView, XMMATRIX camProjection,
 		int i, int indexCount);
@@ -60,11 +63,15 @@ protected:
 	//render objects closer to the camera in front of objects further from the camera
 	ID3D11DepthStencilView* depthStencilView = nullptr;
 	ID3D11Texture2D* depthStencilBuffer = nullptr;
-	//ID3D11Buffer* constantBuffer;
 	ConstantBuffer constantBufferData;
 
 	ID3D11RasterizerState* wireframeState = nullptr;
 	ID3D11RasterizerState* filledState = nullptr;
+	ID3D11RasterizerState* noCullState = nullptr;
+
+	ID3D11BlendState* transparency;
+	ID3D11RasterizerState* CCWcullMode;
+	ID3D11RasterizerState* CWcullMode;
 
 	ID3D11Buffer* cbPerObjectBuffer = nullptr;
 
@@ -72,12 +79,5 @@ protected:
 
 	XMMATRIX WVP;
 	XMMATRIX World;
-
-	//XMMATRIX camView;
-	//XMMATRIX camProjection;
-	//
-	//XMVECTOR camPosition;
-	//XMVECTOR camTarget;
-	//XMVECTOR camUp;
 };
 

@@ -19,6 +19,7 @@ public:
 	void InitTweakBar();
 
 	void SetTransforms(int i);
+	void SetModelTexture(int i);
 
 	virtual void Update(double dt);
 	virtual void Render(double dt);
@@ -44,7 +45,7 @@ protected:
 
 private:
 
-	char* textureFiles[11];
+	char* textureFiles[12];
 
 	std::vector<XMMATRIX> allModelTransforms;
 

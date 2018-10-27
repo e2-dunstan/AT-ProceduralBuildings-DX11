@@ -1,7 +1,6 @@
 #include "DXApp.h"
 #include "Constants.h"
 #include <dwrite.h>
-#include <time.h>
 #include "BuildingGenerator.h"
 
 namespace
@@ -35,7 +34,7 @@ DXApp::DXApp(HINSTANCE hInstance)
 
 	textureFiles[0] = "Resources/chiseled_red_sandstone.tga";
 	textureFiles[1] = "Resources/coal_block.tga";
-	textureFiles[2] = "Resources/daylight_detector.tga";
+	textureFiles[2] = "Resources/daylight_detector_top.tga";
 	textureFiles[3] = "Resources/lapis_ore.tga";
 	textureFiles[4] = "Resources/light_gray_terracotta.tga";
 	textureFiles[5] = "Resources/lime_terracotta.tga";
@@ -44,6 +43,7 @@ DXApp::DXApp(HINSTANCE hInstance)
 	textureFiles[8] = "Resources/purpur_pillar.tga";
 	textureFiles[9] = "Resources/red_nether_bricks.tga";
 	textureFiles[10] = "Resources/red_sandstone.tga";
+	textureFiles[11] = "Resources/George_Foreman.tga";
 }
 
 DXApp::~DXApp()
@@ -127,10 +127,12 @@ bool DXApp::Init()
 
 	for (int i = 0; i < allModels.size(); i++)
 	{
-		//srand(time(NULL));
-		//int randNum = rand() % 11;
+		SetModelTexture(i);
 
-		if (!allModels[i]->InitModel(*renderer, textureFiles[10],
+		std::string str = allModels[i]->GetTextureString();
+		char *cstr = &str[0u];
+
+		if (!allModels[i]->InitModel(*renderer, cstr,
 			appWindow))
 		{
 			MessageBox(0, (LPCSTR)L"Model Initialization - Failed",
@@ -140,127 +142,12 @@ bool DXApp::Init()
 		SetTransforms(i);
 	}
 	//--CREATE OBJ--//
-	exporter->SetTexture(textureFiles[10]);
 	exporter->SetModels(allModels);
 	exporter->SetTransforms(allModelTransforms);
 	exporter->Create();
 
 	return true;
 }
-
-//void DXApp::InitWalls()
-//{
-//	//for all of the floors
-//	//for (int h = 0; h < buildingHeight; h++)
-//	//{
-//	//	//for each depth in the building
-//	//	for (int d = 0; d < buildingDepth; d++)
-//	//	{
-//	//		//first horizontal wall
-//	//		if (d == 0)
-//	//		{
-//	//			for (int w = 0; w < buildingWidth; w++)
-//	//			{
-//	//				allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//	//					wallDepth + (wallWidth/2) + (wallWidth * w), 
-//	//					wallHeight * h,
-//	//					wallDepth / 2, 
-//	//					90.0f * 0));
-//	//			}
-//	//		}
-//	//		//final horizontal wall
-//	//		else if (d == (buildingDepth - 1))
-//	//		{
-//	//			for (int w = 0; w < buildingWidth; w++)
-//	//			{
-//	//				allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//	//					wallDepth + (wallWidth / 2) + (wallWidth * w),
-//	//					wallHeight * h,
-//	//					(wallDepth * 1.5f) + (wallWidth * d),
-//	//					90.0f * 0));
-//	//			}
-//	//		}
-//	//		//vertical walls
-//	//		else
-//	//		{
-//	//			allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//	//				wallDepth / 2, 
-//	//				wallHeight * h,
-//	//				wallDepth + (wallWidth / 2) + (wallWidth * d), 
-//	//				90.0f * 1));
-//	//			allModels.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//	//				(wallDepth * 1.5f) + (wallWidth * buildingWidth),
-//	//				wallHeight * h,
-//	//				wallDepth + (wallWidth / 2) + (wallWidth * d),
-//	//				90.0f * 1));
-//	//		}
-//	//	}
-//	//}
-//
-//
-//	buildingDepth += 2;
-//	for (int f = 1; f <= buildingHeight; f++)
-//	{
-//		float height = f * wallHeight;
-//		for (int d = 0; d < buildingDepth; d++)
-//		{
-//			if (d == 0)
-//			{
-//				float depth = (d + 0.5f) * wallWidth;
-//				for (int w = 0; w < buildingWidth; w++)
-//				{
-//					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//						w * wallWidth, height, depth, 90.0f * 0));
-//				}
-//			}
-//			else if (d == (buildingDepth - 1))
-//			{
-//				float depth = ((d - 0.5f) * wallWidth) + (wallDepth * 2);
-//				for (int w = 0; w < buildingWidth; w++)
-//				{
-//					walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//						w * wallWidth, height, depth, 90.0f * 2));
-//				}
-//			}
-//			else
-//			{
-//				float depth = (d* wallWidth) + wallDepth;
-//				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//					-(wallWidth / 2) - wallDepth, height, depth, 90.0f * 1));
-//				walls.push_back(new Model(Type::WALL, wallWidth, wallHeight, wallDepth,
-//					(buildingWidth * wallWidth) - (wallWidth / 2) + wallDepth, height, depth, 90.0f * 3));
-//			}
-//		}
-//	}
-//
-//	for (int w = 0; w < walls.size(); w++)
-//	{
-//		allModels.push_back(walls[w]);
-//	}
-//}
-
-//void DXApp::InitCorners()
-//{
-//	//0,0
-//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-//		-(wallWidth / 2) - wallDepth, 
-//		(wallHeight * (buildingHeight + 1)) / 2,
-//		0.5f * wallWidth, 0));
-//	//1,0
-//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-//		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, 0.5f * wallWidth, 0));
-//	//0,1
-//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-//		-(wallWidth / 2) - wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
-//	//1,1
-//	corners.push_back(new Model(Type::CORNER, wallDepth, wallHeight * buildingHeight, wallDepth,
-//		(wallWidth * buildingWidth) - (wallWidth / 2) + wallDepth, (wallHeight * (buildingHeight + 1)) / 2, (wallWidth * (buildingDepth - 1)) - (wallDepth / 2), 0));
-//
-//	for (int c = 0; c < corners.size(); c++)
-//	{
-//		allModels.push_back(corners[c]);
-//	}
-//}
 
 void DXApp::InitTweakBar()
 {
@@ -288,6 +175,31 @@ void DXApp::SetTransforms(int i)
 		allModels[i]->GetPosition().z);
 	Scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 	allModelTransforms[i] = Scale * Rotation * Translation;
+}
+
+void DXApp::SetModelTexture(int i)
+{
+	switch (allModels[i]->GetType())
+	{
+	case Type::FLOOR:
+		allModels[i]->SetTextureString(std::string(textureFiles[3]));
+		break;
+	case Type::CORNER:
+		allModels[i]->SetTextureString(std::string(textureFiles[8]));
+		break;
+	case Type::WALL:
+		allModels[i]->SetTextureString(std::string(textureFiles[5]));
+		break;
+	case Type::WINDOW:
+		allModels[i]->SetTextureString(std::string(textureFiles[2]));
+		break;
+	case Type::DOOR:
+		allModels[i]->SetTextureString(std::string(textureFiles[4]));
+		break;
+	default:
+		allModels[i]->SetTextureString(std::string(textureFiles[11]));
+		break;
+	}
 }
 
 void DXApp::Update(double dt)
@@ -319,7 +231,24 @@ void DXApp::Render(double dt)
 	for (int i = 0; i < allModels.size(); i++)
 	{
 		allModels[i]->UpdateBuffers(*renderer);
-		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(), 
+
+		if (allModels[i]->GetType() == Type::FLOOR)
+		{
+			renderer->SetRasterizerState(1);
+			renderer->SetBlendState(1);
+		}
+		else if (allModels[i]->GetType() == Type::WINDOW)
+		{
+			renderer->SetRasterizerState(0);
+			renderer->SetBlendState(0);
+		}
+		else
+		{
+			renderer->SetRasterizerState(0);
+			renderer->SetBlendState(1);
+		}
+
+		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(),
 			camera->GetCamView(), camera->GetCamProjection(), i, allModels[i]->GetIndices().size());
 	}
 	TwDraw();

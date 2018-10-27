@@ -6,7 +6,7 @@
 
 enum Type
 {
-	WALL, FLOOR, CORNER
+	WALL, FLOOR, CORNER, WINDOW, DOOR
 };
 
 struct Position
@@ -32,6 +32,8 @@ public:
 	ID3D11ShaderResourceView* GetTexture();
 	Texture* GetTexturePointer();
 	bool LoadTexture(Renderer& renderer, char* filename, HWND hwnd);
+	void SetTextureString(std::string texStr);
+	std::string GetTextureString();
 
 	XMFLOAT3 GetPosition();
 	void SetPosition(XMFLOAT3 pos);
@@ -45,9 +47,9 @@ private:
 	const long double PI = 3.141592653589793238L;
 
 	Type type;
-	int w = 1;
-	int h = 1;
-	int d = 1;
+	float w = 1;
+	float h = 1;
+	float d = 1;
 	float r = 0;
 	//Position position;
 	XMFLOAT3 position;
@@ -60,6 +62,7 @@ private:
 	ID3D11InputLayout* inputLayout = nullptr;
 
 	Texture* texture = nullptr;
+	std::string textureStr;
 
 	std::vector<Vertex> vertices;
 	std::vector<DWORD> indices;

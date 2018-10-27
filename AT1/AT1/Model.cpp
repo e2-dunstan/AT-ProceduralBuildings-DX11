@@ -13,10 +13,6 @@ Model::Model(Type modelType, int width, int height, int depth,
 	position.x = posX;
 	position.y = posY;
 	position.z = posZ;
-	//if (r == 0 || r == 180)
-	//{
-	//	position.z += 0.5f;
-	//}
 
 	//Convert to radians
 	r = (rotation / 180) * PI;
@@ -61,17 +57,30 @@ void Model::CreateMesh(Renderer & renderer)
 		indices = Shape::CreateQuadIndices();
 		break;
 	}
+	case Type::WINDOW:
+	{
+		vertices = Shape::CreateSquareVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
+		break;
+	}
+	case Type::DOOR:
+	{
+		vertices = Shape::CreateSquareVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
+		break;
+	}
 	case Type::FLOOR:
 	{
 		vertices = Shape::CreateFloorVertices(w, h, d);
-		indices = Shape::CreateQuadIndices();
+		indices = Shape::CreatePlaneIndices();
+		break;
 	}
 	case Type::CORNER:
 	{
 		vertices = Shape::CreateCornerVertices(w, h);
 		indices = Shape::CreateQuadIndices();
+		break;
 	}
-	//potentially add more shapes
 	}
 
 	//--CREATE BUFFERS--//
@@ -168,6 +177,16 @@ bool Model::LoadTexture(Renderer & renderer, char * filename, HWND hwnd)
 	}
 
 	return true;
+}
+
+void Model::SetTextureString(std::string texStr)
+{
+	textureStr = texStr;
+}
+
+std::string Model::GetTextureString()
+{
+	return textureStr;
 }
 
 XMFLOAT3 Model::GetPosition()

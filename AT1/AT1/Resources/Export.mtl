@@ -1,6 +1,24 @@
-newmtl texture
+newmtl texture0
 illum 2
 Kd 1.0 1.0 1.0
 Ka 1.0 1.0 1.0
-map_Kd Resources/red_sandstone.tga
-map_Ka Resources/red_sandstone.tga
+map_Kd Resources/lime_terracotta.tga
+map_Ka Resources/lime_terracotta.tga
+newmtl texture1
+illum 2
+Kd 1.0 1.0 1.0
+Ka 1.0 1.0 1.0
+map_Kd Resources/daylight_detector_top.tga
+map_Ka Resources/daylight_detector_top.tga
+newmtl texture2
+illum 2
+Kd 1.0 1.0 1.0
+Ka 1.0 1.0 1.0
+map_Kd Resources/purpur_pillar.tga
+map_Ka Resources/purpur_pillar.tga
+newmtl texture3
+illum 2
+Kd 1.0 1.0 1.0
+Ka 1.0 1.0 1.0
+map_Kd Resources/lapis_ore.tga
+map_Ka Resources/lapis_ore.tga
