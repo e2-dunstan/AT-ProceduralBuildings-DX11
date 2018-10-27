@@ -6,7 +6,8 @@
 
 enum Type
 {
-	WALL, FLOOR, CORNER, WINDOW, DOOR
+	WALL, FLOOR, CORNER, WINDOW, DOOR, 
+	ROOF_PYRAMID, ROOF_FLAT, ROOF_SHED
 };
 
 struct Position

@@ -43,6 +43,49 @@ std::vector<Vertex> Shape::CreateSquareVertices(float width, float height, float
 
 	return vertices;
 }
+std::vector<Vertex> Shape::CreateLargeSquareVertices(float width, float height, float depth)
+{
+	//To account for centre point
+	width *= 0.5f;
+	height *= 0.5f;
+	depth *= 0.5f;
+
+	std::vector<Vertex> vertices
+	{
+		// Front Face
+		Vertex(-width, -height, -depth,			0.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(-width,  height, -depth,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width,  height, -depth,			10.0f, 0.0f,		0.0f, 0.0f, -1.0f),
+		Vertex(width, -height, -depth,			10.0f, 1.0f,		0.0f, 0.0f, -1.0f),
+		// Back Face
+		Vertex(-width, -height, depth,			10.0f, 1.0f,		0.0f, 0.0f, 1.0f),
+		Vertex(width, -height, depth,			0.0f, 1.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width,  height, depth,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(-width,  height, depth,			10.0f, 0.0f,		0.0f, 0.0f, 1.0f),
+		// Top Face
+		Vertex(-width, height, -depth,			0.0f, 10.0f,		0.0f, 1.0f, 0.0f),
+		Vertex(-width, height,  depth,			0.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height,  depth,			10.0f, 0.0f,		0.0f, 1.0f, 0.0f),
+		Vertex(width, height, -depth,			10.0f, 10.0f,		0.0f, 1.0f, 0.0f),
+		// Bottom Face
+		Vertex(-width, -height, -depth,			10.0f, 10.0f,		0.0f, -1.0f, 0.0f),
+		Vertex(width, -height, -depth,			0.0f, 10.0f,		0.0f, -1.0f, 0.0f),
+		Vertex(width, -height,  depth,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height,  depth,			10.0f, 0.0f,		0.0f, -1.0f, 0.0f),
+		// Left Face
+		Vertex(-width, -height,  depth,			0.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height,  depth,			0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height, -depth,			10.0f, 0.0f,		-1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height, -depth,			10.0f, 1.0f,		-1.0f, 0.0f, 0.0f),
+		// Right Face
+		Vertex(width, -height, -depth,			0.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height, -depth,			0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height,  depth,			10.0f, 0.0f,		1.0f, 0.0f, 0.0f),
+		Vertex(width, -height,  depth,			10.0f, 1.0f,		1.0f, 0.0f, 0.0f),
+	};
+
+	return vertices;
+}
 
 std::vector<Vertex> Shape::CreateFloorVertices(float width, float height, float depth)
 {
@@ -51,10 +94,10 @@ std::vector<Vertex> Shape::CreateFloorVertices(float width, float height, float 
 
 	std::vector<Vertex> vertices
 	{
-		Vertex(-width, height, -depth,			0.0f, 10.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(-width, height, -depth,			0.0f, depth/2,			0.0f, 1.0f, 0.0f),
 		Vertex(-width, height,  depth,			0.0f, 0.0f,				0.0f, 1.0f, 0.0f),
-		Vertex(width, height,  depth,			10.0f, 0.0f,			0.0f, 1.0f, 0.0f),
-		Vertex(width, height, -depth,			10.0f, 10.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height,  depth,			width/2, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height, -depth,			width/2, depth/2,		0.0f, 1.0f, 0.0f),
 	};
 
 	return vertices;
@@ -102,6 +145,76 @@ std::vector<Vertex> Shape::CreateCornerVertices(float width, float height)
 	return vertices;
 }
 
+std::vector<Vertex> Shape::CreatePyramidVertices(float width, float height, float depth)
+{
+	width *= 0.5f;
+	height *= 0.5f;
+	depth *= 0.5f;
+
+	std::vector<Vertex> vertices
+	{
+		// Front Face
+		Vertex(-width, -height, -depth,			0.0f, 5.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(0,  height, 0,					5.0f, 5.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width,  -height, -depth,			5.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		// Back Face
+		Vertex(-width, -height, depth,			5.0f, 5.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(0,  height, 0,					0.0f, 5.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width,  -height, depth,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		// Bottom Face
+		Vertex(-width, -height, -depth,			5.0f, 5.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height, -depth,			0.0f, 5.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height,  depth,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height,  depth,			5.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		// Left Face
+		Vertex(-width, -height,  depth,			0.0f, 5.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(0,  height, 0,					0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height, -depth,			5.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		// Right Face
+		Vertex(width, -height, -depth,			0.0f, 5.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(0,  height, 0,					0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  -height, depth,			5.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+	};
+
+	return vertices;
+}
+
+std::vector<Vertex> Shape::CreateShedVertices(float width, float height, float depth)
+{
+	width *= 0.5f;
+	height *= 0.5f;
+	depth *= 0.5f;
+
+	std::vector<Vertex> vertices
+	{
+		// Front Face
+		Vertex(-width, -height, -depth,			0.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(-width,  height, -depth,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width,  height, -depth,			1.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width, -height, -depth,			1.0f, 1.0f,			0.0f, 0.0f, -1.0f),
+		// Top Face
+		Vertex(-width, height, -depth,			0.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, height,  -depth,			0.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(width, -height,  depth,			1.0f, 0.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(-width, -height, depth,			1.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		// Bottom Face
+		Vertex(-width, -height, -depth,			1.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height, -depth,			0.0f, 1.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(width, -height,  depth,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height,  depth,			1.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		// Left Face
+		Vertex(-width, -height,  -depth,		0.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  -height,  depth,		0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width,  height, -depth,			1.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		// Right Face
+		Vertex(width, -height, -depth,			0.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  height, -depth,			0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width,  -height,  depth,			1.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+	};
+
+	return vertices;
+}
+
 std::vector<DWORD> Shape::CreateQuadIndices()
 {
 	std::vector<DWORD> indices = {
@@ -132,6 +245,44 @@ std::vector<DWORD> Shape::CreatePlaneIndices()
 	std::vector<DWORD> indices = {
 		0, 1, 2,
 		0, 2, 3
+	};
+	return indices;
+}
+
+std::vector<DWORD> Shape::CreatePyramidIndices()
+{
+	std::vector<DWORD> indices = {
+		// Front Face
+		0,  1,  2,
+		// Back Face
+		3,  4,  5,
+		// Bottom Face
+		6,  7,  8,
+		6,  8,  9,
+		// Left Face
+		10, 11, 12,
+		// Right Face
+		14, 13, 15,
+	};
+	return indices;
+}
+
+std::vector<DWORD> Shape::CreateShedIndices()
+{
+	std::vector<DWORD> indices = {
+		// Front Face
+		0,  1,  2,
+		0,  2,  3,
+		// Top Face
+		4,  5,  6,
+		4,  6,  7,
+		// Bottom Face
+		8,  9,  10,
+		8,  10, 11,
+		// Left Face
+		12, 13, 14,
+		// Right Face
+		15, 16, 17,
 	};
 	return indices;
 }

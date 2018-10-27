@@ -3,6 +3,12 @@
 #include <dwrite.h>
 #include "BuildingGenerator.h"
 
+// -- TO DO -- //
+// [ ] Height of door and make the generation of it more consistent
+// [ ] Normal maps? Would require lighting too
+// [ ] Export multiple textures
+// -- -- -- -- //
+
 namespace
 {
 	//used to forward messages to user defined procedure function
@@ -32,18 +38,18 @@ DXApp::DXApp(HINSTANCE hInstance)
 	windowStyle = WS_OVERLAPPEDWINDOW;
 	globalApp = this;
 
-	textureFiles[0] = "Resources/chiseled_red_sandstone.tga";
-	textureFiles[1] = "Resources/coal_block.tga";
-	textureFiles[2] = "Resources/daylight_detector_top.tga";
-	textureFiles[3] = "Resources/lapis_ore.tga";
-	textureFiles[4] = "Resources/light_gray_terracotta.tga";
-	textureFiles[5] = "Resources/lime_terracotta.tga";
-	textureFiles[6] = "Resources/mycelium_top.tga";
-	textureFiles[7] = "Resources/nether_wart_block.tga";
-	textureFiles[8] = "Resources/purpur_pillar.tga";
-	textureFiles[9] = "Resources/red_nether_bricks.tga";
-	textureFiles[10] = "Resources/red_sandstone.tga";
-	textureFiles[11] = "Resources/George_Foreman.tga";
+	textureFiles[0] = "chiseled_red_sandstone.tga";
+	textureFiles[1] = "coal_block.tga";
+	textureFiles[2] = "daylight_detector_top.tga";
+	textureFiles[3] = "lapis_ore.tga";
+	textureFiles[4] = "light_gray_terracotta.tga";
+	textureFiles[5] = "lime_terracotta.tga";
+	textureFiles[6] = "mycelium_top.tga";
+	textureFiles[7] = "nether_wart_block.tga";
+	textureFiles[8] = "purpur_pillar.tga";
+	textureFiles[9] = "red_nether_bricks.tga";
+	textureFiles[10] = "red_sandstone.tga";
+	textureFiles[11] = "George_Foreman.tga";
 }
 
 DXApp::~DXApp()
@@ -114,12 +120,16 @@ bool DXApp::Init()
 		return false;
 	}
 
-	exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
-
 	InitTweakBar();
 
 	// -- CREATE MODELS -- //
+	GenerateNewBuilding();
 
+	return true;
+}
+
+void DXApp::GenerateNewBuilding()
+{
 	std::unique_ptr<BuildingGenerator> generator = std::unique_ptr<BuildingGenerator>(new BuildingGenerator);
 	generator->Init();
 
@@ -129,7 +139,7 @@ bool DXApp::Init()
 	{
 		SetModelTexture(i);
 
-		std::string str = allModels[i]->GetTextureString();
+		std::string str = "Resources/" + allModels[i]->GetTextureString();
 		char *cstr = &str[0u];
 
 		if (!allModels[i]->InitModel(*renderer, cstr,
@@ -137,16 +147,14 @@ bool DXApp::Init()
 		{
 			MessageBox(0, (LPCSTR)L"Model Initialization - Failed",
 				(LPCSTR)L"Error", MB_OK);
-			return false;
 		}
 		SetTransforms(i);
 	}
 	//--CREATE OBJ--//
+	exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
 	exporter->SetModels(allModels);
 	exporter->SetTransforms(allModelTransforms);
 	exporter->Create();
-
-	return true;
 }
 
 void DXApp::InitTweakBar()
@@ -179,26 +187,42 @@ void DXApp::SetTransforms(int i)
 
 void DXApp::SetModelTexture(int i)
 {
-	switch (allModels[i]->GetType())
+	if (i == 0)
 	{
-	case Type::FLOOR:
-		allModels[i]->SetTextureString(std::string(textureFiles[3]));
-		break;
-	case Type::CORNER:
-		allModels[i]->SetTextureString(std::string(textureFiles[8]));
-		break;
-	case Type::WALL:
-		allModels[i]->SetTextureString(std::string(textureFiles[5]));
-		break;
-	case Type::WINDOW:
-		allModels[i]->SetTextureString(std::string(textureFiles[2]));
-		break;
-	case Type::DOOR:
-		allModels[i]->SetTextureString(std::string(textureFiles[4]));
-		break;
-	default:
-		allModels[i]->SetTextureString(std::string(textureFiles[11]));
-		break;
+		allModels[i]->SetTextureString(std::string(textureFiles[6]));
+	}
+	else
+	{
+		switch (allModels[i]->GetType())
+		{
+		case Type::FLOOR:
+			allModels[i]->SetTextureString(std::string(textureFiles[3]));
+			break;
+		case Type::CORNER:
+			allModels[i]->SetTextureString(std::string(textureFiles[8]));
+			break;
+		case Type::WALL:
+			allModels[i]->SetTextureString(std::string(textureFiles[5]));
+			break;
+		case Type::WINDOW:
+			allModels[i]->SetTextureString(std::string(textureFiles[2]));
+			break;
+		case Type::DOOR:
+			allModels[i]->SetTextureString(std::string(textureFiles[4]));
+			break;
+		case Type::ROOF_FLAT:
+			allModels[i]->SetTextureString(std::string(textureFiles[0]));
+			break;
+		case Type::ROOF_PYRAMID:
+			allModels[i]->SetTextureString(std::string(textureFiles[0]));
+			break;
+		case Type::ROOF_SHED:
+			allModels[i]->SetTextureString(std::string(textureFiles[0]));
+			break;
+		default:
+			allModels[i]->SetTextureString(std::string(textureFiles[11]));
+			break;
+		}
 	}
 }
 
@@ -209,17 +233,11 @@ void DXApp::Update(double dt)
 	//Stops it from updating every frame
 	if (valuesChanged)
 	{
+		allModels.clear();
 		allModelTransforms.clear();
 
-		for (int i = 0; i < allModels.size(); i++)
-		{
-			SetTransforms(i);
-		}
-
+		GenerateNewBuilding();
 		renderer->SetModelTransforms(allModelTransforms);
-
-
-		//exporter->Create();
 
 		valuesChanged = false;
 	}
@@ -232,7 +250,9 @@ void DXApp::Render(double dt)
 	{
 		allModels[i]->UpdateBuffers(*renderer);
 
-		if (allModels[i]->GetType() == Type::FLOOR)
+		if (allModels[i]->GetType() == Type::FLOOR
+			|| allModels[i]->GetType() == Type::ROOF_PYRAMID
+			|| allModels[i]->GetType() == Type::ROOF_SHED)
 		{
 			renderer->SetRasterizerState(1);
 			renderer->SetBlendState(1);

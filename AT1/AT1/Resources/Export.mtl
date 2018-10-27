@@ -1,24 +1,35 @@
 newmtl texture0
-illum 2
-Kd 1.0 1.0 1.0
-Ka 1.0 1.0 1.0
-map_Kd Resources/lime_terracotta.tga
-map_Ka Resources/lime_terracotta.tga
+d 1
+illum 1
+Kd 1.000 1.000 1.000
+Ka 1.000 1.000 1.000
+map_Kd chiseled_red_sandstone.tga
+map_Ka chiseled_red_sandstone.tga
 newmtl texture1
-illum 2
-Kd 1.0 1.0 1.0
-Ka 1.0 1.0 1.0
-map_Kd Resources/daylight_detector_top.tga
-map_Ka Resources/daylight_detector_top.tga
+d 1
+illum 1
+Kd 1.000 1.000 1.000
+Ka 1.000 1.000 1.000
+map_Kd lime_terracotta.tga
+map_Ka lime_terracotta.tga
 newmtl texture2
-illum 2
-Kd 1.0 1.0 1.0
-Ka 1.0 1.0 1.0
-map_Kd Resources/purpur_pillar.tga
-map_Ka Resources/purpur_pillar.tga
+d 1
+illum 1
+Kd 1.000 1.000 1.000
+Ka 1.000 1.000 1.000
+map_Kd daylight_detector_top.tga
+map_Ka daylight_detector_top.tga
 newmtl texture3
-illum 2
-Kd 1.0 1.0 1.0
-Ka 1.0 1.0 1.0
-map_Kd Resources/lapis_ore.tga
-map_Ka Resources/lapis_ore.tga
+d 1
+illum 1
+Kd 1.000 1.000 1.000
+Ka 1.000 1.000 1.000
+map_Kd purpur_pillar.tga
+map_Ka purpur_pillar.tga
+newmtl texture4
+d 1
+illum 1
+Kd 1.000 1.000 1.000
+Ka 1.000 1.000 1.000
+map_Kd lapis_ore.tga
+map_Ka lapis_ore.tga

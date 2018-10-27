@@ -1,6 +1,0 @@
-newmtl texture3
-illum 2
-Kd 1.0 1.0 1.0
-Ka 1.0 1.0 1.0
-map_Kd Resources/light_gray_terracotta.tga
-map_Ka Resources/light_gray_terracotta.tga

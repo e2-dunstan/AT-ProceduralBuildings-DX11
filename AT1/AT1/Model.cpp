@@ -81,6 +81,24 @@ void Model::CreateMesh(Renderer & renderer)
 		indices = Shape::CreateQuadIndices();
 		break;
 	}
+	case Type::ROOF_FLAT:
+	{
+		vertices = Shape::CreateLargeSquareVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
+		break;
+	}
+	case Type::ROOF_PYRAMID:
+	{
+		vertices = Shape::CreatePyramidVertices(w, h, d);
+		indices = Shape::CreatePyramidIndices();
+		break;
+	}
+	case Type::ROOF_SHED:
+	{
+		vertices = Shape::CreateShedVertices(w, h, d);
+		indices = Shape::CreateShedIndices();
+		break;
+	}
 	}
 
 	//--CREATE BUFFERS--//

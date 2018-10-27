@@ -55,7 +55,7 @@ bool Renderer::InitDirect3D(HWND appWindow)
 	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
+		NULL,//D3D11_CREATE_DEVICE_DEBUG,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
@@ -167,20 +167,6 @@ void Renderer::InitRenderStates()
 
 void Renderer::InitBlendStates()
 {
-	//(FC)-Final Color
-	//(SP) -Source Pixel
-	//(DP) -Destination Pixel
-	//(SBF) -Source Blend Factor
-	//(DBF) -Destination Blend Factor
-	//(FA) -Final Alpha
-	//(SA) -Source Alpha
-	//(DA) -Destination Alpha
-	//(+) - Binaray Operator described below
-	//(X) -Cross Multiply Matrices
-
-	//(FC) = (SP)(X)(SBF)(+) (DP) (X) (DPF)
-	//(FA) = (SA)(SBF)(+) (DA)(DBF)
-
 	D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
 
@@ -206,7 +192,7 @@ void Renderer::InitBlendStates()
 void Renderer::DrawBackground()
 {
 	//Sets background colour
-	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::PaleVioletRed);
+	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::Coral);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 

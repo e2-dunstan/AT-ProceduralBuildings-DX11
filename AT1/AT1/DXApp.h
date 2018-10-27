@@ -16,6 +16,7 @@ public:
 
 	//Framework
 	virtual bool Init();
+	void GenerateNewBuilding();
 	void InitTweakBar();
 
 	void SetTransforms(int i);

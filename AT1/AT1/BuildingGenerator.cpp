@@ -1,8 +1,19 @@
 #include "BuildingGenerator.h"
 #include <random>
 
+BuildingGenerator::~BuildingGenerator()
+{
+	models.clear();
+	ClearVectors();
+}
+
 void BuildingGenerator::Init()
 {
+	models.push_back(new Model(Type::FLOOR,
+		1000, 0, 1000,
+		0, -(wallHeight + 0.2f) / 2, 0, 0));
+
+	InitRoof();
 	InitWalls();
 	InitCorners();
 	InitFloors();
@@ -229,45 +240,43 @@ void BuildingGenerator::InitFloors()
 	}
 }
 
-/*void BuildingGenerator::InitDoor()
+void BuildingGenerator::InitRoof()
 {
-	std::random_device rd; // obtain a random number from hardware
-	std::mt19937 eng(rd()); // seed the generator
-	std::uniform_int_distribution<> d(0, (buildingDepth * 2)); //define the range
-
-	int width;
-	int depth = d(eng);
-	float rot;
-
-	if (depth == buildingDepth || depth == 0)
+	switch (roofType)
 	{
-		std::uniform_int_distribution<> w(0, (buildingWidth * 2));
-		width = w(eng);
-		if (depth == buildingDepth)
-			depth = (wallWidth * buildingDepth) + wallDepth;
-		else
-			depth = 0;
-
-		rot = 0;
+	case 0: //pyramid
+		models.push_back(new Model(Type::ROOF_PYRAMID,
+			(buildingWidth * wallWidth) + (wallDepth * 2) + roofOverhang,
+			roofHeight,
+			(buildingDepth * wallWidth) + (wallDepth * 2) + roofOverhang,
+			((wallWidth * buildingWidth) + wallDepth) / 2,
+			(wallHeight * buildingHeight) + wallDepth,
+			((wallWidth * buildingDepth) + wallDepth) / 2,
+			0));
+		break;
+	case 1: //flat
+		models.push_back(new Model(Type::ROOF_FLAT,
+			(buildingWidth * wallWidth) + (wallDepth * 2) + roofOverhang, 
+			roofHeight, 
+			(buildingDepth * wallWidth) + (wallDepth * 2) + roofOverhang,
+			((wallWidth * buildingWidth) + wallDepth)/2,
+			(wallHeight * buildingHeight) - (wallHeight / 2),
+			((wallWidth * buildingDepth) + wallDepth) / 2,
+			0));
+		break;
+	case 2: //shed
+		models.push_back(new Model(Type::ROOF_SHED,
+			(buildingWidth * wallWidth) + (wallDepth * 2) + roofOverhang,
+			roofHeight,
+			(buildingDepth * wallWidth) + (wallDepth * 2) + roofOverhang,
+			((wallWidth * buildingWidth) + wallDepth) / 2,
+			(wallHeight * buildingHeight) + wallDepth,
+			((wallWidth * buildingDepth) + wallDepth) / 2,
+			0));
+		break;
 	}
-	else
-	{
-		std::uniform_int_distribution<> w(0, 2);
-		width = w(eng) * ((wallWidth * buildingWidth) + wallDepth);
 
-		if (depth > buildingDepth)
-			depth -= buildingDepth;
-		depth = (wallWidth * depth) + (wallDepth / 2) + (wallWidth / 2);
-		rot = 90;
-	}
-
-	models.push_back(new Model(Type::DOOR,
-		doorWidth, doorHeight, doorDepth,
-		width,
-		0,
-		depth,
-		rot));
-}*/
+}
 
 void BuildingGenerator::ClearVectors()
 {

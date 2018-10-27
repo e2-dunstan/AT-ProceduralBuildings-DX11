@@ -17,14 +17,16 @@ struct Vertex
 namespace Shape
 {
 	std::vector<Vertex> CreateSquareVertices(float width, float height, float depth);
-
-	//not yet implemented
+	std::vector<Vertex> CreateLargeSquareVertices(float width, float height, float depth);
 	std::vector<Vertex> CreateFloorVertices(float width, float height, float depth);
-
 	std::vector<Vertex> CreateCornerVertices(float width, float height); //depth = width
+	std::vector<Vertex> CreatePyramidVertices(float width, float height, float depth);
+	std::vector<Vertex> CreateShedVertices(float width, float height, float depth);
 
 	std::vector<DWORD> CreateQuadIndices();
 	std::vector<DWORD> CreatePlaneIndices();
+	std::vector<DWORD> CreatePyramidIndices();
+	std::vector<DWORD> CreateShedIndices();
 
 	//std::vector<Vertex> CreateTVertices(float tWidth, float iWidth, float tHeight, float iHeight, float roomHeight);
 	//std::vector<DWORD> CreateTIndices();

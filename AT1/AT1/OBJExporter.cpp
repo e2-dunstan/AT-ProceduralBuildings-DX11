@@ -11,26 +11,26 @@ void OBJExporter::Create()
 	int mtlNumber = 0;
 	int newMTL = 0;
 	std::string prevTexture;
+	file << "mtllib Export.mtl" << endl << endl;
 
-	for (int m = 0; m < models.size(); m++)
+	for (int m = 1; m < models.size(); m++)
 	{
 		mtlNumber = newMTL;
-		file << "g <Group" + std::to_string(mtlNumber) + ">" << endl;
+		file << "g default" << endl;//+ std::to_string(mtlNumber) << endl;
 
 		std::string newTexture = models[m]->GetTextureString();
 		if (newTexture != prevTexture)
 		{
 			mtl << "newmtl texture" + std::to_string(mtlNumber) << endl;
-			mtl << "illum 2" << endl;
-			mtl << "Kd 1.0 1.0 1.0" << endl;
-			mtl << "Ka 1.0 1.0 1.0" << endl;
+			mtl << "d 1" << endl;
+			mtl << "illum 1" << endl;
+			mtl << "Kd 1.000 1.000 1.000" << endl;
+			mtl << "Ka 1.000 1.000 1.000" << endl;
 			mtl << "map_Kd " << newTexture << endl;
-			mtl << "map_Ka " << newTexture << endl;
+			mtl << "map_Ka " << newTexture << endl;// << endl;
 			++newMTL;
 		}
 		prevTexture = newTexture;
-
-		file << "mtllib Export" + std::to_string(mtlNumber) + ".mtl" << endl << endl;
 
 		SetVertices(models[m]->GetVertices(), m);
 		SetIndices(models[m]->GetIndices());
@@ -65,29 +65,30 @@ void OBJExporter::Create()
 		{
 			file << positions[i] << endl;
 		}
-		file << endl;
+		//file << endl;
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			file << textureCoordinates[i] << endl;
 		}
-		file << endl;
+		//file << endl;
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			file << normals[i] << endl;
 			++indexOffset;
 		}
-		file << endl << "usemtl texture" + std::to_string(mtlNumber) << endl;
+		file << "g texture " + std::to_string(mtlNumber) << endl;
+		file << "usemtl texture" + std::to_string(mtlNumber) << endl;
 		for (int i = 0; i < indices.size(); i += 3)
 		{
 			file << "f " + faces[i] + faces[i + 1] + faces[i + 2] << endl;
 		}
-		file << endl;
+		//file << endl;
 
 		ClearVertices();
 		ClearIndices();
 	}
-	file.close();
 	mtl.close();
+	file.close();
 }
 
 void OBJExporter::CreateMTL(std::ofstream mtl, int i, std::string texture)
