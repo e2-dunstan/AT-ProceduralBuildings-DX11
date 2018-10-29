@@ -120,7 +120,6 @@ bool DXApp::Init()
 		return false;
 	}
 
-	InitTweakBar();
 
 	// -- CREATE MODELS -- //
 	GenerateNewBuilding();
@@ -132,6 +131,7 @@ void DXApp::GenerateNewBuilding()
 {
 	std::unique_ptr<BuildingGenerator> generator = std::unique_ptr<BuildingGenerator>(new BuildingGenerator);
 	generator->Init();
+	generator->InitTweakBar(*renderer);
 
 	allModels = generator->GetModels();
 
@@ -157,16 +157,7 @@ void DXApp::GenerateNewBuilding()
 	exporter->Create();
 }
 
-void DXApp::InitTweakBar()
-{
-	TwInit(TW_DIRECT3D11, renderer->GetDevice());
-	tweakBar = TwNewBar("Customise");
-	TwWindowSize(200, 400);
-	int tweakBarSize[2] = { 200, 400 };
-	TwSetParam(tweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
-	bool freezeCamera = false;
-	TwAddVarRW(tweakBar, "Freeze Camera", TW_TYPE_BOOLCPP, &freezeCamera, NULL);
-}
+
 
 void DXApp::SetTransforms(int i)
 {

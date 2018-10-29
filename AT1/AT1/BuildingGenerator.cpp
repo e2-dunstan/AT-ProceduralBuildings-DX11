@@ -4,7 +4,19 @@
 BuildingGenerator::~BuildingGenerator()
 {
 	models.clear();
+	TwTerminate();
 	ClearVectors();
+}
+
+void BuildingGenerator::InitTweakBar(Renderer & renderer)
+{
+	TwInit(TW_DIRECT3D11, renderer.GetDevice());
+	tweakBar = TwNewBar("Customise");
+	TwWindowSize(200, 400);
+	int tweakBarSize[2] = { 200, 400 };
+	TwSetParam(tweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
+	
+	TwAddVarRW(tweakBar, "Building Width", TW_TYPE_INT32, &buildingWidth, "Group='Structure' min=1 max=20 step=1");
 }
 
 void BuildingGenerator::Init()
@@ -106,11 +118,11 @@ void BuildingGenerator::InitWindowsAndDoor(float height)
 		int width;
 		int depth = d(eng);
 
-		float rot;
+		float rot = 0;
 
 		if (depth == numWindowsOnDepth || depth == 0)
 		{
-			std::uniform_int_distribution<> w(0, (numWindowsOnWidth * 2));
+			std::uniform_int_distribution<> w(1, (numWindowsOnWidth * 2));
 			width = w(eng);
 			gapBetween = (wallWidth * buildingWidth) / numWindowsOnWidth;
 			if (width > numWindowsOnWidth)
@@ -275,7 +287,6 @@ void BuildingGenerator::InitRoof()
 			0));
 		break;
 	}
-
 }
 
 void BuildingGenerator::ClearVectors()

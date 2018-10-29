@@ -17,7 +17,6 @@ public:
 	//Framework
 	virtual bool Init();
 	void GenerateNewBuilding();
-	void InitTweakBar();
 
 	void SetTransforms(int i);
 	void SetModelTexture(int i);
@@ -54,9 +53,6 @@ private:
 	XMMATRIX Scale;
 	XMMATRIX Translation;
 	float rot = 0.01f;
-
-	TwBar* tweakBar;
-
 
 	double countsPerSecond = 0.0;
 	__int64 CounterStart = 0;
