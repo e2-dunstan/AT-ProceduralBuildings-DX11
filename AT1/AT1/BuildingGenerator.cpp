@@ -83,9 +83,11 @@ void BuildingGenerator::InitWalls()
 	}
 	for (int win = 0; win < windows.size(); win++)
 	{
+		float x = std::abs(windows[win]->GetPosition().x - (door->GetPosition().x / 2));
+		float z = std::abs(windows[win]->GetPosition().z - (door->GetPosition().z / 2));
 		//THIS IS TEMPERMENTAL
-		if (windows[win]->GetPosition().x == door->GetPosition().x
-			&& windows[win]->GetPosition().z == door->GetPosition().z
+		if (std::abs(windows[win]->GetPosition().x - door->GetPosition().x) < 1
+			&& std::abs(windows[win]->GetPosition().z - door->GetPosition().z) < 1
 			&& windows[win]->GetPosition().y == 0)
 		{
 			models.push_back(door);
@@ -271,8 +273,8 @@ void BuildingGenerator::InitRoof()
 			(buildingWidth * wallWidth) + (wallDepth * 2) + roofOverhang, 
 			roofHeight, 
 			(buildingDepth * wallWidth) + (wallDepth * 2) + roofOverhang,
-			((wallWidth * buildingWidth) + wallDepth)/2,
-			(wallHeight * buildingHeight) - (wallHeight / 2),
+			((wallWidth * buildingWidth) + wallDepth) / 2,
+			(wallHeight * buildingHeight) - (roofHeight * 1.5f),
 			((wallWidth * buildingDepth) + wallDepth) / 2,
 			0));
 		break;

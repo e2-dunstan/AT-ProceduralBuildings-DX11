@@ -31,7 +31,7 @@ private:
 
 	//these will be user defined
 	int buildingWidth = 5;
-	int buildingHeight = 8;
+	int buildingHeight = 2;
 	int buildingDepth = 6;
 	float wallWidth = 6;
 	float wallHeight = 8;

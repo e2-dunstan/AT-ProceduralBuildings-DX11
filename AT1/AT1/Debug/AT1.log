@@ -6,40 +6,29 @@ d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(63): warning C4244:
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(70): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(80): warning C4018: '<': signed/unsigned mismatch
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(84): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(131): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(134): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(141): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(146): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(154): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(152): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(151): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(169): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(182): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(203): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(210): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(217): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(223): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(229): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(242): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(249): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(132): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(135): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(142): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(147): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(155): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(153): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(152): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(170): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(183): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(204): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(211): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(218): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(224): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(230): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(243): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(250): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(264): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(263): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(262): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(261): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(274): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(273): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(272): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(271): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(284): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(283): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(282): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(281): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  DXApp.cpp
-  c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(106): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(115): warning C4316: 'Camera': object allocated on the heap may not be aligned 16
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(138): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(222): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(240): warning C4018: '<': signed/unsigned mismatch
-d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(357): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
-  winmain.cpp
-  c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-  Generating Code...
   AT1.vcxproj -> D:\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe

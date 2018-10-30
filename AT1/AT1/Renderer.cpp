@@ -192,7 +192,7 @@ void Renderer::InitBlendStates()
 void Renderer::DrawBackground()
 {
 	//Sets background colour
-	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::Coral);
+	deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::MistyRose);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 

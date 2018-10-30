@@ -251,7 +251,7 @@ void DXApp::Render(double dt)
 		else if (allModels[i]->GetType() == Type::WINDOW)
 		{
 			renderer->SetRasterizerState(0);
-			renderer->SetBlendState(0);
+			renderer->SetBlendState(1);
 		}
 		else
 		{
