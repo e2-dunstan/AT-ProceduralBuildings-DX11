@@ -9,6 +9,8 @@
 // [ ] Export multiple textures
 // -- -- -- -- //
 
+std::unique_ptr<BuildingGenerator> generator = std::unique_ptr<BuildingGenerator>(new BuildingGenerator);
+
 namespace
 {
 	//used to forward messages to user defined procedure function
@@ -21,14 +23,11 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		return globalApp->MsgProc(hwnd, msg, wParam, lParam);
 	}
-	if (TwEventWin(hwnd, msg, wParam, lParam))
-	{
-		return 0;
-	}
 	else
 	{
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
+	generator->TerminateTweakBar();
 }
 
 DXApp::DXApp(HINSTANCE hInstance)
@@ -120,18 +119,22 @@ bool DXApp::Init()
 		return false;
 	}
 
-
 	// -- CREATE MODELS -- //
 	GenerateNewBuilding();
+
+	exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
 
 	return true;
 }
 
 void DXApp::GenerateNewBuilding()
 {
-	std::unique_ptr<BuildingGenerator> generator = std::unique_ptr<BuildingGenerator>(new BuildingGenerator);
 	generator->Init();
-	generator->InitTweakBar(*renderer);
+	if (!tweakBarInitialised)
+	{
+		generator->InitTweakBar(*renderer);
+		tweakBarInitialised = true;
+	}
 
 	allModels = generator->GetModels();
 
@@ -150,14 +153,7 @@ void DXApp::GenerateNewBuilding()
 		}
 		SetTransforms(i);
 	}
-	//--CREATE OBJ--//
-	exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
-	exporter->SetModels(allModels);
-	exporter->SetTransforms(allModelTransforms);
-	exporter->Create();
 }
-
-
 
 void DXApp::SetTransforms(int i)
 {
@@ -222,7 +218,7 @@ void DXApp::Update(double dt)
 	camera->DetectInput(dt, appWindow);
 
 	//Stops it from updating every frame
-	if (valuesChanged)
+	if (generator->ValuesChanged())
 	{
 		allModels.clear();
 		allModelTransforms.clear();
@@ -230,7 +226,15 @@ void DXApp::Update(double dt)
 		GenerateNewBuilding();
 		renderer->SetModelTransforms(allModelTransforms);
 
-		valuesChanged = false;
+		generator->SetValuesChanged(false);
+	}
+	if (generator->CreateNewObj())
+	{
+		//--CREATE OBJ--//
+		exporter->SetModels(allModels);
+		exporter->SetTransforms(allModelTransforms);
+		exporter->Create();
+		generator->SetCreateNewObj(false);
 	}
 }
 
@@ -262,7 +266,9 @@ void DXApp::Render(double dt)
 		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(),
 			camera->GetCamView(), camera->GetCamProjection(), i, allModels[i]->GetIndices().size());
 	}
-	TwDraw();
+
+	// -- DRAW THE TWEAK BAR -- //
+	generator->DrawTweakBar();
 	renderer->EndFrame();
 }
 
@@ -314,6 +320,11 @@ bool DXApp::InitWindow()
 
 LRESULT DXApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (generator->TweakBarEventWin(hwnd, msg, wParam, lParam))
+	{
+		return 0;
+	}
+
 	switch (msg)
 	{
 	case WM_DESTROY:

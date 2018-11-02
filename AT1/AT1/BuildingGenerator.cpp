@@ -8,19 +8,60 @@ BuildingGenerator::~BuildingGenerator()
 	ClearVectors();
 }
 
+void TW_CALL Generate(void *clientData)
+{
+	BuildingGenerator* bg = static_cast<BuildingGenerator*>(clientData);
+		
+	bg->ClearVectors();
+	bg->SetValuesChanged(true);
+}
+void TW_CALL Export(void *clientData)
+{
+	BuildingGenerator* bg = static_cast<BuildingGenerator*>(clientData);
+
+	bg->SetCreateNewObj(true);
+}
+
 void BuildingGenerator::InitTweakBar(Renderer & renderer)
 {
 	TwInit(TW_DIRECT3D11, renderer.GetDevice());
 	tweakBar = TwNewBar("Customise");
-	TwWindowSize(200, 400);
+	TwWindowSize(1280, 720);
 	int tweakBarSize[2] = { 200, 400 };
 	TwSetParam(tweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
 	
 	TwAddVarRW(tweakBar, "Building Width", TW_TYPE_INT32, &buildingWidth, "Group='Structure' min=1 max=20 step=1");
+	TwAddVarRW(tweakBar, "Building Height", TW_TYPE_INT32, &buildingHeight, "Group='Structure' min=1 max=20 step=1");
+	TwAddVarRW(tweakBar, "Building Depth", TW_TYPE_INT32, &buildingDepth, "Group='Structure' min=1 max=20 step=1");
+
+	TwAddVarRW(tweakBar, "Wall Width", TW_TYPE_FLOAT, &wallWidth, "Group='Walls' min=1 max=10 step=1");
+	TwAddVarRW(tweakBar, "Wall Height", TW_TYPE_FLOAT, &wallHeight, "Group='Walls' min=1 max=10 step=1");
+	TwAddVarRW(tweakBar, "Wall Depth", TW_TYPE_FLOAT, &wallDepth, "Group='Walls' min=1 max=3 step=0.5");
+
+	TwAddVarRW(tweakBar, "Windows on Width", TW_TYPE_INT32, &numWindowsOnWidth, "Group='Windows' min=0 max=20 step=1");
+	TwAddVarRW(tweakBar, "Windows on Depth", TW_TYPE_INT32, &numWindowsOnDepth, "Group='Windows' min=0 max=20 step=1");
+	TwAddVarRW(tweakBar, "Window Width", TW_TYPE_FLOAT, &windowWidth, "Group='Windows' min=1 max=5 step=1");
+	TwAddVarRW(tweakBar, "Window Height", TW_TYPE_FLOAT, &windowHeight, "Group='Windows' min=1 max=5 step=1");
+	TwAddVarRW(tweakBar, "Window Depth", TW_TYPE_FLOAT, &windowDepth, "Group='Windows' min=1 max=3 step=0.5");
+
+	TwAddVarRW(tweakBar, "Door Width", TW_TYPE_FLOAT, &doorWidth, "Group='Door' min=1 max=6 step=1");
+	TwAddVarRW(tweakBar, "Door Height", TW_TYPE_FLOAT, &doorHeight, "Group='Door' min=1 max=6 step=1");
+	TwAddVarRW(tweakBar, "Door Depth", TW_TYPE_FLOAT, &doorDepth, "Group='Door' min=1 max=3 step=0.5");
+
+	TwEnumVal roofTypeEV[] = { {PYRAMID, "Pyramid"}, {FLAT, "Flat"}, {SHED, "Shed"} };
+	TwType roofType = TwDefineEnum("RoofType", roofTypeEV, 3);
+	TwAddVarRW(tweakBar, "Roof Type", roofType, &roof, "Group='Roof'");
+	TwAddVarRW(tweakBar, "Roof Overhang", TW_TYPE_FLOAT, &roofOverhang, "Group='Roof' min=0 max=10 step=1");
+	TwAddVarRW(tweakBar, "Roof Height", TW_TYPE_FLOAT, &roofHeight, "Group='Roof' min=1 max=15 step=1");
+
+	TwAddButton(tweakBar, "Generate", Generate, this, " label='Generate a new Building'");
+	TwAddButton(tweakBar, "Export", Export, this, " label='Export as OBJ and MTL'");
 }
 
 void BuildingGenerator::Init()
 {
+	models.clear();
+	
 	models.push_back(new Model(Type::FLOOR,
 		1000, 0, 1000,
 		0, -(wallHeight + 0.2f) / 2, 0, 0));
@@ -81,20 +122,27 @@ void BuildingGenerator::InitWalls()
 	{
 		models.push_back(walls[w]);
 	}
-	for (int win = 0; win < windows.size(); win++)
+	if (windows.size() == 0)
 	{
-		float x = std::abs(windows[win]->GetPosition().x - (door->GetPosition().x / 2));
-		float z = std::abs(windows[win]->GetPosition().z - (door->GetPosition().z / 2));
-		//THIS IS TEMPERMENTAL
-		if (std::abs(windows[win]->GetPosition().x - door->GetPosition().x) < 1
-			&& std::abs(windows[win]->GetPosition().z - door->GetPosition().z) < 1
-			&& windows[win]->GetPosition().y == 0)
+		models.push_back(door);
+	}
+	else
+	{
+		for (int win = 0; win < windows.size(); win++)
 		{
-			models.push_back(door);
-		}
-		else
-		{
-			models.push_back(windows[win]);
+			float x = std::abs(windows[win]->GetPosition().x - (door->GetPosition().x / 2));
+			float z = std::abs(windows[win]->GetPosition().z - (door->GetPosition().z / 2));
+			//THIS IS TEMPERMENTAL
+			if (std::abs(windows[win]->GetPosition().x - door->GetPosition().x) < 1
+				&& std::abs(windows[win]->GetPosition().z - door->GetPosition().z) < 1
+				&& windows[win]->GetPosition().y == 0)
+			{
+				models.push_back(door);
+			}
+			else
+			{
+				models.push_back(windows[win]);
+			}
 		}
 	}
 }
@@ -105,12 +153,19 @@ void BuildingGenerator::InitWindowsAndDoor(float height)
 	if (numWindowsOnWidth > buildingWidth
 		|| numWindowsOnDepth > buildingDepth)
 	{
+		door = new Model(Type::DOOR,
+			doorWidth, doorHeight, doorDepth,
+			(wallDepth / 2) + (wallWidth / 2),
+			(doorHeight / 2) - (wallHeight / 2),
+			0,
+			0);
 		return;
 	}
 	float gapBetween;
 
 	// -- CREATE DOOR -- //
-	//Gets a random location on a wall
+	//Previously would randomise a position on the bottom floor however this proved to be buggy
+	/*Gets a random location on a wall
 	if (height == 0)
 	{
 		std::random_device rd; // obtain a random number from hardware
@@ -155,7 +210,7 @@ void BuildingGenerator::InitWindowsAndDoor(float height)
 			0,
 			depth,
 			rot);
-	}
+	}*/
 
 	// -- WINDOWS -- //
 	//For opposite walls
@@ -178,6 +233,7 @@ void BuildingGenerator::InitWindowsAndDoor(float height)
 		if (numWindowsOnDepth != 0)
 		{
 			gapBetween = (wallWidth * buildingDepth) / numWindowsOnDepth;
+			//j = 1 to allow for door to slot in
 			for (int j = 0; j < numWindowsOnDepth; j++)
 			{
 				windows.push_back(new Model(Type::WINDOW,
@@ -189,6 +245,27 @@ void BuildingGenerator::InitWindowsAndDoor(float height)
 			}
 		}
 	}
+	if (numWindowsOnWidth == 0)
+	{
+		door = new Model(Type::DOOR,
+			doorWidth, doorHeight, doorDepth,
+			wallDepth / 2,
+			(doorHeight / 2) - (wallHeight / 2),
+			0,
+			0);
+	}
+	else
+	{
+		windows[0] = new Model(Type::DOOR,
+			doorWidth, doorHeight, doorDepth,
+			(wallDepth / 2) + (((wallWidth * buildingWidth) / numWindowsOnWidth) / 2),
+			(doorHeight / 2) - (wallHeight / 2),
+			0,
+			0);
+
+		door = windows[0];
+	}
+
 }
 
 void BuildingGenerator::InitCorners()
@@ -256,35 +333,37 @@ void BuildingGenerator::InitFloors()
 
 void BuildingGenerator::InitRoof()
 {
-	switch (roofType)
+	float roofYPos = (wallHeight * buildingHeight) - (wallHeight / 2) + (roofHeight / 2);
+
+	switch (roof)
 	{
-	case 0: //pyramid
+	case PYRAMID:
 		models.push_back(new Model(Type::ROOF_PYRAMID,
 			(buildingWidth * wallWidth) + (wallDepth * 2) + roofOverhang,
 			roofHeight,
 			(buildingDepth * wallWidth) + (wallDepth * 2) + roofOverhang,
 			((wallWidth * buildingWidth) + wallDepth) / 2,
-			(wallHeight * buildingHeight) + wallDepth,
+			roofYPos,
 			((wallWidth * buildingDepth) + wallDepth) / 2,
 			0));
 		break;
-	case 1: //flat
+	case FLAT:
 		models.push_back(new Model(Type::ROOF_FLAT,
 			(buildingWidth * wallWidth) + (wallDepth * 2) + roofOverhang, 
 			roofHeight, 
 			(buildingDepth * wallWidth) + (wallDepth * 2) + roofOverhang,
 			((wallWidth * buildingWidth) + wallDepth) / 2,
-			(wallHeight * buildingHeight) - (roofHeight * 1.5f),
+			roofYPos,
 			((wallWidth * buildingDepth) + wallDepth) / 2,
 			0));
 		break;
-	case 2: //shed
+	case SHED:
 		models.push_back(new Model(Type::ROOF_SHED,
 			(buildingWidth * wallWidth) + (wallDepth * 2) + roofOverhang,
 			roofHeight,
 			(buildingDepth * wallWidth) + (wallDepth * 2) + roofOverhang,
 			((wallWidth * buildingWidth) + wallDepth) / 2,
-			(wallHeight * buildingHeight) + wallDepth,
+			roofYPos,
 			((wallWidth * buildingDepth) + wallDepth) / 2,
 			0));
 		break;
@@ -300,7 +379,42 @@ void BuildingGenerator::ClearVectors()
 	door = nullptr;
 }
 
+void BuildingGenerator::DrawTweakBar()
+{
+	TwDraw();
+}
+
+bool BuildingGenerator::TweakBarEventWin(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return TwEventWin(hwnd, msg, wParam, lParam);
+}
+
+void BuildingGenerator::TerminateTweakBar()
+{
+	TwTerminate();
+}
+
 std::vector<Model*> BuildingGenerator::GetModels()
 {
 	return models;
+}
+
+void BuildingGenerator::SetValuesChanged(bool changed)
+{
+	valuesChanged = changed;
+}
+
+bool BuildingGenerator::ValuesChanged()
+{
+	return valuesChanged;
+}
+
+void BuildingGenerator::SetCreateNewObj(bool create)
+{
+	createNewObj = create;
+}
+
+bool BuildingGenerator::CreateNewObj()
+{
+	return createNewObj;
 }

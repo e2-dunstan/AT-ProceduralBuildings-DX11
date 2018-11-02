@@ -17,16 +17,23 @@ d 1
 illum 1
 Kd 1.000 1.000 1.000
 Ka 1.000 1.000 1.000
+map_Kd light_gray_terracotta.tga
+map_Ka light_gray_terracotta.tga
+newmtl texture3
+d 1
+illum 1
+Kd 1.000 1.000 1.000
+Ka 1.000 1.000 1.000
 map_Kd daylight_detector_top.tga
 map_Ka daylight_detector_top.tga
-newmtl texture3
+newmtl texture4
 d 1
 illum 1
 Kd 1.000 1.000 1.000
 Ka 1.000 1.000 1.000
 map_Kd purpur_pillar.tga
 map_Ka purpur_pillar.tga
-newmtl texture4
+newmtl texture5
 d 1
 illum 1
 Kd 1.000 1.000 1.000

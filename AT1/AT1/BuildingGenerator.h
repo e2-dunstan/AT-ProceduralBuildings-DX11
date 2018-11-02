@@ -16,7 +16,16 @@ public:
 	void InitRoof();
 	void ClearVectors();
 
+	void DrawTweakBar();
+	bool TweakBarEventWin(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	void TerminateTweakBar();
+
 	std::vector<Model*> GetModels();
+
+	void SetValuesChanged(bool changed);
+	bool ValuesChanged();
+	void SetCreateNewObj(bool create);
+	bool CreateNewObj();
 
 private:
 	TwBar * tweakBar;
@@ -29,13 +38,16 @@ private:
 	std::vector<Model*> floors;
 	Model* door;
 
+	bool valuesChanged = true;
+	bool createNewObj = false;
+
 	//these will be user defined
 	int buildingWidth = 5;
 	int buildingHeight = 2;
 	int buildingDepth = 6;
 	float wallWidth = 6;
 	float wallHeight = 8;
-	float wallDepth = 1; //don't allow to be greater than wall width
+	float wallDepth = 1;
 
 	int numWindowsOnWidth = 5;
 	int numWindowsOnDepth = 2;
@@ -47,7 +59,9 @@ private:
 	float doorHeight = 5;
 	float doorDepth = 2;
 
-	int roofType = 1;
+	typedef enum { PYRAMID, FLAT, SHED } Roof;
+	Roof roof = FLAT;
+
 	float roofOverhang = 4;
 	float roofHeight = 2;
 };
