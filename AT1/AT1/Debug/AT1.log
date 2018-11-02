@@ -30,11 +30,29 @@ e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\buildinggen
 e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(362): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   DXApp.cpp
   c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(105): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(114): warning C4316: 'Camera': object allocated on the heap may not be aligned 16
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(141): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(218): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(244): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(368): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(95): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(104): warning C4316: 'Camera': object allocated on the heap may not be aligned 16
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(148): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(225): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(251): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(375): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+  Model.cpp
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(11): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(12): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(18): warning C4244: '=': conversion from 'long double' to 'float', possible loss of data
+  OBJExporter.cpp
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(16): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(43): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(57): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(64): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(69): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(74): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(81): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(118): warning C4018: '<': signed/unsigned mismatch
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(136): warning C4018: '<': signed/unsigned mismatch
+  Shapes.cpp
+  winmain.cpp
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
   Generating Code...
   AT1.vcxproj -> E:\-- UNIVERSITY --\-- Year 3 --\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe

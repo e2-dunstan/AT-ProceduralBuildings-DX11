@@ -4,7 +4,7 @@
 #include "BuildingGenerator.h"
 
 // -- TO DO -- //
-// [ ] Height of door and make the generation of it more consistent
+// [x] Height of door and make the generation of it more consistent
 // [ ] Normal maps? Would require lighting too
 // [ ] Export multiple textures
 // -- -- -- -- //
@@ -53,16 +53,6 @@ DXApp::DXApp(HINSTANCE hInstance)
 
 DXApp::~DXApp()
 {
-
-	//CHANGE 11 TO MAX TEXTURES
-	//for (int i = 0; i < 11; i++)
-	//{
-	//	if (textureFiles[i])
-	//	{
-	//		delete textureFiles[i];
-	//		textureFiles[i] = nullptr;
-	//	}
-	//}
 }
 
 int DXApp::Run()
@@ -124,7 +114,24 @@ bool DXApp::Init()
 
 	exporter = std::unique_ptr<OBJExporter>(new OBJExporter);
 
+	InitTextureTweakBar();
+
 	return true;
+}
+
+void DXApp::InitTextureTweakBar()
+{
+	textureTweakBar = TwNewBar("Textures");
+	TwWindowSize(1280, 720);
+	int tweakBarSize[2] = { 200, 400 };
+	TwSetParam(textureTweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
+
+	TwAddVarRW(textureTweakBar, "Floors", TW_TYPE_INT32, &floorTex, "min=1 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Corners", TW_TYPE_INT32, &cornerTex, "min=1 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Walls", TW_TYPE_INT32, &wallTex, "min=1 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Windows", TW_TYPE_INT32, &windowTex, "min=1 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Door", TW_TYPE_INT32, &doorTex, "min=1 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Room", TW_TYPE_INT32, &roofTex, "min=1 max=10 step=1");
 }
 
 void DXApp::GenerateNewBuilding()
@@ -183,28 +190,28 @@ void DXApp::SetModelTexture(int i)
 		switch (allModels[i]->GetType())
 		{
 		case Type::FLOOR:
-			allModels[i]->SetTextureString(std::string(textureFiles[3]));
+			allModels[i]->SetTextureString(std::string(textureFiles[floorTex]));
 			break;
 		case Type::CORNER:
-			allModels[i]->SetTextureString(std::string(textureFiles[8]));
+			allModels[i]->SetTextureString(std::string(textureFiles[cornerTex]));
 			break;
 		case Type::WALL:
-			allModels[i]->SetTextureString(std::string(textureFiles[5]));
+			allModels[i]->SetTextureString(std::string(textureFiles[wallTex]));
 			break;
 		case Type::WINDOW:
-			allModels[i]->SetTextureString(std::string(textureFiles[2]));
+			allModels[i]->SetTextureString(std::string(textureFiles[windowTex]));
 			break;
 		case Type::DOOR:
-			allModels[i]->SetTextureString(std::string(textureFiles[4]));
+			allModels[i]->SetTextureString(std::string(textureFiles[doorTex]));
 			break;
 		case Type::ROOF_FLAT:
-			allModels[i]->SetTextureString(std::string(textureFiles[0]));
+			allModels[i]->SetTextureString(std::string(textureFiles[roofTex]));
 			break;
 		case Type::ROOF_PYRAMID:
-			allModels[i]->SetTextureString(std::string(textureFiles[0]));
+			allModels[i]->SetTextureString(std::string(textureFiles[roofTex]));
 			break;
 		case Type::ROOF_SHED:
-			allModels[i]->SetTextureString(std::string(textureFiles[0]));
+			allModels[i]->SetTextureString(std::string(textureFiles[roofTex]));
 			break;
 		default:
 			allModels[i]->SetTextureString(std::string(textureFiles[11]));

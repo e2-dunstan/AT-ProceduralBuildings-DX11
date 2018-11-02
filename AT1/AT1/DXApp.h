@@ -16,6 +16,7 @@ public:
 
 	//Framework
 	virtual bool Init();
+	void InitTextureTweakBar();
 	void GenerateNewBuilding();
 
 	void SetTransforms(int i);
@@ -64,5 +65,16 @@ private:
 	double frameTime;
 
 	bool tweakBarInitialised = false;
+
+	// -- TEXTURES -- //
+
+	TwBar * textureTweakBar;
+
+	int floorTex = 3;
+	int cornerTex = 4;
+	int wallTex = 5;
+	int windowTex = 2;
+	int doorTex = 4;
+	int roofTex = 7;
 };
 
