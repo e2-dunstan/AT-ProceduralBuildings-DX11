@@ -119,6 +119,13 @@ bool DXApp::Init()
 	return true;
 }
 
+void TW_CALL ReloadTextures(void *clientData)
+{
+	DXApp* app = static_cast<DXApp*>(clientData);
+
+	app->ResetTextures();
+}
+
 void DXApp::InitTextureTweakBar()
 {
 	textureTweakBar = TwNewBar("Textures");
@@ -131,7 +138,9 @@ void DXApp::InitTextureTweakBar()
 	TwAddVarRW(textureTweakBar, "Walls", TW_TYPE_INT32, &wallTex, "min=1 max=10 step=1");
 	TwAddVarRW(textureTweakBar, "Windows", TW_TYPE_INT32, &windowTex, "min=1 max=10 step=1");
 	TwAddVarRW(textureTweakBar, "Door", TW_TYPE_INT32, &doorTex, "min=1 max=10 step=1");
-	TwAddVarRW(textureTweakBar, "Room", TW_TYPE_INT32, &roofTex, "min=1 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Roof", TW_TYPE_INT32, &roofTex, "min=1 max=10 step=1");
+
+	TwAddButton(textureTweakBar, "Reload textures", ReloadTextures, this, " label='Reload textures'");
 }
 
 void DXApp::GenerateNewBuilding()
@@ -145,21 +154,7 @@ void DXApp::GenerateNewBuilding()
 
 	allModels = generator->GetModels();
 
-	for (int i = 0; i < allModels.size(); i++)
-	{
-		SetModelTexture(i);
-
-		std::string str = "Resources/" + allModels[i]->GetTextureString();
-		char *cstr = &str[0u];
-
-		if (!allModels[i]->InitModel(*renderer, cstr,
-			appWindow))
-		{
-			MessageBox(0, (LPCSTR)L"Model Initialization - Failed",
-				(LPCSTR)L"Error", MB_OK);
-		}
-		SetTransforms(i);
-	}
+	ResetTextures();
 }
 
 void DXApp::SetTransforms(int i)
@@ -177,6 +172,25 @@ void DXApp::SetTransforms(int i)
 		allModels[i]->GetPosition().z);
 	Scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 	allModelTransforms[i] = Scale * Rotation * Translation;
+}
+
+void DXApp::ResetTextures()
+{
+	for (int i = 0; i < allModels.size(); i++)
+	{
+		SetModelTexture(i);
+
+		std::string str = "Resources/" + allModels[i]->GetTextureString();
+		char *cstr = &str[0u];
+
+		if (!allModels[i]->InitModel(*renderer, cstr,
+			appWindow))
+		{
+			MessageBox(0, (LPCSTR)L"Model Initialization - Failed",
+				(LPCSTR)L"Error", MB_OK);
+		}
+		SetTransforms(i);
+	}
 }
 
 void DXApp::SetModelTexture(int i)

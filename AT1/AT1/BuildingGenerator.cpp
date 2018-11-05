@@ -76,11 +76,41 @@ void BuildingGenerator::Init()
 
 void BuildingGenerator::InitWalls()
 {
+	float height = ((buildingHeight - 1) * wallHeight) / 2;
+	//wall 1
+	walls.push_back(new Model(Type::WALL,
+		wallWidth * buildingWidth , wallHeight * buildingHeight, wallDepth,
+		(wallWidth * (buildingWidth / 2)) + (wallDepth / 2) + (wallWidth / 2),
+		height,
+		0,
+		0));
+	//wall 2
+	walls.push_back(new Model(Type::WALL,
+		wallWidth * buildingWidth, wallHeight * buildingHeight, wallDepth,
+		(wallWidth * (buildingWidth / 2)) + (wallDepth / 2) + (wallWidth / 2),
+		height,
+		(wallWidth * buildingDepth) + wallDepth,
+		0));
+	//wall 3
+	walls.push_back(new Model(Type::WALL,
+		wallWidth * buildingDepth, wallHeight * buildingHeight, wallDepth,
+		0,
+		height,
+		(wallWidth * (buildingDepth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
+		90));
+	//wall 4
+	walls.push_back(new Model(Type::WALL,
+		wallWidth * buildingDepth, wallHeight * buildingHeight, wallDepth,
+		(wallWidth * buildingWidth) + wallDepth,
+		height,
+		(wallWidth * (buildingDepth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
+		90));
+
 	for (int h = 0; h < buildingHeight; h++)
 	{
 		float w_height = h * wallHeight;
 
-		for (int w = 0; w < buildingWidth; w++)
+		/*for (int w = 0; w < buildingWidth; w++)
 		{
 			//Wall 1
 			walls.push_back(new Model(Type::WALL,
@@ -113,7 +143,7 @@ void BuildingGenerator::InitWalls()
 				w_height,
 				(wallWidth * d) + (wallDepth / 2) + (wallWidth / 2),
 				90));
-		}
+		}*/
 		// -- CREATE WINDOWS -- //
 		InitWindowsAndDoor(w_height);
 	}

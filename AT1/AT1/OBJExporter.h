@@ -9,7 +9,6 @@ public:
 	~OBJExporter() = default;
 
 	void Create();
-	void CreateMTL(std::ofstream mtl, int i, std::string texture);
 	void SetModels(std::vector<Model*> models);
 	void SetTransforms(std::vector<XMMATRIX> _transforms);
 
@@ -23,4 +22,5 @@ private:
 	std::vector<DWORD> indices;
 	std::vector<Model*> models;
 	std::vector<XMMATRIX> transforms;
+	std::vector<std::string> textures;
 };

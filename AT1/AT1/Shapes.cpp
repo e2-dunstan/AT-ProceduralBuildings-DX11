@@ -112,34 +112,34 @@ std::vector<Vertex> Shape::CreateCornerVertices(float width, float height)
 	{
 		// Front Face
 		Vertex(-width, -height, -width,			0.0f, 1.0f,			0.0f, 0.0f, -1.0f),
-		Vertex(-width,  height, -width,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
-		Vertex(width,  height, -width,			1.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(-width, height, -width,			0.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width, height, -width,			1.0f, 0.0f,			0.0f, 0.0f, -1.0f),
 		Vertex(width, -height, -width,			1.0f, 1.0f,			0.0f, 0.0f, -1.0f),
 		// Back Face
 		Vertex(-width, -height, width,			1.0f, 1.0f,			0.0f, 0.0f, 1.0f),
 		Vertex(width, -height, width,			0.0f, 1.0f,			0.0f, 0.0f, 1.0f),
-		Vertex(width,  height, width,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
-		Vertex(-width,  height, width,			1.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width, height, width,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(-width, height, width,			1.0f, 0.0f,			0.0f, 0.0f, 1.0f),
 		// Top Face
-		Vertex(-width, height, -width,			0.0f, 1.0f,			0.0f, 1.0f, 0.0f),
-		Vertex(-width, height,  width,			0.0f, 0.0f,			0.0f, 1.0f, 0.0f),
-		Vertex(width, height,  width,			1.0f, 0.0f,			0.0f, 1.0f, 0.0f),
-		Vertex(width, height, -width,			1.0f, 1.0f,			0.0f, 1.0f, 0.0f),
+		Vertex(-width, height, -width,			0.0f, 1.0f,			0.0f, 1.0f, 0.0f),	//2
+		Vertex(-width, height, width,			0.0f, 0.0f,			0.0f, 1.0f, 0.0f),	//8
+		Vertex(width, height, width,			1.0f, 0.0f,			0.0f, 1.0f, 0.0f),	//7
+		Vertex(width, height, -width,			1.0f, 1.0f,			0.0f, 1.0f, 0.0f),	//3
 		// Bottom Face
-		Vertex(-width, -height, -width,			1.0f, 1.0f,			0.0f, -1.0f, 0.0f),
-		Vertex(width, -height, -width,			0.0f, 1.0f,			0.0f, -1.0f, 0.0f),
-		Vertex(width, -height,  width,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
-		Vertex(-width, -height,  width,			1.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height, -width,			1.0f, 1.0f,			0.0f, -1.0f, 0.0f),	//1
+		Vertex(width, -height, -width,			0.0f, 1.0f,			0.0f, -1.0f, 0.0f),	//4
+		Vertex(width, -height, width,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),	//6
+		Vertex(-width, -height, width,			1.0f, 0.0f,			0.0f, -1.0f, 0.0f),	//5
 		// Left Face
-		Vertex(-width, -height,  width,			0.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
-		Vertex(-width,  height,  width,			0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
-		Vertex(-width,  height, -width,			1.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
-		Vertex(-width, -height, -width,			1.0f, 1.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height, width,			0.0f, 1.0f,			-1.0f, 0.0f, 0.0f),	//5
+		Vertex(-width, height, width,			0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),	//8
+		Vertex(-width, height, -width,			1.0f, 0.0f,			-1.0f, 0.0f, 0.0f),	//2
+		Vertex(-width, -height, -width,			1.0f, 1.0f,			-1.0f, 0.0f, 0.0f),	//1
 		// Right Face
-		Vertex(width, -height, -width,			0.0f, 1.0f,			1.0f, 0.0f, 0.0f),
-		Vertex(width,  height, -width,			0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
-		Vertex(width,  height,  width,			1.0f, 0.0f,			1.0f, 0.0f, 0.0f),
-		Vertex(width, -height,  width,			1.0f, 1.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width, -height, -width,			0.0f, 1.0f,			1.0f, 0.0f, 0.0f),	//4
+		Vertex(width, height, -width,			0.0f, 0.0f,			1.0f, 0.0f, 0.0f),	//3
+		Vertex(width, height, width,			1.0f, 0.0f,			1.0f, 0.0f, 0.0f),	//7
+		Vertex(width, -height, width,			1.0f, 1.0f,			1.0f, 0.0f, 0.0f),	//6
 	};
 
 	return vertices;
@@ -156,24 +156,24 @@ std::vector<Vertex> Shape::CreatePyramidVertices(float width, float height, floa
 		// Front Face
 		Vertex(-width, -height, -depth,			0.0f, 5.0f,			0.0f, 0.0f, -1.0f),
 		Vertex(0,  height, 0,					5.0f, 5.0f,			0.0f, 0.0f, -1.0f),
-		Vertex(width,  -height, -depth,			5.0f, 0.0f,			0.0f, 0.0f, -1.0f),
+		Vertex(width, -height, -depth,			5.0f, 0.0f,			0.0f, 0.0f, -1.0f),
 		// Back Face
 		Vertex(-width, -height, depth,			5.0f, 5.0f,			0.0f, 0.0f, 1.0f),
 		Vertex(0,  height, 0,					0.0f, 5.0f,			0.0f, 0.0f, 1.0f),
-		Vertex(width,  -height, depth,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
+		Vertex(width, -height, depth,			0.0f, 0.0f,			0.0f, 0.0f, 1.0f),
 		// Bottom Face
-		Vertex(-width, -height, -depth,			5.0f, 5.0f,			0.0f, -1.0f, 0.0f),
-		Vertex(width, -height, -depth,			0.0f, 5.0f,			0.0f, -1.0f, 0.0f),
-		Vertex(width, -height,  depth,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),
-		Vertex(-width, -height,  depth,			5.0f, 0.0f,			0.0f, -1.0f, 0.0f),
+		Vertex(-width, -height, -depth,			5.0f, 5.0f,			0.0f, -1.0f, 0.0f),	//1
+		Vertex(width, -height, -depth,			0.0f, 5.0f,			0.0f, -1.0f, 0.0f),	//3
+		Vertex(width, -height, depth,			0.0f, 0.0f,			0.0f, -1.0f, 0.0f),	//6
+		Vertex(-width, -height, depth,			5.0f, 0.0f,			0.0f, -1.0f, 0.0f),	//4
 		// Left Face
-		Vertex(-width, -height,  depth,			0.0f, 5.0f,			-1.0f, 0.0f, 0.0f),
-		Vertex(0,  height, 0,					0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
-		Vertex(-width, -height, -depth,			5.0f, 0.0f,			-1.0f, 0.0f, 0.0f),
+		Vertex(-width, -height, depth,			0.0f, 5.0f,			-1.0f, 0.0f, 0.0f),	//4
+		Vertex(0,  height, 0,					0.0f, 0.0f,			-1.0f, 0.0f, 0.0f),	//2
+		Vertex(-width, -height, -depth,			5.0f, 0.0f,			-1.0f, 0.0f, 0.0f),	//1
 		// Right Face
-		Vertex(width, -height, -depth,			0.0f, 5.0f,			1.0f, 0.0f, 0.0f),
-		Vertex(0,  height, 0,					0.0f, 0.0f,			1.0f, 0.0f, 0.0f),
-		Vertex(width,  -height, depth,			5.0f, 0.0f,			1.0f, 0.0f, 0.0f),
+		Vertex(width, -height, -depth,			0.0f, 5.0f,			1.0f, 0.0f, 0.0f),	//3
+		Vertex(0,  height, 0,					0.0f, 0.0f,			1.0f, 0.0f, 0.0f),	//2
+		Vertex(width, -height, depth,			5.0f, 0.0f,			1.0f, 0.0f, 0.0f),	//6
 	};
 
 	return vertices;

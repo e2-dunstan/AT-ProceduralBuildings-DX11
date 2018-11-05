@@ -9,29 +9,35 @@ void OBJExporter::Create()
 	int indexOffset = 1;
 
 	int mtlNumber = 0;
-	int newMTL = 0;
-	std::string prevTexture;
 	file << "mtllib Export.mtl" << endl << endl;
 
 	for (int m = 1; m < models.size(); m++)
 	{
-		mtlNumber = newMTL;
-		file << "g default" << endl;//+ std::to_string(mtlNumber) << endl;
+		string newTexture = "";
 
-		std::string newTexture = models[m]->GetTextureString();
-		if (newTexture != prevTexture)
+		for (int i = 0; i < textures.size(); i++)
 		{
-			mtl << "newmtl texture" + std::to_string(mtlNumber) << endl;
+			if (models[m]->GetTextureString() == textures[i])
+			{
+				newTexture = textures[i];
+				mtlNumber = i + 1;
+			}
+		}
+		if (newTexture == "")
+		{
+			textures.push_back(models[m]->GetTextureString());
+			newTexture = textures.back();
+			++mtlNumber;
+
+			mtl << "newmtl texture_" + newTexture << endl;
 			mtl << "d 1" << endl;
 			mtl << "illum 1" << endl;
 			mtl << "Kd 1.000 1.000 1.000" << endl;
 			mtl << "Ka 1.000 1.000 1.000" << endl;
 			mtl << "map_Kd " << newTexture << endl;
-			mtl << "map_Ka " << newTexture << endl;// << endl;
-			++newMTL;
+			mtl << "map_Ka " << newTexture << endl;;
+			mtl << endl;
 		}
-		prevTexture = newTexture;
-
 		SetVertices(models[m]->GetVertices(), m);
 		SetIndices(models[m]->GetIndices());
 
@@ -39,6 +45,8 @@ void OBJExporter::Create()
 		vector<string> textureCoordinates;
 		vector<string> normals;
 		vector<string> faces;
+
+		file << "g texture " + newTexture << endl;
 
 		for (int i = 0; i < vertices.size(); i++)
 		{
@@ -65,24 +73,22 @@ void OBJExporter::Create()
 		{
 			file << positions[i] << endl;
 		}
-		//file << endl;
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			file << textureCoordinates[i] << endl;
 		}
-		//file << endl;
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			file << normals[i] << endl;
 			++indexOffset;
 		}
-		file << "g texture " + std::to_string(mtlNumber) << endl;
-		file << "usemtl texture" + std::to_string(mtlNumber) << endl;
+
+		file << "usemtl texture_" + newTexture << endl;
 		for (int i = 0; i < indices.size(); i += 3)
 		{
 			file << "f " + faces[i] + faces[i + 1] + faces[i + 2] << endl;
 		}
-		//file << endl;
+		file << endl;
 
 		ClearVertices();
 		ClearIndices();
@@ -91,29 +97,17 @@ void OBJExporter::Create()
 	file.close();
 }
 
-void OBJExporter::CreateMTL(std::ofstream mtl, int i, std::string texture)
-{
-	//ofstream mtl("Resources/Export" + std::to_string(i) + ".mtl");
-	//mtl << "newmtl texture" + std::to_string(i) << endl;
-	//mtl << "illum 2" << endl;
-	//mtl << "Kd 1.0 1.0 1.0" << endl;
-	//mtl << "Ka 1.0 1.0 1.0" << endl;
-	//mtl << "map_Kd " << texture << endl;
-	//mtl << "map_Ka " << texture << endl;
-	//mtl.close();
-}
-
-void OBJExporter::SetModels(std::vector<Model*> _models)
+void OBJExporter::SetModels(vector<Model*> _models)
 {
 	models = _models;
 }
 
-void OBJExporter::SetTransforms(std::vector<XMMATRIX> _transforms)
+void OBJExporter::SetTransforms(vector<XMMATRIX> _transforms)
 {
 	transforms = _transforms;
 }
 
-void OBJExporter::SetVertices(std::vector<Vertex> newVertices, int i)
+void OBJExporter::SetVertices(vector<Vertex> newVertices, int i)
 {
 	for (int v = 0; v < newVertices.size(); v++)
 	{
@@ -131,7 +125,7 @@ void OBJExporter::SetVertices(std::vector<Vertex> newVertices, int i)
 	
 }
 
-void OBJExporter::SetIndices(std::vector<DWORD> newIndices)
+void OBJExporter::SetIndices(vector<DWORD> newIndices)
 {
 	for (int i = 0; i < newIndices.size(); i++)
 	{

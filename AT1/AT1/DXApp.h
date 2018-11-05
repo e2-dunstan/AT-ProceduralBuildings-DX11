@@ -20,6 +20,7 @@ public:
 	void GenerateNewBuilding();
 
 	void SetTransforms(int i);
+	void ResetTextures();
 	void SetModelTexture(int i);
 
 	virtual void Update(double dt);
