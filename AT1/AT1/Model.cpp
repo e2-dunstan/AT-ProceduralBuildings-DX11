@@ -99,6 +99,10 @@ void Model::CreateMesh(Renderer & renderer)
 		indices = Shape::CreateShedIndices();
 		break;
 	}
+	case Type::INTERIOR_WALL:
+	{
+		break;
+	}
 	}
 
 	//--CREATE BUFFERS--//

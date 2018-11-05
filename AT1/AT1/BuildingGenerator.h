@@ -1,5 +1,6 @@
 #pragma once
 #include "DXApp.h"
+#include "InteriorWalls.h"
 
 class BuildingGenerator
 {
@@ -29,6 +30,8 @@ public:
 
 private:
 	TwBar * tweakBar;
+
+	std::vector<InteriorWalls*> interiorWalls;
 
 	std::vector<Model*> models;
 

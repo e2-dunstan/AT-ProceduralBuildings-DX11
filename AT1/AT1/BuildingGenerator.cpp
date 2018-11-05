@@ -71,6 +71,11 @@ void BuildingGenerator::Init()
 	InitCorners();
 	InitFloors();
 
+	for (int i = 0; i < buildingHeight; i++)
+	{
+		interiorWalls.push_back(new InteriorWalls(buildingWidth, buildingDepth));
+	}
+
 	ClearVectors();
 }
 

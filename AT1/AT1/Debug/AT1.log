@@ -1,12 +1,8 @@
-﻿  OBJExporter.cpp
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(14): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(18): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(51): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(65): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(72): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(77): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(82): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(89): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(114): warning C4018: '<': signed/unsigned mismatch
-e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\objexporter.cpp(132): warning C4018: '<': signed/unsigned mismatch
+﻿  Model.cpp
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(11): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(12): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+e:\-- university --\-- year 3 --\at-proceduralbuildings-dx11\at1\at1\model.cpp(18): warning C4244: '=': conversion from 'long double' to 'float', possible loss of data
+  Shapes.cpp
+  Generating Code...
   AT1.vcxproj -> E:\-- UNIVERSITY --\-- Year 3 --\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe
