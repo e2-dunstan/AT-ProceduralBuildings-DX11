@@ -71,10 +71,13 @@ void BuildingGenerator::Init()
 	InitCorners();
 	InitFloors();
 
-	for (int i = 0; i < buildingHeight; i++)
+	for (int floor = 0; floor < buildingHeight; floor++)
 	{
-		interiorWalls.push_back(new InteriorWalls(buildingWidth, buildingDepth));
+		interiorFloors.push_back(new InteriorWalls(buildingWidth, buildingHeight, buildingDepth, 
+			wallWidth, wallHeight, wallDepth, floor));
+		interiorFloors[floor]->InitWalls();
 	}
+	InitInteriorWalls();
 
 	ClearVectors();
 }
@@ -180,6 +183,100 @@ void BuildingGenerator::InitWalls()
 			}
 		}
 	}
+}
+
+void BuildingGenerator::InitInteriorWalls()
+{
+	//for each floor
+	for (int i = 0; i < interiorFloors.size(); i++)
+	{
+		for (int j = 0; j < interiorFloors[i]->GetWalls().size(); j++)
+			models.push_back(interiorFloors[i]->GetWalls()[j]);
+		//float yPos = i * wallHeight;
+		//std::vector<InteriorWall> intWalls = interiorFloors[i]->GetWalls();
+		//for each wall on this floor
+		//for (int j = 0; j < intWalls.size(); j++)
+		//{
+		//	if (intWalls[j].rot == 0)
+		//		models.push_back(new Model(Type::INTERIOR_WALL,
+		//			intWalls[j].width, wallHeight, wallDepth,
+		//			intWalls[j].posX, yPos, intWalls[j].posZ,
+		//			intWalls[j].rot));
+		//	else
+		//		models.push_back(new Model(Type::INTERIOR_WALL,
+		//			intWalls[j].width, wallHeight, wallDepth,
+		//			intWalls[j].posZ, yPos, intWalls[j].posX,
+		//			intWalls[j].rot));
+		//}
+	}
+	//each interior wall is actually all of the walls on that floor
+	/*for (int i = 0; i < interiorFloors.size(); i++)
+	{
+		interiorFloors[i]->InitWalls();
+		float yPos = i * wallHeight;
+		std::vector<InteriorWall> interiorWalls = interiorFloors[i]->GetWalls();
+		//for each wall on this floor
+		for (int j = 0; j < interiorWalls.size(); j++)
+		{
+			if (interiorWalls[j].rot == 0)
+			{
+				int sec1_width = wallWidth * (interiorWalls[j].door - 1);
+				int sec2_width = wallWidth * (buildingWidth - interiorWalls[j].door);
+				float sec1_x = (sec1_width + wallDepth) / 2;
+				float sec2_x = sec1_x + (sec1_width / 2) + wallWidth + (sec2_width / 2);
+
+				if (sec1_width != 0)
+				{
+					interiorFloorsModels.push_back(new Model(Type::INTERIOR_WALL,
+						sec1_width, wallHeight, wallDepth,
+						sec1_x, //pos x
+						yPos, //height from ground
+						interiorWalls[j].pos * wallWidth, //pos z
+						0));
+				}
+				if (sec2_width != 0)
+				{
+					interiorFloorsModels.push_back(new Model(Type::INTERIOR_WALL,
+						sec2_width, wallHeight, wallDepth,
+						sec2_x, //pos x
+						yPos, //height from ground
+						interiorWalls[j].pos * wallWidth, //pos z
+						0));
+				}
+			}
+			else
+			{
+				int sec1_width = wallWidth * (interiorWalls[j].door - 1);
+				int sec2_width = wallWidth * (buildingDepth - interiorWalls[j].door);
+				float sec1_x = (sec1_width + wallDepth) / 2;
+				float sec2_x = sec1_x + (sec1_width / 2) + wallWidth + (sec2_width / 2);
+
+				if (sec1_width != 0)
+				{
+					interiorFloorsModels.push_back(new Model(Type::INTERIOR_WALL,
+						sec1_width, wallHeight, wallDepth,
+						sec1_x, //pos x
+						yPos, //height from ground
+						interiorWalls[j].pos * wallWidth, //pos z
+						90));
+				}
+				if (sec2_width != 0)
+				{
+					interiorFloorsModels.push_back(new Model(Type::INTERIOR_WALL,
+						sec2_width, wallHeight, wallDepth,
+						sec2_x, //pos x
+						yPos, //height from ground
+						interiorWalls[j].pos * wallWidth, //pos z
+						90));
+				}
+			}
+		}
+	}
+	for (int k = 0; k < interiorFloorsModels.size(); k++)
+	{
+		models.push_back(interiorFloorsModels[k]);
+	}
+	*/
 }
 
 void BuildingGenerator::InitWindowsAndDoor(float height)
@@ -411,6 +508,7 @@ void BuildingGenerator::ClearVectors()
 	windows.clear();
 	corners.clear();
 	floors.clear();
+	interiorFloors.clear();
 	door = nullptr;
 }
 

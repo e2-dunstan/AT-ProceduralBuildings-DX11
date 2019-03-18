@@ -11,6 +11,7 @@ public:
 	void InitTweakBar(Renderer & renderer);
 	void Init();
 	void InitWalls();
+	void InitInteriorWalls();
 	void InitWindowsAndDoor(float height);
 	void InitCorners();
 	void InitFloors();
@@ -31,7 +32,7 @@ public:
 private:
 	TwBar * tweakBar;
 
-	std::vector<InteriorWalls*> interiorWalls;
+	std::vector<InteriorWalls*> interiorFloors;
 
 	std::vector<Model*> models;
 

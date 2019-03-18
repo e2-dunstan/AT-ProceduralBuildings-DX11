@@ -212,6 +212,9 @@ void DXApp::SetModelTexture(int i)
 		case Type::WALL:
 			allModels[i]->SetTextureString(std::string(textureFiles[wallTex]));
 			break;
+		case Type::INTERIOR_WALL:
+			allModels[i]->SetTextureString(std::string(textureFiles[wallTex]));
+			break;
 		case Type::WINDOW:
 			allModels[i]->SetTextureString(std::string(textureFiles[windowTex]));
 			break;

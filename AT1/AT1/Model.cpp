@@ -101,6 +101,8 @@ void Model::CreateMesh(Renderer & renderer)
 	}
 	case Type::INTERIOR_WALL:
 	{
+		vertices = Shape::CreateSquareVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
 		break;
 	}
 	}
