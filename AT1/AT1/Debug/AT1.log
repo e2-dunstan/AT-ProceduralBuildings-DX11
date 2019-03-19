@@ -1,32 +1,57 @@
-﻿  InteriorWalls.cpp
+﻿  BuildingGenerator.cpp
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(90): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(97): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(104): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(111): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(159): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(169): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(191): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(193): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(289): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(358): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(372): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(383): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(392): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(296): warning C4101: 'gapBetween': unreferenced local variable
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(414): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(421): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(428): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(434): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(440): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(453): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(460): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(476): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(475): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(474): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(486): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(485): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(484): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(496): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(495): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\buildinggenerator.cpp(494): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  DXApp.cpp
+  c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(95): warning C4316: 'Renderer': object allocated on the heap may not be aligned 16
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(104): warning C4316: 'Camera': object allocated on the heap may not be aligned 16
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(179): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(242): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(268): warning C4018: '<': signed/unsigned mismatch
+d:\at-proceduralbuildings-dx11\at1\at1\dxapp.cpp(392): warning C4244: '=': conversion from 'float' to '__int64', possible loss of data
+  InteriorWalls.cpp
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(27): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(52): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(53): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(55): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(60): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(70): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(71): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(77): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(76): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(55): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(60): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(70): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(71): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(83): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(82): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(92): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(89): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(95): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(100): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(97): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(107): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(104): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
   AT1.vcxproj -> D:\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe

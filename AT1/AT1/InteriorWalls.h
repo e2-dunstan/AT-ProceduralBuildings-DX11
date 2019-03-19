@@ -46,6 +46,7 @@ public:
 
 	void InitWalls();
 	void CreateWalls();
+	void CreateWallModels(Wall* w1, Wall* w2);
 	//void Divide(int rot);
 	//int GetValidPosition(std::uniform_int_distribution<int> dist, int rot);
 
@@ -74,4 +75,8 @@ private:
 
 	std::vector<int> previousX;
 	std::vector<int> previousZ;
+
+	Room* room1;
+	Room* room2;
+	Room* room3;
 };
