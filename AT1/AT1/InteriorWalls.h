@@ -15,6 +15,27 @@
 //	int width;
 //};
 
+struct Room
+{
+	Room(int x, int z, int w, int d)
+		: originX(x), originZ(z),
+		width(w), depth(d) {}
+	int originX;
+	int originZ;
+	int width;
+	int depth;
+};
+struct Wall
+{
+	Wall(int x, int z, int l, int d)
+		: originX(x), originZ(z),
+		length(l), doorLoc(d){}
+	int originX;
+	int originZ;
+	int length;
+	int doorLoc;
+};
+
 class InteriorWalls
 {
 public:
@@ -24,8 +45,9 @@ public:
 	~InteriorWalls();
 
 	void InitWalls();
-	void Divide(int rot);
-	int GetValidPosition(std::uniform_int_distribution<int> dist, int rot);
+	void CreateWalls();
+	//void Divide(int rot);
+	//int GetValidPosition(std::uniform_int_distribution<int> dist, int rot);
 
 	std::vector<Model*> GetWalls();
 

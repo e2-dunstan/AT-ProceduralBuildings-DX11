@@ -5,8 +5,10 @@
 InteriorWalls::InteriorWalls(int bwidth, int bheight, int bdepth, float wwidth, float wheight, float wdepth, int b_floor)
 {
 	b_buildingWidth = bwidth;
+	currentWidth = b_buildingWidth;
 	b_buildingHeight = bheight;
 	b_buildingDepth = bdepth;
+	currentDepth = b_buildingDepth;
 	b_wallWidth = wwidth;
 	b_wallHeight = wheight;
 	b_wallDepth = wdepth;
@@ -23,20 +25,86 @@ InteriorWalls::~InteriorWalls()
 void InteriorWalls::InitWalls()
 {
 	generator.seed(time(0));
+	CreateWalls();
+	//std::uniform_int_distribution<int> numOfWallsDistribution(1, 3);
+	//int numOfWalls = 2;//numOfWallsDistribution(generator);
 
-	std::uniform_int_distribution<int> numOfWallsDistribution(1, 3);
-	int numOfWalls = 2;//numOfWallsDistribution(generator);
-
-	for (int i = 0; i < numOfWalls; i++)
-	{
-		if (i % 2 == 0)
-			Divide(0);
-		else
-			Divide(90);
-	}
+	//for (int i = 0; i < numOfWalls; i++)
+	//{
+	//	if (i % 2 == 0)
+	//		Divide(0);
+	//	else
+	//		Divide(90);
+	//}
 }
 
-void InteriorWalls::Divide(int rot)
+// ---------------------
+// |      room 1       |
+// |                   |
+// |-------------  ----|
+// |       |           |
+// | room 2|           |
+// |           room 3  |
+// |       |           |
+// ---------------------
+void InteriorWalls::CreateWalls()
+{
+	currentWidth = b_buildingWidth * b_wallWidth;
+	currentDepth = b_buildingDepth * b_wallWidth;
+
+	std::uniform_int_distribution<int> randZ(currentDepth / 3, currentDepth - b_wallWidth);
+	int z = randZ(generator);
+	Room* room1 = new Room(0, z, currentWidth, currentDepth - z);
+
+	currentDepth = z;
+	std::uniform_int_distribution<int> randX(b_wallWidth, currentWidth - b_wallWidth);
+	int x = randX(generator);
+	Room* room2 = new Room(x, 0, currentWidth - x, currentDepth);
+
+	currentWidth = x;
+	Room* room3 = new Room(0, 0, currentWidth, currentDepth);
+
+	Wall* wall1 = new Wall(room1->width / 2, room1->originZ, room1->width, 0);
+	Wall* wall2 = new Wall(room2->originX, room2->depth / 2, room2->depth, 0);
+
+	std::uniform_int_distribution<int> randDoor1(0, wall1->length);
+	std::uniform_int_distribution<int> randDoor2(0, wall2->length);
+	wall1->doorLoc = randDoor1(generator);
+	wall2->doorLoc = randDoor2(generator);
+
+	walls.push_back(new Model(Type::INTERIOR_WALL,
+		wall1->doorLoc, b_wallHeight, b_wallDepth,
+		(wall1->doorLoc / 2) + (b_wallDepth / 2),
+		floor * b_wallHeight,
+		wall1->originZ + (b_wallDepth / 2),
+		0));
+	walls.push_back(new Model(Type::INTERIOR_WALL,
+		wall1->length - wall1->doorLoc - b_wallWidth, b_wallHeight, b_wallDepth,
+		(wall1->length / 2) + (b_wallDepth / 2) - (b_wallWidth / 2) + b_wallWidth,
+		floor * b_wallHeight,
+		wall1->originZ + (b_wallDepth / 2),
+		0));
+
+	walls.push_back(new Model(Type::INTERIOR_WALL,
+		b_wallDepth, b_wallHeight, wall2->doorLoc,
+		wall2->originX + (b_wallDepth / 2),
+		floor * b_wallHeight,
+		(wall2->doorLoc / 2) + (b_wallDepth / 2),
+		0));
+	walls.push_back(new Model(Type::INTERIOR_WALL,
+		b_wallDepth, b_wallHeight, wall2->length - wall2->doorLoc - b_wallWidth,
+		wall2->originX + (b_wallDepth / 2),
+		floor * b_wallHeight,
+		(wall2->length / 2) + (b_wallDepth / 2) - (b_wallWidth / 2) + b_wallWidth,
+		0));
+}
+
+
+
+
+
+
+/*void InteriorWalls::Divide(int rot)
 {
 	int w = currentWidth;
 	int d = currentDepth;
@@ -107,11 +175,6 @@ void InteriorWalls::Divide(int rot)
 			currentDepth = wallPos;
 		}
 	}
-
-
-
-
-
 	/*int sec_z = wallPos * buildingGenWallWidth;
 
 	int sec1_width = buildingGenWallWidth * (doorPos - 2);
@@ -152,7 +215,7 @@ void InteriorWalls::Divide(int rot)
 		{
 			currentDepth = wallPos;
 		}
-	}*/
+	}
 }
 
 int InteriorWalls::GetValidPosition(std::uniform_int_distribution<int> dist, int rot)
@@ -181,7 +244,7 @@ int InteriorWalls::GetValidPosition(std::uniform_int_distribution<int> dist, int
 			return -1;
 		}
 	}
-}
+}*/
 
 
 
