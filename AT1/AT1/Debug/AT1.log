@@ -12,8 +12,21 @@ d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(60): warning C4244: 'ar
           [
               _Ty=int
           ]
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(70): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(71): warning C4244: 'argument': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(77): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(76): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(82): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(92): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(89): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 d:\at-proceduralbuildings-dx11\at1\at1\interiorwalls.cpp(95): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   AT1.vcxproj -> D:\AT-ProceduralBuildings-DX11\AT1\Debug\AT1.exe

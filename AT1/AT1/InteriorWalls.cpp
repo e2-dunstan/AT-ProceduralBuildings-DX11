@@ -52,12 +52,12 @@ void InteriorWalls::CreateWalls()
 	currentWidth = b_buildingWidth * b_wallWidth;
 	currentDepth = b_buildingDepth * b_wallWidth;
 
-	std::uniform_int_distribution<int> randZ(currentDepth / 3, currentDepth - b_wallWidth);
+	std::uniform_int_distribution<int> randZ(currentDepth / 3, currentDepth - (b_wallWidth * 2));
 	int z = randZ(generator);
 	Room* room1 = new Room(0, z, currentWidth, currentDepth - z);
 
 	currentDepth = z;
-	std::uniform_int_distribution<int> randX(b_wallWidth, currentWidth - b_wallWidth);
+	std::uniform_int_distribution<int> randX(b_wallWidth * 2, currentWidth - (b_wallWidth * 2));
 	int x = randX(generator);
 	Room* room2 = new Room(x, 0, currentWidth - x, currentDepth);
 
@@ -67,35 +67,35 @@ void InteriorWalls::CreateWalls()
 	Wall* wall1 = new Wall(room1->width / 2, room1->originZ, room1->width, 0);
 	Wall* wall2 = new Wall(room2->originX, room2->depth / 2, room2->depth, 0);
 
-	std::uniform_int_distribution<int> randDoor1(0, wall1->length);
-	std::uniform_int_distribution<int> randDoor2(0, wall2->length);
+	std::uniform_int_distribution<int> randDoor1(1, wall1->length - b_wallWidth);
+	std::uniform_int_distribution<int> randDoor2(1, wall2->length - b_wallWidth);
 	wall1->doorLoc = randDoor1(generator);
 	wall2->doorLoc = randDoor2(generator);
 
 	walls.push_back(new Model(Type::INTERIOR_WALL,
 		wall1->doorLoc, b_wallHeight, b_wallDepth,
-		(wall1->doorLoc / 2) + (b_wallDepth / 2),
+		(int)((wall1->doorLoc / 2) + (b_wallDepth / 2)),
 		floor * b_wallHeight,
-		wall1->originZ + (b_wallDepth / 2),
+		wall1->originZ + b_wallDepth,
 		0));
 	walls.push_back(new Model(Type::INTERIOR_WALL,
-		wall1->length - wall1->doorLoc - b_wallWidth, b_wallHeight, b_wallDepth,
-		(wall1->length / 2) + (b_wallDepth / 2) - (b_wallWidth / 2) + b_wallWidth,
+		wall1->length - wall1->doorLoc - doorWidth, b_wallHeight, b_wallDepth,
+		(b_buildingWidth * b_wallWidth) - ((wall1->length - wall1->doorLoc - doorWidth - b_wallDepth) / 2),//(wall1->length / 2) + (b_wallDepth / 2) - (b_wallWidth / 2) + b_wallWidth,
 		floor * b_wallHeight,
-		wall1->originZ + (b_wallDepth / 2),
+		wall1->originZ + b_wallDepth,
 		0));
 
 	walls.push_back(new Model(Type::INTERIOR_WALL,
 		b_wallDepth, b_wallHeight, wall2->doorLoc,
-		wall2->originX + (b_wallDepth / 2),
+		wall2->originX + b_wallDepth,
 		floor * b_wallHeight,
-		(wall2->doorLoc / 2) + (b_wallDepth / 2),
+		(int)((wall2->doorLoc / 2) + (b_wallDepth / 2)),
 		0));
 	walls.push_back(new Model(Type::INTERIOR_WALL,
-		b_wallDepth, b_wallHeight, wall2->length - wall2->doorLoc - b_wallWidth,
-		wall2->originX + (b_wallDepth / 2),
+		b_wallDepth, b_wallHeight, wall2->length - wall2->doorLoc - doorWidth,
+		wall2->originX + b_wallDepth,
 		floor * b_wallHeight,
-		(wall2->length / 2) + (b_wallDepth / 2) - (b_wallWidth / 2) + b_wallWidth,
+		wall2->length - (int)((wall2->length - wall2->doorLoc - doorWidth - b_wallDepth) / 2), //(b_buildingDepth * b_wallWidth) - ((wall2->length - wall2->doorLoc - doorWidth) / 2) - wall1->length,//(wall2->length / 2) + (b_wallDepth / 2) - (b_wallWidth / 2) + b_wallWidth,
 		0));
 }
 

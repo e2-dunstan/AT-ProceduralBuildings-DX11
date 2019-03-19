@@ -67,6 +67,8 @@ private:
 	float b_wallHeight = 8;
 	float b_wallDepth = 1;
 
+	float doorWidth = 4;
+
 	int xOffset = 0;
 	int zOffset = 0;
 
