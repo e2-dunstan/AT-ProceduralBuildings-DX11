@@ -73,7 +73,7 @@ void BuildingGenerator::Init()
 
 	for (int floor = 0; floor < buildingHeight; floor++)
 	{
-		interiorFloors.push_back(new InteriorWalls(buildingWidth, buildingHeight, buildingDepth, 
+		interiorFloors.push_back(new Interiors(buildingWidth, buildingHeight, buildingDepth, 
 			wallWidth, wallHeight, wallDepth, floor));
 		interiorFloors[floor]->InitWalls();
 	}

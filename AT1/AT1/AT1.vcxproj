@@ -120,7 +120,7 @@
     <ClCompile Include="BuildingGenerator.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DXApp.cpp" />
-    <ClCompile Include="InteriorWalls.cpp" />
+    <ClCompile Include="Interiors.cpp" />
     <ClCompile Include="OBJExporter.cpp" />
     <ClCompile Include="OBJImporter.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -135,7 +135,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />
-    <ClInclude Include="InteriorWalls.h" />
+    <ClInclude Include="Interiors.h" />
     <ClInclude Include="OBJExporter.h" />
     <ClInclude Include="OBJImporter.h" />
     <ClInclude Include="Renderer.h" />

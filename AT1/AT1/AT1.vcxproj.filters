@@ -45,10 +45,10 @@
     <ClCompile Include="BuildingGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InteriorWalls.cpp">
+    <ClCompile Include="OBJImporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OBJImporter.cpp">
+    <ClCompile Include="Interiors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,10 +86,10 @@
     <ClInclude Include="BuildingGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InteriorWalls.h">
+    <ClInclude Include="OBJImporter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OBJImporter.h">
+    <ClInclude Include="Interiors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,7 +8,7 @@ enum Type
 {
 	WALL, FLOOR, CORNER, WINDOW, DOOR, 
 	ROOF_PYRAMID, ROOF_FLAT, ROOF_SHED,
-	INTERIOR_WALL
+	INTERIOR_WALL, OBJECT
 };
 
 struct Position
@@ -44,6 +44,8 @@ public:
 
 	std::vector<Vertex> & GetVertices();
 	std::vector<DWORD> & GetIndices();
+	void SetVertices(std::vector<Vertex> v);
+	void SetIndices(std::vector<DWORD> i);
 
 private:
 	const long double PI = 3.141592653589793238L;
@@ -68,6 +70,7 @@ private:
 
 	std::vector<Vertex> vertices;
 	std::vector<DWORD> indices;
+
 
 	//ID3D11DepthStencilState* depthState = nullptr;
 	//ID3D11BlendState* blendState = nullptr;

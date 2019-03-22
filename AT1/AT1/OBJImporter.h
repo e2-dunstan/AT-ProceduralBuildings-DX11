@@ -7,10 +7,13 @@ public:
 	OBJImporter() = default;
 	~OBJImporter() = default;
 
-	void ReadOBJs(std::string filename);
+	void ReadOBJ(std::string filename);
+
+	std::vector<Vertex> GetVertices();
+	std::vector<DWORD> GetIndices();
 
 private:
 
-	std::vector<Vertex*> vertices;
+	std::vector<Vertex> vertices;
 	std::vector<DWORD> indices;
 };

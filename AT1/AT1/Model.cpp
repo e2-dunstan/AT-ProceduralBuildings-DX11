@@ -105,6 +105,11 @@ void Model::CreateMesh(Renderer & renderer)
 		indices = Shape::CreateQuadIndices();
 		break;
 	}
+	case Type::OBJECT:
+	{
+		//Nothing required
+		break;
+	}
 	}
 
 	//--CREATE BUFFERS--//
@@ -241,6 +246,16 @@ std::vector<Vertex> & Model::GetVertices()
 std::vector<DWORD> & Model::GetIndices()
 {
 	return indices;
+}
+
+void Model::SetVertices(std::vector<Vertex> v)
+{
+	vertices = v;
+}
+
+void Model::SetIndices(std::vector<DWORD> i)
+{
+	indices = i;
 }
 
 
