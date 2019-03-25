@@ -41,7 +41,6 @@ Interiors::~Interiors()
 	//	delete bedModel;
 	//	bedModel = nullptr;
 	//}
-
 	//if (objImporter)
 	//{
 	//	delete objImporter;
@@ -82,24 +81,29 @@ void Interiors::InitWalls()
 // ---------------------
 void Interiors::CreateWalls(std::mt19937 seed)
 {
+	//Current room dimensions
 	currentWidth = b_buildingWidth * b_wallWidth;
 	currentDepth = b_buildingDepth * b_wallWidth;
 
+	//Generate room 1
 	std::uniform_int_distribution<std::mt19937::result_type> randZ(currentDepth / 3, currentDepth - (b_wallWidth * 2));
 	int z = randZ(seed);
 	room1 = new Room(0, z, currentWidth, currentDepth - z);
 
+	//Generate room 2
 	currentDepth = z;
 	std::uniform_int_distribution<std::mt19937::result_type> randX(b_wallWidth * 2, currentWidth - (b_wallWidth * 2));
 	int x = randX(seed);
 	room2 = new Room(x, 0, currentWidth - x, currentDepth);
 
+	//Generate room 3
 	currentWidth = x;
 	room3 = new Room(0, 0, currentWidth, currentDepth);
 
 	Wall* wall1 = new Wall(room1->width / 2, room1->originZ, room1->width, 0);
 	Wall* wall2 = new Wall(room2->originX, room2->depth / 2, room2->depth, 0);
 
+	//Randomise doorway locations
 	std::uniform_int_distribution<std::mt19937::result_type> randDoor1(1, wall1->length - b_wallWidth);
 	std::uniform_int_distribution<std::mt19937::result_type> randDoor2(1, wall2->length - b_wallWidth);
 	wall1->doorLoc = randDoor1(seed);
