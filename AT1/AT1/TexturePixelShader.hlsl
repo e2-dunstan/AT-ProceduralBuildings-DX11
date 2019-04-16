@@ -1,4 +1,3 @@
-
 Texture2D shaderTexture; //resource
 SamplerState SampleType; //determines which pixels are drawn
 

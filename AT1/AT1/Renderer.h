@@ -19,7 +19,7 @@ public:
 	void SetBlendState(int state);
 	void DrawModel(ID3D11ShaderResourceView *textureShader, 
 		ID3D11SamplerState *samplerState, XMMATRIX cameraView, XMMATRIX camProjection,
-		int i, int indexCount);
+		int i, int indexCount, XMVECTOR lightDir, XMVECTOR diffuseColor);
 	void EndFrame();
 
 	struct SimpleCubeVertex
@@ -37,9 +37,17 @@ public:
 
 	struct MatrixBufferType
 	{
-		XMMATRIX  WVP;
+		XMMATRIX  W;
+		XMMATRIX  VP;
 	};
-	MatrixBufferType matrixBuffer;
+	MatrixBufferType matrixBufferType;
+	struct LightBufferType
+	{
+		XMVECTOR diffuseColor;
+		XMVECTOR lightDirection;
+		float padding;
+	};
+	LightBufferType lightBufferType;
 
 	void SetModelTransforms(std::vector<XMMATRIX> modelTransforms);
 
@@ -73,11 +81,13 @@ protected:
 	ID3D11RasterizerState* CCWcullMode;
 	ID3D11RasterizerState* CWcullMode;
 
-	ID3D11Buffer* cbPerObjectBuffer = nullptr;
+	ID3D11Buffer* matrixBuffer = nullptr;
+	ID3D11Buffer* lightBuffer = nullptr;
 
 	std::vector<XMMATRIX> _modelTransforms;
 
-	XMMATRIX WVP;
+	XMMATRIX W;
+	XMMATRIX VP;
 	XMMATRIX World;
 };
 

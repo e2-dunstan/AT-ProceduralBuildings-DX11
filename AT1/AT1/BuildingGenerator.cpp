@@ -78,7 +78,7 @@ void BuildingGenerator::Init()
 			wallWidth, wallHeight, wallDepth, floor));
 		interiorFloors[floor]->InitWalls();
 	}
-	InitInteriorWalls();
+	InitInteriors();
 
 	ClearVectors();
 }
@@ -186,7 +186,7 @@ void BuildingGenerator::InitWalls()
 	}
 }
 
-void BuildingGenerator::InitInteriorWalls()
+void BuildingGenerator::InitInteriors()
 {
 	//for each floor
 	for (int i = 0; i < interiorFloors.size(); i++)
@@ -194,6 +194,10 @@ void BuildingGenerator::InitInteriorWalls()
 		for (int j = 0; j < interiorFloors[i]->GetWalls().size(); j++)
 		{
 			models.push_back(interiorFloors[i]->GetWalls()[j]);
+		}
+		for (int k = 0; k < interiorFloors[i]->GetObjects().size(); k++)
+		{
+			models.push_back(interiorFloors[i]->GetObjects()[k]);
 		}
 	}
 }

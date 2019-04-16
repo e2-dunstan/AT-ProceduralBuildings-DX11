@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "OBJExporter.h"
+#include "Lighting.h"
 
 class DXApp
 {
@@ -41,6 +42,7 @@ protected:
 	std::vector<Model*> allModels;
 	std::unique_ptr<Camera> camera;
 	std::unique_ptr<OBJExporter> exporter;
+	std::unique_ptr<Lighting> lighting;
 
 	//Initialise Win32 window
 	bool InitWindow();

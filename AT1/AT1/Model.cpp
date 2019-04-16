@@ -107,7 +107,9 @@ void Model::CreateMesh(Renderer & renderer)
 	}
 	case Type::OBJECT:
 	{
-		//Nothing required
+		vertices = Shape::CreateSquareVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
+		//If loading from .obj, nothing required
 		break;
 	}
 	}
@@ -145,8 +147,8 @@ void Model::CreateMesh(Renderer & renderer)
 
 void Model::CreateShaders(Renderer & renderer)
 {
-	std::ifstream vsFile("TextureVertexShader.cso", std::ios::binary);
-	std::ifstream psFile("TexturePixelShader.cso", std::ios::binary);
+	std::ifstream vsFile("LightVertexShader.cso", std::ios::binary);
+	std::ifstream psFile("LightPixelShader.cso", std::ios::binary);
 
 	std::vector<char> vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
 	std::vector<char> psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
@@ -162,6 +164,7 @@ void Model::CreateShaders(Renderer & renderer)
 		//2 parameters. See Input data in shader
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		//use append element for each following parameter
 	};
 	UINT numElements = ARRAYSIZE(layout);

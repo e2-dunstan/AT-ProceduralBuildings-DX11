@@ -51,6 +51,9 @@
     <ClCompile Include="Interiors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXApp.h">
@@ -92,6 +95,9 @@
     <ClInclude Include="Interiors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ColourPixelShader.hlsl">
@@ -104,6 +110,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="TextureVertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="LightPixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="LightVertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

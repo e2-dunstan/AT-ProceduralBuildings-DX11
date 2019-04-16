@@ -48,11 +48,12 @@ public:
 	void InitWalls();
 	void CreateWalls(std::mt19937 seed);
 	void CreateWallModels(Wall* w1, Wall* w2);
-	//void CreateObjects();
+	void CreateObjects(std::mt19937 seed);
 	//void Divide(int rot);
 	//int GetValidPosition(std::uniform_int_distribution<int> dist, int rot);
 
 	std::vector<Model*> GetWalls();
+	std::vector<Model*> GetObjects();
 
 private:
 	int currentWidth;
@@ -64,7 +65,12 @@ private:
 	std::random_device generator;
 
 	std::vector<Model*> walls;
-	//Model* bedModel;
+	Model* bedModel;
+	Model* sofaModel;
+	Model* toiletModel;
+	std::string bedTexture = "Bed.tga";
+	std::string sofaTexture = "Sofa.tga";
+	std::string toiletTexture = "Toilet.tga";
 
 	int b_buildingWidth = 5;
 	int b_buildingHeight = 2;

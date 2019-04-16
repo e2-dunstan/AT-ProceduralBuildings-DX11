@@ -121,6 +121,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DXApp.cpp" />
     <ClCompile Include="Interiors.cpp" />
+    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="OBJExporter.cpp" />
     <ClCompile Include="OBJImporter.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="DXApp.h" />
     <ClInclude Include="DXUtil.h" />
     <ClInclude Include="Interiors.h" />
+    <ClInclude Include="Lighting.h" />
     <ClInclude Include="OBJExporter.h" />
     <ClInclude Include="OBJImporter.h" />
     <ClInclude Include="Renderer.h" />
@@ -169,6 +171,20 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">main</EntryPointName>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="LightPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+    </FxCompile>
+    <FxCompile Include="LightVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
     </FxCompile>
     <FxCompile Include="TexturePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>

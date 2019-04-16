@@ -36,11 +36,21 @@ Interiors::~Interiors()
 		delete room3;
 		room3 = nullptr;
 	}
-	//if (bedModel)
-	//{
-	//	delete bedModel;
-	//	bedModel = nullptr;
-	//}
+	if (bedModel)
+	{
+		delete bedModel;
+		bedModel = nullptr;
+	}
+	if (sofaModel)
+	{
+		delete sofaModel;
+		sofaModel = nullptr;
+	}
+	if (toiletModel)
+	{
+		delete toiletModel;
+		toiletModel = nullptr;
+	}
 	//if (objImporter)
 	//{
 	//	delete objImporter;
@@ -110,7 +120,7 @@ void Interiors::CreateWalls(std::mt19937 seed)
 	wall2->doorLoc = randDoor2(seed);
 
 	CreateWallModels(wall1, wall2);
-	//CreateObjects();
+	CreateObjects(seed);
 }
 
 void Interiors::CreateWallModels(Wall* w1, Wall* w2)
@@ -146,18 +156,45 @@ void Interiors::CreateWallModels(Wall* w1, Wall* w2)
 			0));
 }
 
-//void Interiors::CreateObjects()
-//{
-//	bedModel = new Model(Type::OBJECT,
-//		1, 1, 1,
-//		room1->originX,
-//		floor * b_wallHeight,
-//		room1->originZ,
-//		0);
-//	objImporter->ReadOBJ(table);
-//	bedModel->SetVertices(objImporter->GetVertices());
-//	bedModel->SetIndices(objImporter->GetIndices());
-//}
+void Interiors::CreateObjects(std::mt19937 seed)
+{
+	float dims = 3;
+	
+	std::uniform_int_distribution<std::mt19937::result_type> randX_1(room1->originX + dims, room1->originX + room1->width - dims);
+	std::uniform_int_distribution<std::mt19937::result_type> randZ_1(room1->originZ + dims, room1->originZ + room1->depth - dims);
+
+	sofaModel = new Model(Type::OBJECT,
+		dims, dims, dims,
+		randX_1(seed),
+		(floor * b_wallHeight) + (dims / 2) - (b_wallHeight / 2) + 0.01f,
+		randZ_1(seed),
+		0);
+
+	std::uniform_int_distribution<std::mt19937::result_type> randX_2(room2->originX + dims, room2->originX + room2->width - dims);
+	std::uniform_int_distribution<std::mt19937::result_type> randZ_2(room2->originZ + dims, room2->originZ + room2->depth - dims);
+
+	toiletModel = new Model(Type::OBJECT,
+		dims, dims, dims,
+		randX_2(seed),
+		(floor * b_wallHeight) + (dims / 2) - (b_wallHeight / 2) + 0.01f,
+		randZ_2(seed),
+		0);
+
+	std::uniform_int_distribution<std::mt19937::result_type> randX_3(room3->originX + dims, room3->originX + room3->width - dims);
+	std::uniform_int_distribution<std::mt19937::result_type> randZ_3(room3->originZ + dims, room3->originZ + room3->depth - dims);
+
+	bedModel = new Model(Type::OBJECT,
+		dims, dims, dims,
+		randX_3(seed),
+		(floor * b_wallHeight) + (dims / 2) - (b_wallHeight / 2) + 0.01f,
+		randZ_3(seed),
+		0);
+
+
+	//objImporter->ReadOBJ(table);
+	//bedModel->SetVertices(objImporter->GetVertices());
+	//bedModel->SetIndices(objImporter->GetIndices());
+}
 
 
 /*void Interiors::Divide(int rot)
@@ -305,5 +342,21 @@ int Interiors::GetValidPosition(std::uniform_int_distribution<int> dist, int rot
 std::vector<Model*> Interiors::GetWalls()
 {
 	return walls;
+}
+
+std::vector<Model*> Interiors::GetObjects()
+{
+	std::vector<Model*> objs;
+
+	objs.push_back(bedModel);
+	objs[0]->SetTextureString(bedTexture);
+
+	objs.push_back(sofaModel);
+	objs[1]->SetTextureString(sofaTexture);
+
+	objs.push_back(toiletModel);
+	objs[2]->SetTextureString(toiletTexture);
+
+	return objs;
 }
 

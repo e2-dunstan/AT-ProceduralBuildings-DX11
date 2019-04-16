@@ -48,6 +48,7 @@ DXApp::DXApp(HINSTANCE hInstance)
 	textureFiles[8] = "purpur_pillar.tga";
 	textureFiles[9] = "red_nether_bricks.tga";
 	textureFiles[10] = "red_sandstone.tga";
+	
 	textureFiles[11] = "George_Foreman.tga";
 }
 
@@ -92,6 +93,7 @@ bool DXApp::Init()
 		return false;
 	}	
 	
+	// -- INIT RENDERER -- //
 	renderer = std::unique_ptr<Renderer>(new Renderer);
 	if (!renderer->InitDirect3D(appWindow))
 	{
@@ -101,6 +103,7 @@ bool DXApp::Init()
 	}
 	renderer->InitView();
 
+	// -- INIT CAMERA -- //
 	camera = std::unique_ptr<Camera>(new Camera);
 	if (!camera->InitDirectInput(appInstance, appWindow))
 	{
@@ -108,6 +111,15 @@ bool DXApp::Init()
 			(LPCSTR)L"Error", MB_OK);
 		return false;
 	}
+
+	// -- INIT LIGHTING -- //
+	lighting = std::unique_ptr<Lighting>(new Lighting);
+	if (!lighting)
+	{
+		return false;
+	}
+	lighting->SetDiffuseColor(1.0f, 0.0f, 1.0f, 1.0f);
+	lighting->SetDirection(0.0f, 0.0f, 1.0f);
 
 	// -- CREATE MODELS -- //
 	GenerateNewBuilding();
@@ -230,6 +242,9 @@ void DXApp::SetModelTexture(int i)
 		case Type::ROOF_SHED:
 			allModels[i]->SetTextureString(std::string(textureFiles[roofTex]));
 			break;
+		case Type::OBJECT:
+			//assigned in interiors.cpp
+			break;
 		default:
 			allModels[i]->SetTextureString(std::string(textureFiles[11]));
 			break;
@@ -288,7 +303,8 @@ void DXApp::Render(double dt)
 		}
 
 		renderer->DrawModel(allModels[i]->GetTexture(), allModels[i]->GetTexturePointer()->GetSamplerState(),
-			camera->GetCamView(), camera->GetCamProjection(), i, allModels[i]->GetIndices().size());
+			camera->GetCamView(), camera->GetCamProjection(), i, allModels[i]->GetIndices().size(),
+			lighting->GetDirection(), lighting->GetDiffuseColor());
 	}
 
 	// -- DRAW THE TWEAK BAR -- //

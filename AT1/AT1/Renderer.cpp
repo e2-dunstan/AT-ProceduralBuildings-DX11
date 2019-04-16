@@ -12,7 +12,8 @@ Renderer::~Renderer()
 	renderTargetView->Release();
 	depthStencilView->Release();
 	depthStencilBuffer->Release();
-	cbPerObjectBuffer->Release();
+	matrixBuffer->Release();
+	lightBuffer->Release();
 	wireframeState->Release();
 	filledState->Release();
 	transparency->Release();
@@ -120,12 +121,21 @@ void Renderer::InitView()
 
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	ZeroMemory(&matrixBufferDesc, sizeof(D3D11_BUFFER_DESC));
-	matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	matrixBufferDesc.ByteWidth = sizeof(matrixBuffer);
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(matrixBufferType);
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = 0;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	matrixBufferDesc.MiscFlags = 0;
-	HRESULT result = device->CreateBuffer(&matrixBufferDesc, NULL, &cbPerObjectBuffer);
+	HRESULT result = device->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
+
+	D3D11_BUFFER_DESC lightBufferDesc;
+	ZeroMemory(&lightBufferDesc, sizeof(D3D11_BUFFER_DESC));
+	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	lightBufferDesc.ByteWidth = sizeof(lightBufferType);
+	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	lightBufferDesc.MiscFlags = 0;
+	result = device->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
 
 	if (FAILED(result))
 	{
@@ -232,13 +242,22 @@ void Renderer::SetBlendState(int state)
 }
 
 void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerState *samplerState, 
-	XMMATRIX cameraView, XMMATRIX camProjection, int i, int indexCount)
+	XMMATRIX cameraView, XMMATRIX camProjection, int i, int indexCount, XMVECTOR lightDir, XMVECTOR diffuseColor)
 {
-	WVP = _modelTransforms[i] * cameraView * camProjection;
-	matrixBuffer.WVP = XMMatrixTranspose(WVP);
-	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
-	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+	W = _modelTransforms[i];
+	VP =  cameraView * camProjection;
+	matrixBufferType.W = XMMatrixTranspose(W);
+	matrixBufferType.VP = XMMatrixTranspose(VP);
+
+	deviceContext->UpdateSubresource(matrixBuffer, 0, NULL, &matrixBufferType, 0, 0);
+	deviceContext->VSSetConstantBuffers(0, 1, &matrixBuffer);
 	deviceContext->PSSetShaderResources(0, 1, &textureShader);
+
+	lightBufferType.diffuseColor = diffuseColor;
+	lightBufferType.lightDirection = lightDir;
+	lightBufferType.padding = 0.0f;
+	deviceContext->PSSetConstantBuffers(0, 1, &lightBuffer);
+
 	deviceContext->PSSetSamplers(0, 1, &samplerState);
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 }
