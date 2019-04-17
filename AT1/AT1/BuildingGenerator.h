@@ -11,7 +11,7 @@ public:
 	void InitTweakBar(Renderer & renderer);
 	void Init();
 	void InitWalls();
-	void InitInteriorWalls();
+	void InitInteriors();
 	void InitWindowsAndDoor(float height);
 	void InitCorners();
 	void InitFloors();

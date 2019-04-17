@@ -230,6 +230,8 @@ void DXApp::SetModelTexture(int i)
 		case Type::ROOF_SHED:
 			allModels[i]->SetTextureString(std::string(textureFiles[roofTex]));
 			break;
+		case Type::OBJECT:
+			break;
 		default:
 			allModels[i]->SetTextureString(std::string(textureFiles[11]));
 			break;

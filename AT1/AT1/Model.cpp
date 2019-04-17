@@ -107,7 +107,9 @@ void Model::CreateMesh(Renderer & renderer)
 	}
 	case Type::OBJECT:
 	{
-		//Nothing required
+		vertices = Shape::CreateSquareVertices(w, h, d);
+		indices = Shape::CreateQuadIndices();
+		//Nothing required if OBJ imported
 		break;
 	}
 	}
