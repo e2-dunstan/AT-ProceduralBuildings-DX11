@@ -31,9 +31,9 @@ void BuildingGenerator::InitTweakBar(Renderer & renderer)
 	int tweakBarSize[2] = { 200, 400 };
 	TwSetParam(tweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
 	
-	TwAddVarRW(tweakBar, "Building Width", TW_TYPE_INT32, &buildingWidth, "Group='Structure' min=1 max=20 step=1");
+	TwAddVarRW(tweakBar, "Building Width", TW_TYPE_INT32, &buildingWidth, "Group='Structure' min=4 max=20 step=1");
 	TwAddVarRW(tweakBar, "Building Height", TW_TYPE_INT32, &buildingHeight, "Group='Structure' min=1 max=20 step=1");
-	TwAddVarRW(tweakBar, "Building Depth", TW_TYPE_INT32, &buildingDepth, "Group='Structure' min=1 max=20 step=1");
+	TwAddVarRW(tweakBar, "Building Depth", TW_TYPE_INT32, &buildingDepth, "Group='Structure' min=4 max=20 step=1");
 
 	TwAddVarRW(tweakBar, "Wall Width", TW_TYPE_FLOAT, &wallWidth, "Group='Walls' min=1 max=10 step=1");
 	TwAddVarRW(tweakBar, "Wall Height", TW_TYPE_FLOAT, &wallHeight, "Group='Walls' min=1 max=10 step=1");
@@ -89,14 +89,14 @@ void BuildingGenerator::InitWalls()
 	//wall 1
 	walls.push_back(new Model(Type::WALL,
 		wallWidth * buildingWidth , wallHeight * buildingHeight, wallDepth,
-		(wallWidth * (buildingWidth / 2)) + (wallDepth / 2) + (wallWidth / 2),
+		(wallWidth * ((float)buildingWidth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
 		height,
 		0,
 		0));
 	//wall 2
 	walls.push_back(new Model(Type::WALL,
 		wallWidth * buildingWidth, wallHeight * buildingHeight, wallDepth,
-		(wallWidth * (buildingWidth / 2)) + (wallDepth / 2) + (wallWidth / 2),
+		(wallWidth * ((float)buildingWidth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
 		height,
 		(wallWidth * buildingDepth) + wallDepth,
 		0));
@@ -105,14 +105,14 @@ void BuildingGenerator::InitWalls()
 		wallWidth * buildingDepth, wallHeight * buildingHeight, wallDepth,
 		0,
 		height,
-		(wallWidth * (buildingDepth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
+		(wallWidth * ((float)buildingDepth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
 		90));
 	//wall 4
 	walls.push_back(new Model(Type::WALL,
 		wallWidth * buildingDepth, wallHeight * buildingHeight, wallDepth,
 		(wallWidth * buildingWidth) + wallDepth,
 		height,
-		(wallWidth * (buildingDepth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
+		(wallWidth * ((float)buildingDepth / 2)) + (wallDepth / 2),// + (wallWidth / 2),
 		90));
 
 	for (int h = 0; h < buildingHeight; h++)

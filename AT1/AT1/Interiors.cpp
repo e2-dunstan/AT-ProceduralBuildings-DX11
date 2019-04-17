@@ -128,7 +128,7 @@ void Interiors::CreateWallModels(Wall* w1, Wall* w2)
 	if (w1->doorLoc > 0)
 		walls.push_back(new Model(Type::INTERIOR_WALL,
 			w1->doorLoc, b_wallHeight - 0.1f, b_wallDepth,
-			(int)((w1->doorLoc / 2) + (b_wallDepth / 2)),
+			(float)((w1->doorLoc / 2) + (b_wallDepth / 2)),
 			floor * b_wallHeight - 0.4f,
 			w1->originZ + b_wallDepth,
 			0));
@@ -145,7 +145,7 @@ void Interiors::CreateWallModels(Wall* w1, Wall* w2)
 			b_wallDepth, b_wallHeight - 0.1f, w2->doorLoc,
 			w2->originX + b_wallDepth,
 			floor * b_wallHeight - 0.4f,
-			(int)((w2->doorLoc / 2) + (b_wallDepth / 2)),
+			(float)((w2->doorLoc / 2) + (b_wallDepth / 2)),
 			0));
 	if (w2->length - w2->doorLoc - doorWidth > 0)
 		walls.push_back(new Model(Type::INTERIOR_WALL,

@@ -119,14 +119,14 @@ void Renderer::InitView()
 	//rs = rasteriser stage
 	deviceContext->RSSetViewports(1, &viewport);
 
-	D3D11_BUFFER_DESC matrixBufferDesc;
-	ZeroMemory(&matrixBufferDesc, sizeof(D3D11_BUFFER_DESC));
-	matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	matrixBufferDesc.ByteWidth = sizeof(cbPerObject);
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = 0;
-	matrixBufferDesc.MiscFlags = 0;
-	HRESULT result = device->CreateBuffer(&matrixBufferDesc, NULL, &cbPerObjectBuffer);
+	D3D11_BUFFER_DESC cbPerObjectBufferDesc;
+	ZeroMemory(&cbPerObjectBufferDesc, sizeof(D3D11_BUFFER_DESC));
+	cbPerObjectBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	cbPerObjectBufferDesc.ByteWidth = sizeof(cbPerObject);
+	cbPerObjectBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbPerObjectBufferDesc.CPUAccessFlags = 0;
+	cbPerObjectBufferDesc.MiscFlags = 0;
+	HRESULT result = device->CreateBuffer(&cbPerObjectBufferDesc, NULL, &cbPerObjectBuffer);
 
 	D3D11_BUFFER_DESC cbPerFrameBufferDesc;
 	ZeroMemory(&cbPerFrameBufferDesc, sizeof(D3D11_BUFFER_DESC));

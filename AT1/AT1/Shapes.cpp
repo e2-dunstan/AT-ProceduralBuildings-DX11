@@ -375,14 +375,14 @@ std::vector<DWORD> Shape::CreatePyramidIndices()
 		// Front Face
 		0,  1,  2,
 		// Back Face
-		3,  4,  5,
+		5,  4,  3,
 		// Bottom Face
 		6,  7,  8,
 		6,  8,  9,
 		// Left Face
 		10, 11, 12,
 		// Right Face
-		14, 13, 15,
+		13, 14, 15,
 	};
 	return indices;
 }
@@ -394,8 +394,8 @@ std::vector<DWORD> Shape::CreateShedIndices()
 		0,  1,  2,
 		0,  2,  3,
 		// Top Face
-		4,  5,  6,
-		4,  6,  7,
+		6,  5,  4,
+		7,  6,  4,
 		// Bottom Face
 		8,  9,  10,
 		8,  10, 11,

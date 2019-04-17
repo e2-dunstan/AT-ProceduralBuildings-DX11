@@ -133,12 +133,12 @@ void DXApp::InitTextureTweakBar()
 	int tweakBarSize[2] = { 200, 400 };
 	TwSetParam(textureTweakBar, NULL, "size", TW_PARAM_INT32, 2, tweakBarSize);
 
-	TwAddVarRW(textureTweakBar, "Floors", TW_TYPE_INT32, &floorTex, "min=1 max=10 step=1");
-	TwAddVarRW(textureTweakBar, "Corners", TW_TYPE_INT32, &cornerTex, "min=1 max=10 step=1");
-	TwAddVarRW(textureTweakBar, "Walls", TW_TYPE_INT32, &wallTex, "min=1 max=10 step=1");
-	TwAddVarRW(textureTweakBar, "Windows", TW_TYPE_INT32, &windowTex, "min=1 max=10 step=1");
-	TwAddVarRW(textureTweakBar, "Door", TW_TYPE_INT32, &doorTex, "min=1 max=10 step=1");
-	TwAddVarRW(textureTweakBar, "Roof", TW_TYPE_INT32, &roofTex, "min=1 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Floors", TW_TYPE_INT32, &floorTex, "min=0 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Corners", TW_TYPE_INT32, &cornerTex, "min=0 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Walls", TW_TYPE_INT32, &wallTex, "min=0 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Windows", TW_TYPE_INT32, &windowTex, "min=0 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Door", TW_TYPE_INT32, &doorTex, "min=0 max=10 step=1");
+	TwAddVarRW(textureTweakBar, "Roof", TW_TYPE_INT32, &roofTex, "min=0 max=10 step=1");
 
 	TwAddButton(textureTweakBar, "Reload textures", ReloadTextures, this, " label='Reload textures'");
 }
