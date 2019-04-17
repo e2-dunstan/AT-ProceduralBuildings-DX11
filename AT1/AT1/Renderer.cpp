@@ -13,6 +13,7 @@ Renderer::~Renderer()
 	depthStencilView->Release();
 	depthStencilBuffer->Release();
 	cbPerObjectBuffer->Release();
+	cbPerFrameBuffer->Release();
 	wireframeState->Release();
 	filledState->Release();
 	transparency->Release();
@@ -121,11 +122,20 @@ void Renderer::InitView()
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	ZeroMemory(&matrixBufferDesc, sizeof(D3D11_BUFFER_DESC));
 	matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	matrixBufferDesc.ByteWidth = sizeof(matrixBuffer);
+	matrixBufferDesc.ByteWidth = sizeof(cbPerObject);
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	matrixBufferDesc.CPUAccessFlags = 0;
 	matrixBufferDesc.MiscFlags = 0;
 	HRESULT result = device->CreateBuffer(&matrixBufferDesc, NULL, &cbPerObjectBuffer);
+
+	D3D11_BUFFER_DESC cbPerFrameBufferDesc;
+	ZeroMemory(&cbPerFrameBufferDesc, sizeof(D3D11_BUFFER_DESC));
+	cbPerFrameBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	cbPerFrameBufferDesc.ByteWidth = sizeof(cbPerFrame);
+	cbPerFrameBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbPerFrameBufferDesc.CPUAccessFlags = 0;
+	cbPerFrameBufferDesc.MiscFlags = 0;
+	result = device->CreateBuffer(&cbPerFrameBufferDesc, NULL, &cbPerFrameBuffer);
 
 	if (FAILED(result))
 	{
@@ -235,9 +245,18 @@ void Renderer::DrawModel(ID3D11ShaderResourceView *textureShader, ID3D11SamplerS
 	XMMATRIX cameraView, XMMATRIX camProjection, int i, int indexCount)
 {
 	WVP = _modelTransforms[i] * cameraView * camProjection;
-	matrixBuffer.WVP = XMMatrixTranspose(WVP);
-	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &matrixBuffer, 0, 0);
+	cbPerObject.WVP = XMMatrixTranspose(WVP);
+
+	World = _modelTransforms[i];
+	cbPerObject.World = XMMatrixTranspose(World);
+
+	deviceContext->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObject, 0, 0);
 	deviceContext->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
+
+	cbPerFrame.light = lightClass.GetLight();
+	deviceContext->UpdateSubresource(cbPerFrameBuffer, 0, NULL, &cbPerFrame, 0, 0);
+	deviceContext->PSSetConstantBuffers(0, 1, &cbPerFrameBuffer);
+
 	deviceContext->PSSetShaderResources(0, 1, &textureShader);
 	deviceContext->PSSetSamplers(0, 1, &samplerState);
 	deviceContext->DrawIndexed(indexCount, 0, 0);

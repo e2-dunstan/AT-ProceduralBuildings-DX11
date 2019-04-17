@@ -1,5 +1,6 @@
 #pragma once
 #include "DXUtil.h"
+#include "Light.h"
 
 using namespace DirectX;
 
@@ -35,11 +36,18 @@ public:
 		XMMATRIX projection;
 	};
 
-	struct MatrixBufferType
+	struct CBPerObject
 	{
 		XMMATRIX  WVP;
+		XMMATRIX World;
 	};
-	MatrixBufferType matrixBuffer;
+	CBPerObject cbPerObject;
+
+	struct CBPerFrame
+	{
+		Light light;
+	};
+	CBPerFrame cbPerFrame;
 
 	void SetModelTransforms(std::vector<XMMATRIX> modelTransforms);
 
@@ -74,10 +82,13 @@ protected:
 	ID3D11RasterizerState* CWcullMode;
 
 	ID3D11Buffer* cbPerObjectBuffer = nullptr;
+	ID3D11Buffer* cbPerFrameBuffer = nullptr;
 
 	std::vector<XMMATRIX> _modelTransforms;
 
 	XMMATRIX WVP;
 	XMMATRIX World;
+
+	LightClass lightClass;
 };
 
